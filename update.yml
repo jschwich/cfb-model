@@ -1,0 +1,40 @@
+name: Update model
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"     # every 6 hours (times are UTC)
+  workflow_dispatch:            # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-model
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Run model
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        run: python run.py
+
+      - name: Save results
+        run: |
+          git config user.name "cfb-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs data/cache
+          git diff --cached --quiet || git commit -m "Model update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
