@@ -21,7 +21,8 @@ def _snapshot(year, data, R):
     future tuning can test their weights using only what was known at the time."""
     from pathlib import Path
     g = data["games"]
-    todo = g[~g["completed"]]
+    soon = g["start"] > pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3)
+    todo = g[~g["completed"] & soon]   # ignore old games that were never played
     wk = int(todo["wk"].min()) if len(todo) else int(g["wk"].max()) + 1
     out = Path(__file__).resolve().parent / "data" / "snapshots" / str(year)
     out.mkdir(parents=True, exist_ok=True)
