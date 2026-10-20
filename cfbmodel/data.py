@@ -30,13 +30,24 @@ def detect_year(today=None):
     return today.year if today.month >= 8 else today.year - 1
 
 
+def read_fixture(folder, name):
+    """Read a saved response: name.json or name.json.gz (data/history uses .gz)."""
+    import gzip
+    f = Path(folder) / f"{name}.json"
+    if f.exists():
+        return json.loads(f.read_text())
+    if f.with_suffix(".json.gz").exists():
+        with gzip.open(f.with_suffix(".json.gz"), "rt") as fh:
+            return json.load(fh)
+    return []
+
+
 def _get(path, params, fixture_name):
     """One CFBD request (or fixture file read)."""
     global _calls
     fx = os.environ.get("CFBD_FIXTURE_DIR")
     if fx:
-        f = Path(fx) / f"{fixture_name}.json"
-        return json.loads(f.read_text()) if f.exists() else []
+        return read_fixture(fx, fixture_name)
     key = os.environ.get("CFBD_API_KEY", "").strip()
     if not key:
         raise SystemExit("CFBD_API_KEY is not set. Add it as a repository secret (see README step 3).")
@@ -247,10 +258,10 @@ def load_fei(year, fbs=None):
     fx = os.environ.get("CFBD_FIXTURE_DIR")
     try:
         if fx:
-            f = Path(fx) / "fei.json"
-            if not f.exists():
+            raw = read_fixture(fx, "fei")
+            if not raw:
                 return None
-            df = pd.DataFrame(json.loads(f.read_text()))
+            df = pd.DataFrame(raw)
         else:
             r = requests.get(f"https://www.bcftoys.com/{year}-fei", timeout=30,
                              headers={"User-Agent": "Mozilla/5.0 (cfb-model)"})
