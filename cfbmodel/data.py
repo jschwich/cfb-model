@@ -17,6 +17,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+import config
+
 API = "https://api.collegefootballdata.com"
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "cache"
@@ -34,6 +36,8 @@ def read_fixture(folder, name):
     """Read a saved response: name.json or name.json.gz (data/history uses .gz)."""
     import gzip
     f = Path(folder) / f"{name}.json"
+    if not f.exists() and not f.with_suffix(".json.gz").exists() and name == "venues":
+        f = Path(folder).parent / "venues.json"   # data/history keeps one shared venues file
     if f.exists():
         return json.loads(f.read_text())
     if f.with_suffix(".json.gz").exists():
@@ -148,9 +152,50 @@ def _adv(raw):
             "plays": pd.to_numeric(_pick(off, "plays"), errors="coerce"),
             "ppa": pd.to_numeric(_pick(off, "ppa"), errors="coerce"),
             "sr": pd.to_numeric(_pick(off, "successRate", "success_rate"), errors="coerce"),
+            "expl": pd.to_numeric(_pick(off, "explosiveness"), errors="coerce"),
+            "drives": pd.to_numeric(_pick(off, "drives"), errors="coerce"),
         })
-    df = pd.DataFrame(rows, columns=["game_id", "team", "opponent", "plays", "ppa", "sr"])
+    df = pd.DataFrame(rows, columns=["game_id", "team", "opponent", "plays", "ppa", "sr", "expl", "drives"])
     return df.dropna(subset=["plays", "ppa", "sr"]).query("plays > 0")
+
+
+def _pace(raw):
+    """Full-game plays per team (garbage time included), for tempo."""
+    df = _adv(raw)
+    return df[["game_id", "team", "opponent", "plays", "drives"]]
+
+
+def _rating_list(raw, value_key, sub=None):
+    rows = []
+    for r in raw or []:
+        v = _pick(r, value_key) if sub is None else _pick(_pick(r, sub, default={}) or {}, value_key)
+        rows.append({"team": _pick(r, "team"), "value": pd.to_numeric(v, errors="coerce")})
+    df = pd.DataFrame(rows, columns=["team", "value"]).dropna()
+    return df[df["team"].notna() & (df["team"] != "nationalAverages")]
+
+
+def _fresh(name, path, params, fixture_name, hours):
+    """Like _cached, but refetch after `hours` (for ratings that update weekly)."""
+    import time
+    f = CACHE / f"{name}.json"
+    fx = os.environ.get("CFBD_FIXTURE_DIR")
+    if fx:
+        return read_fixture(fx, fixture_name)
+    if f.exists():
+        saved = json.loads(f.read_text())
+        if isinstance(saved, dict) and time.time() - saved.get("fetched", 0) < hours * 3600:
+            return saved["rows"]
+    try:
+        rows = _get(path, params, fixture_name)
+    except SystemExit:
+        raise
+    except Exception as e:
+        print(f"  warning: could not load {name}: {e}")
+        return json.loads(f.read_text())["rows"] if f.exists() else []
+    if rows:
+        CACHE.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps({"fetched": time.time(), "rows": rows}))
+    return rows
 
 
 def _locations(teams_raw, venues_raw):
@@ -180,6 +225,15 @@ def load_all(year):
     games = _games(_get("/games", {"year": year, "seasonType": "both"}, "games"))
     lines = _lines(_get("/lines", {"year": year, "seasonType": "both"}, "lines"))
     adv = _adv(_get("/stats/game/advanced", {"year": year, "excludeGarbageTime": "true"}, "adv"))
+    empty = pd.DataFrame(columns=["team", "value"])
+    pace = _pace(_get("/stats/game/advanced", {"year": year}, "adv_all")) \
+        if config.PACE_PTS_PER_PLAY else pd.DataFrame()
+    hrs = config.OUTSIDE_REFRESH_HOURS
+    w = config.OUTSIDE_WEIGHTS
+    sp_now = _rating_list(_fresh(f"sp_now_{year}", "/ratings/sp", {"year": year}, "sp_now", hrs),
+                          "rating") if w.get("sp") else empty
+    fpi_now = _rating_list(_fresh(f"fpi_now_{year}", "/ratings/fpi", {"year": year}, "fpi_now", hrs),
+                           "fpi") if w.get("fpi") else empty
 
     teams_raw = _cached(f"teams_{year}", "/teams/fbs", {"year": year}, "teams")
     venues_raw = _cached("venues_all", "/venues", {}, "venues")
@@ -202,7 +256,8 @@ def load_all(year):
     ret = pd.DataFrame([{"team": _pick(t, "team"),
                          "ret_ppa": pd.to_numeric(_pick(t, "percentPPA", "percent_ppa"), errors="coerce")}
                         for t in returning])
-    return {"year": year, "games": games, "lines": lines, "adv": adv, "fbs": fbs,
+    return {"year": year, "games": games, "lines": lines, "adv": adv, "pace": pace,
+            "sp_now": sp_now, "fpi_now": fpi_now, "fbs": fbs,
             "teams": teams, "venues": venues, "sp": sp, "talent": tal, "returning": ret,
             "api_calls": _calls}
 

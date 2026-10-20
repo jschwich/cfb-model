@@ -112,21 +112,24 @@ def rate(data, fei=None, through_week=None):
 
         comps = {"pts": (o_pts, -d_pts)}
         adv = data["adv"]
+        per_play = [k for k, wt in config.STAT_WEIGHTS.items() if k != "pts" and wt > 0]
         if len(adv):
             a = adv.merge(side[["game_id", "raw_off", "off", "dfn", "h", "pts"]],
                           left_on=["game_id", "team"], right_on=["game_id", "raw_off"])
-            if len(a) >= 10:
-                for stat in ("ppa", "sr"):
-                    # points per unit of this stat, from this season's games
-                    b = np.cov(a[stat], a["pts"])[0, 1] / max(a[stat].var(), 1e-9)
-                    rows = a.assign(y=a[stat], w=a["plays"])
-                    _, _, o_s, d_s = _ridge(rows, teams, config.RIDGE_ALPHA_PER_PLAY)
-                    comps[stat] = (o_s * b, -d_s * b)
+            for stat in per_play:
+                if stat not in a or a[stat].notna().sum() < 10:
+                    continue
+                aa = a.dropna(subset=[stat])
+                # points per unit of this stat, from this season's games
+                b = np.cov(aa[stat], aa["pts"])[0, 1] / max(aa[stat].var(), 1e-9)
+                rows = aa.assign(y=aa[stat], w=aa["plays"])
+                _, _, o_s, d_s = _ridge(rows, teams, config.RIDGE_ALPHA_PER_PLAY)
+                comps[stat] = (o_s * b, -d_s * b)
 
-        wsum = sum(config.STAT_WEIGHTS[k] for k in comps)
+        wsum = sum(config.STAT_WEIGHTS.get(k, 0) for k in comps) or 1.0
         for k, (o, d) in comps.items():
-            off_data += config.STAT_WEIGHTS[k] / wsum * o
-            def_data += config.STAT_WEIGHTS[k] / wsum * d
+            off_data += config.STAT_WEIGHTS.get(k, 0) / wsum * o
+            def_data += config.STAT_WEIGHTS.get(k, 0) / wsum * d
 
     # ---- blend with the preseason prior ----
     P = _prior(data, fbs_list)
@@ -145,21 +148,38 @@ def rate(data, fei=None, through_week=None):
         "off_prior": P["off"], "def_prior": P["def"], "prior_rating": P["off"] + P["def"],
         "data_weight": wdata, "off": off, "def": dfn,
     }, index=fbs_list)
-    R["fei_rating"] = np.nan
 
-    # ---- FEI blend ----
-    if fei is not None and len(fei) and config.FEI_WEIGHT > 0:
-        keys = {norm_name(t): t for t in fbs_list}
+    # ---- outside opinions: FEI, SP+, FPI ----
+    sources = {}
+    keys = {norm_name(t): t for t in fbs_list}
+    if fei is not None and len(fei):
         f = fei.assign(team_m=fei["key"].map(keys)).dropna(subset=["team_m"]).drop_duplicates("team_m")
-        fm = f.set_index("team_m")["fei"] * config.FEI_POSSESSIONS
-        fm = fm - fm.mean()
-        R.loc[fm.index, "fei_rating"] = fm
-        base = R["off"] + R["def"]
-        target = base.where(R["fei_rating"].isna(),
-                            (1 - config.FEI_WEIGHT) * base + config.FEI_WEIGHT * R["fei_rating"])
-        adj = target - base
-        R["off"] += adj / 2
-        R["def"] += adj / 2
+        sources["fei"] = f.set_index("team_m")["fei"] * config.FEI_POSSESSIONS
+    for name in ("sp", "fpi"):
+        df = data.get(f"{name}_now")
+        if df is not None and len(df):
+            m = df.assign(team_m=df["team"].map(lambda t: keys.get(norm_name(t)))).dropna(subset=["team_m"])
+            sources[name] = m.drop_duplicates("team_m").set_index("team_m")["value"].astype(float)
+    base = R["off"] + R["def"]
+    num = pd.Series(0.0, index=fbs_list)
+    wtot = pd.Series(0.0, index=fbs_list)
+    for name, vals in sources.items():
+        w = config.OUTSIDE_WEIGHTS.get(name, 0)
+        vals = (vals - vals.mean()).reindex(fbs_list)
+        R[f"{name}_rating"] = vals
+        if w > 0:
+            has = vals.notna()
+            num[has] += w * vals[has]
+            wtot[has] += w
+    for name in ("fei", "sp", "fpi"):
+        if f"{name}_rating" not in R:
+            R[f"{name}_rating"] = np.nan
+    target = (1 - wtot) * base + num
+    adj = target - base
+    R["off"] += adj / 2
+    R["def"] += adj / 2
+    R["outside_weight"] = wtot
+    meta_sources = sorted(k for k in sources if config.OUTSIDE_WEIGHTS.get(k, 0) > 0)
 
     R["off"] -= R["off"].mean()
     R["def"] -= R["def"].mean()
@@ -175,7 +195,20 @@ def rate(data, fei=None, through_week=None):
     R["fbs"] = R["fbs"].astype(bool)
     R["rank"] = R.loc[R["fbs"], "rating"].rank(ascending=False, method="min")
     R.index.name = "team"
-    meta = {"hfa": hfa, "mu_pts": mu_pts, "through_week": through_week,
+    # ---- pace (full-game plays) ----
+    R["pace_off"], R["pace_def"] = 0.0, 0.0
+    mu_plays = 0.0
+    pace = data.get("pace")
+    if config.PACE_PTS_PER_PLAY and pace is not None and len(pace):
+        pp = pace.merge(side[["game_id", "raw_off", "off", "dfn", "h"]],
+                        left_on=["game_id", "team"], right_on=["game_id", "raw_off"])
+        if len(pp) >= 40:
+            mu_plays, _, po, pd_ = _ridge(pp.assign(y=pp["plays"], w=1.0), teams, config.PACE_ALPHA)
+            R["pace_off"] = po.reindex(R.index).fillna(0.0)
+            R["pace_def"] = pd_.reindex(R.index).fillna(0.0)
+
+    meta = {"hfa": hfa, "mu_pts": mu_pts, "through_week": through_week, "mu_plays": mu_plays,
+            "sources": meta_sources,
             "games_used": int(len(done))}
     return R.sort_values("rating", ascending=False), meta
 

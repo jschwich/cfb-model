@@ -44,6 +44,10 @@ def project(g, R, meta):
     mu = meta["mu_pts"]
     hp = mu + h["off"] - a["def"] + hfa / 2
     ap = mu + a["off"] - h["def"] - hfa / 2
+    k = config.PACE_PTS_PER_PLAY  # extra points per extra play above average tempo
+    if k:
+        hp += k * (h.get("pace_off", 0.0) + a.get("pace_def", 0.0))
+        ap += k * (a.get("pace_off", 0.0) + h.get("pace_def", 0.0))
     return max(hp, 0.0), max(ap, 0.0)
 
 
@@ -125,6 +129,8 @@ def fit_scale(rows):
 
     Fit from games graded out of sample: actual margin = k * rating gap + home field.
     """
+    if rows is not None and len(rows):
+        rows = rows[rows["wk"] >= config.BACKTEST_FIRST_WEEK]
     if not getattr(config, "CALIBRATE", True) or rows is None or len(rows) < config.CALIBRATION_MIN_GAMES:
         return 1.0
     gap = rows["home_rating"] - rows["away_rating"]
@@ -181,8 +187,8 @@ def backtest(data):
     sit = Situations(data)
     out = []
     for wk in sorted(done["wk"].unique()):
-        if wk < config.BACKTEST_FIRST_WEEK:
-            continue
+        if wk < 1:
+            continue  # weeks before the track record starts are kept for grading your picks
         R, meta = rate(data, fei=None, through_week=wk)  # no historical FEI available
         prior = pd.concat(out, ignore_index=True) if out else None
         k = fit_scale(prior)  # only uses weeks before this one
@@ -221,7 +227,8 @@ def backtest(data):
 
     bt["ats_win"] = bt.apply(ats, axis=1)
     bt["ou_win"] = bt.apply(ou, axis=1)
-    bt.attrs["periods"] = P.grade(bt, data["games"])
+    graded = bt["wk"] >= config.BACKTEST_FIRST_WEEK
+    bt.attrs["periods"] = P.grade(bt[graded], data["games"])
     return bt
 
 
@@ -255,6 +262,11 @@ def flag_record(bt):
 
 def summarize_backtest(bt):
     if bt is None or not len(bt):
+        return None
+    attrs = dict(bt.attrs)
+    bt = bt[bt["wk"] >= config.BACKTEST_FIRST_WEEK]
+    bt.attrs.update(attrs)
+    if not len(bt):
         return None
     lined = bt.dropna(subset=["market_spread"])
     s = {"games": int(len(bt)), "lined": int(len(lined)),

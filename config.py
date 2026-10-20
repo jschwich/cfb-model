@@ -19,7 +19,15 @@ RIDGE_ALPHA_PER_GAME = 1.0   # for per-game stats (points)
 
 # How much each opponent-adjusted stat counts in the rating (sums to 1).
 # Per-play efficiency predicts future results better than points scored.
-STAT_WEIGHTS = {"ppa": 0.45, "sr": 0.25, "pts": 0.30}
+# "expl" = explosiveness (average EPA on successful plays).
+STAT_WEIGHTS = {"ppa": 0.45, "sr": 0.25, "pts": 0.30, "expl": 0.0}
+
+# ---------- Pace (totals) ----------
+# Teams that run more plays than average push totals up. Tempo is opponent-
+# adjusted from full-game play counts; this is points added per extra play.
+# 0 turns pace off (and skips its API call).
+PACE_PTS_PER_PLAY = 0.0
+PACE_ALPHA = 3.0             # shrinkage for tempo, in games
 
 # ---------- Preseason prior ----------
 # Starting point for each team, built from last year's SP+, roster talent,
@@ -30,11 +38,14 @@ PRIOR_REGRESS = 0.60         # how much of last year's rating carries over
 TALENT_PTS_PER_SD = 3.0      # points per 1 SD of 247 team talent
 RETURNING_PTS_PER_SD = 2.5   # points (offense) per 1 SD of returning PPA %
 
-# ---------- FEI blend ----------
-# Brian Fremeau's FEI (bcftoys.com), used as an independent second opinion.
-# FEI is points per possession; multiply by possessions to get points per game.
+# ---------- Outside opinions ----------
+# Independent ratings blended into the final margin rating, as shares.
+#   fei = Brian Fremeau's FEI (bcftoys.com)   sp = Bill Connelly's SP+   fpi = ESPN's FPI
+# Whatever isn't given to these stays with the model's own rating.
 USE_FEI = True
-FEI_WEIGHT = 0.30            # share of the final margin rating from FEI
+OUTSIDE_WEIGHTS = {"fei": 0.30, "sp": 0.0, "fpi": 0.0}
+OUTSIDE_REFRESH_HOURS = 12   # SP+/FPI change weekly; refetch at most this often
+# FEI is points per possession; multiply by possessions to get points per game.
 FEI_POSSESSIONS = 12.0
 
 # ---------- Calibration ----------
@@ -80,3 +91,10 @@ LONG_TRIP_TIMEZONES = 2
 # Add rivalries the built-in list misses, using CFBD team names, e.g.
 # EXTRA_RIVALRIES = [("Appalachian State", "Georgia Southern")]
 EXTRA_RIVALRIES = []
+
+# ---------- Your picks ----------
+# Published-to-web CSV link of the Pick Log tab (File > Share > Publish to web).
+# Only rows for PICKS_PERSON are read. Leave the link blank to turn this off.
+PICKS_CSV_URL = ("https://docs.google.com/spreadsheets/d/e/2PACX-1vTM0w9nlD9bsm-FkKBgZtdoANkl9CPovwThzyEgC3"
+                 "-Ri7lbS-MtGUZEhW3xyL7uoTehU2vGlyI7ReNU/pub?gid=1435131979&single=true&output=csv")
+PICKS_PERSON = "Jerome"

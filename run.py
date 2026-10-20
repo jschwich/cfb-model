@@ -13,6 +13,7 @@ from cfbmodel import data as D
 from cfbmodel.ratings import rate
 from cfbmodel.value import upcoming, backtest, summarize_backtest, fit_scale, apply_scale
 from cfbmodel import report
+from cfbmodel import picks as K
 
 
 def main():
@@ -44,6 +45,18 @@ def main():
 
     info = {"updated": pd.Timestamp.now(tz="America/New_York").strftime("%b %-d, %-I:%M %p ET"),
             "year": year, "fei": fei is not None}
+    pk = K.fetch()
+    if pk is not None and len(pk):
+        P = K.match(pk, data["games"])
+        proj = pd.concat([bt, games], ignore_index=True) if len(bt) else games
+        G = K.grade(P, proj.drop_duplicates("game_id", keep="last"))
+        info["picks"] = (G, K.summarize(G))
+        s = info["picks"][1]
+        if s:
+            g = s["groups"]
+            print(f"Your picks: {g['All picks']['w']}-{g['All picks']['l']}; model agreed "
+                  f"{g['Model agreed']['w']}-{g['Model agreed']['l']}, disagreed "
+                  f"{g['Model disagreed']['w']}-{g['Model disagreed']['l']}")
     if a.demo:
         info["demo_banner"] = "<div class=demo>SAMPLE DATA: made-up teams and scores for testing, not real projections</div>"
     report.write(R, meta, games, label, bt, bt_sum, info)

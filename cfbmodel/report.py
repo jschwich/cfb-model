@@ -177,6 +177,55 @@ def _periods_grade(g):
             "<th>Total miss</th><th>Spread miss</th></tr></thead><tbody>" + rows + "</tbody></table></div>")
 
 
+def _picks_section(pk):
+    if not pk:
+        return ""
+    G, S = pk
+    if G is None or not len(G):
+        return ""
+
+    def tile(label, r):
+        return f"<div><span>{_rec(r)}</span>{E(label)}</div>"
+
+    head = ""
+    if S:
+        g = S["groups"]
+        head = ("<div class=stats>" + "".join(tile(k, v) for k, v in g.items()) + "</div>")
+        mk = "".join(f"<tr><td>{E(k)}</td><td>{_rec(v['agree'])}</td><td>{_rec(v['disagree'])}</td></tr>"
+                     for k, v in S["by_market"].items())
+        head += ("<div class=tw><table><thead><tr><th>Market</th><th>Model agreed</th><th>Model disagreed</th>"
+                 "</tr></thead><tbody>" + mk + "</tbody></table></div>")
+
+    def view(r):
+        if pd.isna(r.get("model_view")):
+            return "–", "<span class=muted>no model number</span>"
+        if r["market"] == "Spread":
+            v = r["model_view"]
+            txt = f"{E(r['team'])} by {v:.1f}" if v >= 0 else f"{E(r['team'])} loses by {-v:.1f}"
+        else:
+            txt = f"{r['model_view']:.1f}"
+        e = r["model_edge"]
+        tag = (f"<span class='tier strong'>agrees +{e:.1f}</span>" if e > 0
+               else f"<span class='tier lean'>disagrees {e:.1f}</span>")
+        return txt, tag
+
+    rows = []
+    for _, r in G.iloc[::-1].iterrows():
+        txt, tag = view(r)
+        res = r.get("Result") or ""
+        res_html = {"Win": "<b class=win>W</b>", "Loss": "<b class=loss>L</b>", "Push": "P"}.get(res, "<span class=muted>pending</span>")
+        rows.append(f"<tr><td>{E(str(r.get('Week', '')))}</td><td class=gm>{E(r['Pick'])}</td>"
+                    f"<td>{res_html}</td><td>{txt}</td><td>{tag}</td></tr>")
+    table = ("<div class=tw><table><thead><tr><th>Week</th><th>Pick</th><th>Result</th><th>Model</th>"
+             "<th>Model vs. your number</th></tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
+    note = ("<p class=muted>The model's number is what it projected before that week's games, at the line "
+            "you took. “Agrees +2.0” means the model had your side covering by 2 points. "
+            f"{S['unmatched'] if S else 0} pick(s) couldn't be matched to a game or have no model number "
+            "(early-season quarters, 2Q/4Q).</p>")
+    return ("<section id=mine><h2>Your picks vs. the model</h2>" + head + note
+            + "<h3>Every pick, newest first</h3>" + table + "</section>")
+
+
 def _ratings_table(R):
     F = R[R["fbs"]].sort_values("rating", ascending=False)
     rows = []
@@ -187,9 +236,10 @@ def _ratings_table(R):
             f"<td><b>{r['rating']:+.1f}</b></td><td>{r['off']:+.1f}</td><td>{r['def']:+.1f}</td>"
             f"<td>{int(r['games'])}</td><td>{r['data_weight']:.0%}</td>"
             f"<td>{r['data_rating']:+.1f}</td><td>{r['prior_rating']:+.1f}</td>"
-            f"<td>{_n(r['fei_rating'], '{:+.1f}')}</td></tr>")
+            f"<td>{_n(r['fei_rating'], '{:+.1f}')}</td><td>{_n(r.get('sp_rating'), '{:+.1f}')}</td>"
+            f"<td>{_n(r.get('fpi_rating'), '{:+.1f}')}</td></tr>")
     return ("<div class=tw><table id=rt><thead><tr><th>#</th><th>Team</th><th>Rating</th><th>Off</th>"
-            "<th>Def</th><th>G</th><th>This yr wt</th><th>This yr</th><th>Prior</th><th>FEI</th>"
+            "<th>Def</th><th>G</th><th>This yr wt</th><th>This yr</th><th>Prior</th><th>FEI</th><th>SP+</th><th>FPI</th>"
             "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
 
 
@@ -269,8 +319,9 @@ input{width:100%;max-width:320px;padding:8px 10px;border:1px solid var(--line);b
 table.per td{white-space:nowrap}.stick{position:sticky;left:0;background:var(--card);z-index:1}
 th.stick{z-index:2}table.per td.gm{min-width:150px;white-space:normal}
 .pcards{display:none}.pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
-.pcard table{font-size:13px;margin-top:4px}.pcard th,.pcard td{padding:4px 6px}
+.pcard{overflow-x:auto}.pcard table{font-size:13px;margin-top:4px}.pcard th,.pcard td{padding:4px 6px;white-space:normal}
 @media (max-width:700px){.pcards{display:block}.pwide{display:none}}
+.win{color:var(--strong)}.loss{color:var(--warn)}
 .legend{font-size:12.5px;color:var(--mut);margin:6px 0 10px}.legend b{color:var(--ink)}
 """
 
@@ -292,8 +343,13 @@ def write(R, meta, games, label, bt, bt_sum, info):
     if bt is not None and len(bt):
         bt.drop(columns=["flags"]).assign(start=bt["start"].astype(str)).round(2).to_csv(DOCS / "data" / "backtest.csv", index=False)
 
-    fei_note = ("FEI blended in at {:.0%}".format(config.FEI_WEIGHT) if info.get("fei")
-                else "FEI unavailable this run (model ran without it)")
+    names = {"fei": "FEI", "sp": "SP+", "fpi": "FPI"}
+    used = meta.get("sources", [])
+    wanted = [k for k, w in config.OUTSIDE_WEIGHTS.items() if w > 0]
+    fei_note = " · ".join(f"{names[k]} {config.OUTSIDE_WEIGHTS[k]:.0%}" for k in used) or "no outside ratings"
+    missing = [names[k] for k in wanted if k not in used]
+    if missing:
+        fei_note += f" ({', '.join(missing)} unavailable this run)"
     legend = ("<div class=legend><b>Situational flags</b> (info only, never change the numbers): "
               "<b>Letdown</b> off a big win vs. a lesser foe · <b>Look-ahead</b> big game next week · "
               "<b>Sandwich</b> between two big games · <b>Rest edge</b> bye or opponent on a short week · "
@@ -307,7 +363,7 @@ def write(R, meta, games, label, bt, bt_sum, info):
 {info.get('demo_banner', '')}
 <header><h1>CFB Model · {info['year']}</h1>
 <div class=muted>Updated {E(info['updated'])} · {E(label)} · home field {meta['hfa']:.1f} pts · {fei_note} · calibration ×{meta.get('scale', 1.0):.2f}</div></header>
-<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#periods">Team totals &amp; periods</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
+<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#periods">Team totals &amp; periods</a><a href="#mine">Your picks</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
 <main>
 <section id=value><h2>Value board · {E(label)}</h2>
 <p class=muted>Lean = {config.SPREAD_LEAN:g}+ pt spread / {config.TOTAL_LEAN:g}+ pt total edge; Strong = {config.SPREAD_STRONG:g}+ / {config.TOTAL_STRONG:g}+. Big edges often mean news the model can't see (injuries, QB changes, weather). Check before betting.</p>
@@ -316,6 +372,7 @@ def write(R, meta, games, label, bt, bt_sum, info):
 <section id=periods><h2>Team totals &amp; periods</h2>
 <p class=muted>Model numbers only. There's no market line for these here, so compare them with your book. Spreads are shown from the favorite's side; totals are bold, with each team's points in brackets (away–home). Team totals are full game; quarter and half numbers leave out overtime.</p>
 {_periods_table(games)}</section>
+{_picks_section(info.get('picks'))}
 <section id=ratings><h2>Power ratings</h2>
 <p class=muted>Points vs. an average FBS team on a neutral field. “This yr wt” is how much this season's games count versus the preseason prior.</p>
 <input id=q placeholder="Filter teams or conferences">{_ratings_table(R)}</section>
