@@ -223,22 +223,21 @@ def _warn(msg):
 
 
 def _parse_fei(page):
-    """bcftoys splits the ratings across several tables with grouped headers.
-    Read every table that has Team and FEI columns and stack them."""
-    from io import StringIO
-    parts = []
-    for t in pd.read_html(StringIO(page)):
-        names = [str(c[-1] if isinstance(c, tuple) else c).strip() for c in t.columns]
-        if "Team" not in names or "FEI" not in names:
-            continue
-        sub = pd.DataFrame({"team": t.iloc[:, names.index("Team")],
-                            "fei": t.iloc[:, names.index("FEI")]})
-        parts.append(sub)
-    if not parts:
+    """bcftoys splits the ratings across several tables, and the header markup
+    varies. Read each row directly: Rk | Team | Rec | FBS rec | FEI | ..."""
+    import html as _html
+    rec = re.compile(r"^\d{1,2}-\d{1,2}$")
+    num = re.compile(r"^-?\d*\.\d+$|^-?\d+$")
+    rows = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", page, flags=re.S | re.I):
+        cells = [_html.unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", tr, flags=re.S | re.I)]
+        cells = [c for c in cells if c != ""]  # drop blank spacer columns
+        if len(cells) >= 5 and cells[0].isdigit() and rec.match(cells[2]) and num.match(cells[4]):
+            rows.append({"team": cells[1], "fei": cells[4]})
+    if len(rows) < 50:
         return None
-    df = pd.concat(parts, ignore_index=True)
-    df = df[df["team"].astype(str).str.strip().ne("Team")]  # repeated header rows
-    return df.drop_duplicates("team")
+    return pd.DataFrame(rows).drop_duplicates("team")
 
 
 def load_fei(year, fbs=None):
@@ -256,7 +255,9 @@ def load_fei(year, fbs=None):
             r.raise_for_status()
             df = _parse_fei(r.text)
             if df is None:
-                _warn("FEI table not found on bcftoys.com; running without it")
+                _warn(f"FEI table not found on bcftoys.com (page {len(r.text):,} chars, "
+                      f"{len(re.findall('<tr', r.text, flags=re.I))} rows, "
+                      f"title {re.search('<title>(.*?)</title>', r.text, re.S|re.I).group(1).strip()[:60] if re.search('<title>', r.text, re.I) else 'none'!r}); running without it")
                 return None
         df["fei"] = pd.to_numeric(df["fei"], errors="coerce")
         df = df.dropna(subset=["fei"])
