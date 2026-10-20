@@ -32,6 +32,7 @@ Bookmark it. From then on it updates itself every 6 hours.
 - **Value board:** games where the model disagrees with the betting line by enough to matter, ranked by size of the edge.
 - **All games:** market line versus model line for the whole slate, plus projected scores and rough first-half numbers.
 - **Power ratings:** every FBS team in points versus an average team, split into offense and defense, with this season's data weighted against the preseason prior.
+- **Situational flags:** tags on games where a classic handicapping spot applies: letdown, look-ahead, sandwich, rest edge (bye or short week), and long trip. They are information only and never change the model's numbers. A value pick that a spot works against gets a ⚠ warning.
 - **Track record:** the model graded week by week against closing lines, using only information it had before each week. This is how you know whether to trust it.
 
 Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
@@ -45,6 +46,8 @@ Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
 5. **FEI blend.** Brian Fremeau's FEI (bcftoys.com) is mixed in at 30% as an independent second opinion. If that site can't be reached, the model runs without it.
 6. **Projection.** Home rating minus away rating plus home field (fit from the data, about 2–3.5 pts) gives the spread; offense versus defense gives each side's points and the total.
 7. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
+
+8. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
 
 All of these knobs live in `config.py` with plain-English comments. Edit a number on GitHub (pencil icon) and the next run uses it.
 

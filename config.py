@@ -14,8 +14,8 @@ LINE_PROVIDERS = ["DraftKings", "ESPN Bet", "FanDuel", "Bovada",
 # ---------- Opponent adjustment ----------
 # How strongly each team's numbers are pulled toward average before the
 # data speaks for itself. Bigger = more cautious early in the season.
-RIDGE_ALPHA_PER_PLAY = 175   # for per-play stats (weighted by plays)
-RIDGE_ALPHA_PER_GAME = 2.5   # for per-game stats (points)
+RIDGE_ALPHA_PER_PLAY = 70    # for per-play stats (weighted by plays)
+RIDGE_ALPHA_PER_GAME = 1.0   # for per-game stats (points)
 
 # How much each opponent-adjusted stat counts in the rating (sums to 1).
 # Per-play efficiency predicts future results better than points scored.
@@ -56,3 +56,15 @@ TOTAL_SD = 17.0
 
 # ---------- Backtest ----------
 BACKTEST_FIRST_WEEK = 4   # start grading the model from this week on
+
+# ---------- Situational flags (info only: they never change the numbers) ----------
+# A "big game" is against a model top-N team or a rivalry opponent.
+BIG_GAME_TOP_N = 25
+UPSET_DOG_POINTS = 7.0       # a win as an underdog of this many points counts as a big win
+BYE_DAYS = 13                # this many days since last game = coming off a bye
+SHORT_WEEK_DAYS = 5          # this many days or fewer = short week
+LONG_TRIP_MILES = 1500
+LONG_TRIP_TIMEZONES = 2
+# Add rivalries the built-in list misses, using CFBD team names, e.g.
+# EXTRA_RIVALRIES = [("Appalachian State", "Georgia Southern")]
+EXTRA_RIVALRIES = []
