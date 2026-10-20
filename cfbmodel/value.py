@@ -44,10 +44,19 @@ def project(g, R, meta):
     mu = meta["mu_pts"]
     hp = mu + h["off"] - a["def"] + hfa / 2
     ap = mu + a["off"] - h["def"] - hfa / 2
+    if "tot_off" in h and not pd.isna(h["tot_off"]) and not pd.isna(a.get("tot_off")):
+        # Totals use their own stat mix; the spread (hp - ap) stays as above.
+        total = 2 * mu + (h["tot_off"] - a["tot_def"]) + (a["tot_off"] - h["tot_def"])
+        margin = hp - ap
+        hp, ap = (total + margin) / 2, (total - margin) / 2
     k = config.PACE_PTS_PER_PLAY  # extra points per extra play above average tempo
     if k:
-        hp += k * (h.get("pace_off", 0.0) + a.get("pace_def", 0.0))
-        ap += k * (a.get("pace_off", 0.0) + h.get("pace_def", 0.0))
+        # Extra plays in the game (both teams' tempo), split evenly so pace moves
+        # the total but not the spread.
+        extra = (h.get("pace_off", 0.0) + a.get("pace_def", 0.0) +
+                 a.get("pace_off", 0.0) + h.get("pace_def", 0.0))
+        hp += k * extra / 2
+        ap += k * extra / 2
     return max(hp, 0.0), max(ap, 0.0)
 
 
@@ -137,6 +146,9 @@ def fit_scale(rows):
     hfa = (-rows["model_spread"]) - gap * rows.get("scale", 1.0)
     y = rows["actual_margin"] - hfa
     k = float((gap * y).sum() / (gap * gap).sum())
+    # A few hundred games is a noisy read, so lean toward no change until the sample grows.
+    n0 = getattr(config, "CALIBRATION_SHRINK_GAMES", 0)
+    k = 1 + (k - 1) * len(rows) / (len(rows) + n0)
     return float(np.clip(k, config.CALIBRATION_MIN, config.CALIBRATION_MAX))
 
 

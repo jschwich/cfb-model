@@ -42,7 +42,7 @@ def _team(name, fbs):
     return name if name in fbs else FCS
 
 
-def _prior(data, fbs_list):
+def _prior(data, fbs_list, regress=None):
     """Preseason rating from last year's SP+, talent and returning production."""
     P = pd.DataFrame(index=fbs_list, data={"off": 0.0, "def": 0.0})
     sp = data["sp"].dropna(subset=["sp_off", "sp_def"]).set_index("team") if len(data["sp"]) else None
@@ -52,8 +52,9 @@ def _prior(data, fbs_list):
         o = known["sp_off"] - sp.loc[sp.index.isin(fbs_list), "sp_off"].mean()
         d = sp.loc[sp.index.isin(fbs_list), "sp_def"].mean() - known["sp_def"]
         # New FBS programs with no SP+ last year start near the bottom.
-        P["off"] = (o.fillna(o.quantile(0.1)) * config.PRIOR_REGRESS).to_numpy()
-        P["def"] = (d.fillna(d.quantile(0.1)) * config.PRIOR_REGRESS).to_numpy()
+        reg = config.PRIOR_REGRESS if regress is None else regress
+        P["off"] = (o.fillna(o.quantile(0.1)) * reg).to_numpy()
+        P["def"] = (d.fillna(d.quantile(0.1)) * reg).to_numpy()
 
     def z(df, col):
         if not len(df):
@@ -101,35 +102,51 @@ def rate(data, fei=None, through_week=None):
 
     off_data = pd.Series(0.0, index=teams)
     def_data = pd.Series(0.0, index=teams)
+    off_tot = pd.Series(0.0, index=teams)   # same idea, weighted for totals
+    def_tot = pd.Series(0.0, index=teams)
     hfa = config.HFA_DEFAULT
 
     if len(side) >= 10:
-        # Points (per game)
-        rows = side.assign(y=side["pts"], w=1.0)
-        _, h_pts, o_pts, d_pts = _ridge(rows, teams, config.RIDGE_ALPHA_PER_GAME)
-        if len(fbs_games) >= 150:
-            hfa = float(np.clip(2 * h_pts, config.HFA_MIN, config.HFA_MAX))
-
-        comps = {"pts": (o_pts, -d_pts)}
+        tw = getattr(config, "TOTAL_STAT_WEIGHTS", None) or config.STAT_WEIGHTS
+        a_game, a_play = config.RIDGE_ALPHA_PER_GAME, config.RIDGE_ALPHA_PER_PLAY
+        t_game = getattr(config, "TOTAL_RIDGE_ALPHA_PER_GAME", None) or a_game
+        t_play = getattr(config, "TOTAL_RIDGE_ALPHA_PER_PLAY", None) or a_play
         adv = data["adv"]
-        per_play = [k for k, wt in config.STAT_WEIGHTS.items() if k != "pts" and wt > 0]
+        a = None
         if len(adv):
             a = adv.merge(side[["game_id", "raw_off", "off", "dfn", "h", "pts"]],
                           left_on=["game_id", "team"], right_on=["game_id", "raw_off"])
-            for stat in per_play:
-                if stat not in a or a[stat].notna().sum() < 10:
-                    continue
-                aa = a.dropna(subset=[stat])
-                # points per unit of this stat, from this season's games
-                b = np.cov(aa[stat], aa["pts"])[0, 1] / max(aa[stat].var(), 1e-9)
-                rows = aa.assign(y=aa[stat], w=aa["plays"])
-                _, _, o_s, d_s = _ridge(rows, teams, config.RIDGE_ALPHA_PER_PLAY)
-                comps[stat] = (o_s * b, -d_s * b)
+        cache = {}
 
-        wsum = sum(config.STAT_WEIGHTS.get(k, 0) for k in comps) or 1.0
-        for k, (o, d) in comps.items():
-            off_data += config.STAT_WEIGHTS.get(k, 0) / wsum * o
-            def_data += config.STAT_WEIGHTS.get(k, 0) / wsum * d
+        def components(W, alpha_game, alpha_play):
+            """Opponent-adjusted points per stat, at the given shrinkage."""
+            key = ("pts", alpha_game)
+            if key not in cache:
+                _, h_pts, o_pts, d_pts = _ridge(side.assign(y=side["pts"], w=1.0), teams, alpha_game)
+                cache[key] = (o_pts, -d_pts, h_pts)
+            comps = {"pts": cache[key][:2]}
+            for stat in [k for k, wt in W.items() if k != "pts" and wt > 0]:
+                if a is None or stat not in a or a[stat].notna().sum() < 10:
+                    continue
+                key = (stat, alpha_play)
+                if key not in cache:
+                    aa = a.dropna(subset=[stat])
+                    # points per unit of this stat, from this season's games
+                    b = np.cov(aa[stat], aa["pts"])[0, 1] / max(aa[stat].var(), 1e-9)
+                    _, _, o_s, d_s = _ridge(aa.assign(y=aa[stat], w=aa["plays"]), teams, alpha_play)
+                    cache[key] = (o_s * b, -d_s * b)
+                comps[stat] = cache[key]
+            return comps
+
+        for W, ag, apl, o_acc, d_acc in ((config.STAT_WEIGHTS, a_game, a_play, off_data, def_data),
+                                         (tw, t_game, t_play, off_tot, def_tot)):
+            comps = components(W, ag, apl)
+            wsum = sum(W.get(k, 0) for k in comps) or 1.0
+            for k, (o, d) in comps.items():
+                o_acc += W.get(k, 0) / wsum * o
+                d_acc += W.get(k, 0) / wsum * d
+        if len(fbs_games) >= 150:
+            hfa = float(np.clip(2 * cache[("pts", a_game)][2], config.HFA_MIN, config.HFA_MAX))
 
     # ---- blend with the preseason prior ----
     P = _prior(data, fbs_list)
@@ -140,13 +157,18 @@ def rate(data, fei=None, through_week=None):
     dd = def_data[fbs_list] - def_data[fbs_list].mean()
     off = wdata * od + (1 - wdata) * P["off"]
     dfn = wdata * dd + (1 - wdata) * P["def"]
+    Pt = _prior(data, fbs_list, getattr(config, "TOTAL_PRIOR_REGRESS", None))
+    fade_t = getattr(config, "TOTAL_PRIOR_FADE_GAMES", None) or config.PRIOR_FADE_GAMES
+    wt = g / (g + fade_t)
+    ot = wt * (off_tot[fbs_list] - off_tot[fbs_list].mean()) + (1 - wt) * Pt["off"]
+    dt = wt * (def_tot[fbs_list] - def_tot[fbs_list].mean()) + (1 - wt) * Pt["def"]
 
     R = pd.DataFrame({
         "conference": [data["teams"].get(t, {}).get("conference", "") for t in fbs_list],
         "fbs": True, "games": g.astype(int),
         "off_data": od, "def_data": dd, "data_rating": od + dd,
         "off_prior": P["off"], "def_prior": P["def"], "prior_rating": P["off"] + P["def"],
-        "data_weight": wdata, "off": off, "def": dfn,
+        "data_weight": wdata, "off": off, "def": dfn, "tot_off": ot - ot.mean(), "tot_def": dt - dt.mean(),
     }, index=fbs_list)
 
     # ---- outside opinions: FEI, SP+, FPI ----
@@ -191,7 +213,9 @@ def rate(data, fei=None, through_week=None):
     R.loc[FCS] = {"conference": "FCS", "fbs": False, "games": int(games_played[FCS]),
                   "off": fcs_off, "def": fcs_def, "rating": fcs_off + fcs_def,
                   "off_data": fcs_off, "def_data": fcs_def, "data_rating": fcs_off + fcs_def,
-                  "data_weight": 1.0}
+                  "data_weight": 1.0,
+                  "tot_off": off_tot[FCS] - off_tot[fbs_list].mean() if games_played[FCS] else -12.0,
+                  "tot_def": def_tot[FCS] - def_tot[fbs_list].mean() if games_played[FCS] else -13.0}
     R["fbs"] = R["fbs"].astype(bool)
     R["rank"] = R.loc[R["fbs"], "rating"].rank(ascending=False, method="min")
     R.index.name = "team"

@@ -293,14 +293,33 @@ def _track(bt_sum):
     weekly = ("<div class=tw><table><thead><tr><th>Week</th><th>Games</th><th>Model miss</th>"
               "<th>Market miss</th><th>Lean+ ATS</th></tr></thead><tbody>" + wk + "</tbody></table></div>")
     fr = s.get("flags")
-    if fr is not None and len(fr):
-        frows = "".join(f"<tr><td>{E(r['type'])}</td><td>{r['w']}–{r['l']}</td><td>{r['pct']:.0%}</td></tr>"
-                        for _, r in fr.iterrows())
-        flags = ("<h3>Situational spots this season</h3><p class=muted>How often each spot called the "
-                 "cover: the flagged-against team failed to cover, or the rested team covered. "
-                 "Small samples; read as a curiosity, not proof.</p>"
-                 "<div class=tw><table><thead><tr><th>Spot</th><th>Record</th><th>Hit rate</th>"
-                 "</tr></thead><tbody>" + frows + "</tbody></table></div>")
+    hist = {}
+    try:
+        import json
+        hist = json.loads((ROOT / "data" / "history" / "spots.json").read_text())
+    except Exception:
+        pass
+    hs = hist.get("spots", {})
+    types = sorted(set(fr["type"]) if fr is not None and len(fr) else set() | set(hs))
+    if types:
+        cur = {r["type"]: r for _, r in fr.iterrows()} if fr is not None and len(fr) else {}
+
+        def wl(w, l):
+            return f"{w}–{l} ({w / (w + l):.0%})" if w + l else "–"
+        frows = "".join(
+            f"<tr><td>{E(t)}</td><td>{wl(int(cur[t]['w']), int(cur[t]['l'])) if t in cur else '–'}</td>"
+            f"<td>{wl(hs[t]['w'], hs[t]['l']) if t in hs else '–'}</td></tr>" for t in types)
+        c = hist.get("conflict", {})
+        cnote = ""
+        if "True" in c and "False" in c:
+            cnote = (f" Over {E(hist['years'])}, value picks with a ⚠ spot against them covered "
+                     f"{c['True']['w'] / c['True']['n']:.0%} ({c['True']['n']} picks) vs. "
+                     f"{c['False']['w'] / c['False']['n']:.0%} without.")
+        flags = ("<h3>Situational spots</h3><p class=muted>How often each spot called the cover: the "
+                 "flagged-against team failed to cover, or the rested team covered. Break-even at -110 is "
+                 "52.4%; with a few hundred games, anything within about 3 points of 50% is noise." + cnote + "</p>"
+                 f"<div class=tw><table><thead><tr><th>Spot</th><th>This season</th>"
+                 f"<th>{E(hist.get('years', 'Past seasons'))}</th></tr></thead><tbody>" + frows + "</tbody></table></div>")
     else:
         flags = ""
     return head + weekly + _periods_grade(s.get("periods")) + flags + _my_adj(s.get("my_adj"))

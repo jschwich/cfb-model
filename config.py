@@ -14,27 +14,37 @@ LINE_PROVIDERS = ["DraftKings", "ESPN Bet", "FanDuel", "Bovada",
 # ---------- Opponent adjustment ----------
 # How strongly each team's numbers are pulled toward average before the
 # data speaks for itself. Bigger = more cautious early in the season.
-RIDGE_ALPHA_PER_PLAY = 70    # for per-play stats (weighted by plays)
-RIDGE_ALPHA_PER_GAME = 1.0   # for per-game stats (points)
+# Tuned on 2022-2025 (walk-forward, ~2,800 games); see tools/tune.py.
+RIDGE_ALPHA_PER_PLAY = 40    # for per-play stats (weighted by plays)
+RIDGE_ALPHA_PER_GAME = 0.3   # for per-game stats (points)
 
 # How much each opponent-adjusted stat counts in the rating (sums to 1).
 # Per-play efficiency predicts future results better than points scored.
-# "expl" = explosiveness (average EPA on successful plays).
-STAT_WEIGHTS = {"ppa": 0.45, "sr": 0.25, "pts": 0.30, "expl": 0.0}
+# "expl" = explosiveness (EPA on successful plays). Tested 2022-2025: it made
+# spreads and totals worse at every weight tried, so it's off.
+STAT_WEIGHTS = {"ppa": 0.30, "sr": 0.20, "pts": 0.50, "expl": 0.0}
+
+# Totals are built separately: what predicts the spread best (more weight on
+# points, lighter shrinkage, heavier prior) made totals worse in testing.
+TOTAL_STAT_WEIGHTS = {"ppa": 0.45, "sr": 0.25, "pts": 0.30, "expl": 0.0}
+TOTAL_RIDGE_ALPHA_PER_GAME = 1.0
+TOTAL_RIDGE_ALPHA_PER_PLAY = 70
+TOTAL_PRIOR_REGRESS = 0.6
+TOTAL_PRIOR_FADE_GAMES = 2.0
 
 # ---------- Pace (totals) ----------
 # Teams that run more plays than average push totals up. Tempo is opponent-
 # adjusted from full-game play counts; this is points added per extra play.
 # 0 turns pace off (and skips its API call).
-PACE_PTS_PER_PLAY = 0.0
+PACE_PTS_PER_PLAY = 0.2     # tuned: 0.15-0.25 best; moves totals only
 PACE_ALPHA = 3.0             # shrinkage for tempo, in games
 
 # ---------- Preseason prior ----------
 # Starting point for each team, built from last year's SP+, roster talent,
 # and returning offensive production. It fades as games are played:
 #   weight on this season's data = games / (games + PRIOR_FADE_GAMES)
-PRIOR_FADE_GAMES = 2.0
-PRIOR_REGRESS = 0.60         # how much of last year's rating carries over
+PRIOR_FADE_GAMES = 3.0       # tuned (was 2.0)
+PRIOR_REGRESS = 0.80         # how much of last year's rating carries over (tuned; was 0.60)
 TALENT_PTS_PER_SD = 3.0      # points per 1 SD of 247 team talent
 RETURNING_PTS_PER_SD = 2.5   # points (offense) per 1 SD of returning PPA %
 
@@ -43,7 +53,10 @@ RETURNING_PTS_PER_SD = 2.5   # points (offense) per 1 SD of returning PPA %
 #   fei = Brian Fremeau's FEI (bcftoys.com)   sp = Bill Connelly's SP+   fpi = ESPN's FPI
 # Whatever isn't given to these stays with the model's own rating.
 USE_FEI = True
-OUTSIDE_WEIGHTS = {"fei": 0.30, "sp": 0.0, "fpi": 0.0}
+# Past weekly values of these aren't available, so their weights can't be tuned
+# yet. The original 30% is kept, split evenly; data/snapshots/ saves them each
+# week so next season they can be tested properly.
+OUTSIDE_WEIGHTS = {"fei": 0.10, "sp": 0.10, "fpi": 0.10}
 OUTSIDE_REFRESH_HOURS = 12   # SP+/FPI change weekly; refetch at most this often
 # FEI is points per possession; multiply by possessions to get points per game.
 FEI_POSSESSIONS = 12.0
@@ -55,6 +68,9 @@ FEI_POSSESSIONS = 12.0
 CALIBRATE = True
 CALIBRATION_MIN_GAMES = 100     # graded games needed before calibrating
 CALIBRATION_MIN, CALIBRATION_MAX = 0.8, 1.6
+# Since tuning, raw ratings are close to right (past-season slope ~1.04), so the
+# in-season measurement only gets partial trust: weight = games / (games + this).
+CALIBRATION_SHRINK_GAMES = 500
 
 # ---------- Home field ----------
 HFA_MIN, HFA_MAX, HFA_DEFAULT = 1.5, 3.5, 2.5   # points
