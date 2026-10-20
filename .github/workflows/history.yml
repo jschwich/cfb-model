@@ -6,6 +6,9 @@ on:
       years:
         description: "Seasons to download, separated by spaces"
         default: "2022 2023 2024 2025 2026"
+      only:
+        description: "Optional: just these files (e.g. adv_all)"
+        default: ""
 
 permissions:
   contents: write
@@ -27,7 +30,7 @@ jobs:
       - name: Download seasons
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
-        run: python tools/fetch_history.py ${{ github.event.inputs.years }}
+        run: python tools/fetch_history.py ${{ github.event.inputs.years }} ${{ github.event.inputs.only && format('--only {0}', github.event.inputs.only) || '' }}
       - name: Save
         run: |
           git config user.name "cfb-model-bot"

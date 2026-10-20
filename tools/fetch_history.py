@@ -26,20 +26,28 @@ def save(folder, name, obj):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("years", nargs="+", type=int)
+    ap.add_argument("--only", nargs="*", help="just these files, e.g. adv_all")
     a = ap.parse_args()
     for y in a.years:
         print(f"{y}:")
         out = ROOT / "data" / "history" / str(y)
         get = lambda path, params: D._get(path, params, "unused")  # noqa: E731
-        save(out, "games", get("/games", {"year": y, "seasonType": "both"}))
-        save(out, "lines", get("/lines", {"year": y, "seasonType": "both"}))
-        save(out, "adv", get("/stats/game/advanced", {"year": y, "excludeGarbageTime": "true"}))
-        save(out, "teams", get("/teams/fbs", {"year": y}))
-        save(out, "sp", get("/ratings/sp", {"year": y - 1}))        # prior: last year's SP+
-        save(out, "talent", get("/talent", {"year": y}))
-        save(out, "returning", get("/player/returning", {"year": y}))
-        save(out, "sp_final", get("/ratings/sp", {"year": y}))      # reference only (hindsight)
-        save(out, "fpi_final", get("/ratings/fpi", {"year": y}))    # reference only (hindsight)
+        jobs = {
+            "games": ("/games", {"year": y, "seasonType": "both"}),
+            "lines": ("/lines", {"year": y, "seasonType": "both"}),
+            "adv": ("/stats/game/advanced", {"year": y, "excludeGarbageTime": "true"}),
+            "adv_all": ("/stats/game/advanced", {"year": y}),               # full play counts, for pace
+            "teams": ("/teams/fbs", {"year": y}),
+            "sp": ("/ratings/sp", {"year": y - 1}),        # prior: last year's SP+
+            "talent": ("/talent", {"year": y}),
+            "returning": ("/player/returning", {"year": y}),
+            "sp_final": ("/ratings/sp", {"year": y}),      # reference only (hindsight)
+            "fpi_final": ("/ratings/fpi", {"year": y}),    # reference only (hindsight)
+        }
+        for name, (path, params) in jobs.items():
+            if a.only and name not in a.only:
+                continue
+            save(out, name, get(path, params))
     if not (ROOT / "data" / "history" / "venues.json.gz").exists():
         save(ROOT / "data" / "history", "venues", D._get("/venues", {}, "unused"))
     print(f"API calls: {D._calls}")
