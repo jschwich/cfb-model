@@ -57,5 +57,22 @@ def main():
     print("\nDashboard written to docs/index.html")
 
 
+def _report_errors():
+    """On GitHub, show any failure as a readable message on the run's page."""
+    import os, traceback
+    try:
+        return main()
+    except SystemExit as e:
+        if e.code not in (None, 0) and os.environ.get("GITHUB_ACTIONS"):
+            print(f"::error title=Model stopped::{e.code}")
+        raise
+    except Exception as e:
+        if os.environ.get("GITHUB_ACTIONS"):
+            where = traceback.extract_tb(e.__traceback__)[-1]
+            print(f"::error title=Model crashed::{type(e).__name__}: {e} "
+                  f"(at {os.path.basename(where.filename)} line {where.lineno})")
+        raise
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_report_errors())
