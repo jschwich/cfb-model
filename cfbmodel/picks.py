@@ -57,6 +57,8 @@ def fetch(url=None):
     df = df.rename(columns={pick_col: "Pick"})
     me = getattr(config, "PICKS_PERSON", "Jerome")
     df = df[(df["Person"].str.strip() == me) & (df["Pick"].str.strip() != "")]
+    fixes = getattr(config, "PICK_FIXES", {}) or {}
+    df["Pick"] = df["Pick"].map(lambda p: fixes.get(p.strip(), p))
     keep = [c for c in ["Week", "Pick", "Result"] if c in df]
     return df[keep].reset_index(drop=True)
 

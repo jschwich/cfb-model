@@ -115,6 +115,11 @@ EXTRA_RIVALRIES = []
 PICKS_CSV_URL = ("https://docs.google.com/spreadsheets/d/e/2PACX-1vTM0w9nlD9bsm-FkKBgZtdoANkl9CPovwThzyEgC3"
                  "-Ri7lbS-MtGUZEhW3xyL7uoTehU2vGlyI7ReNU/pub?gid=1435131979&single=true&output=csv")
 PICKS_PERSON = "Jerome"
+# Typos in the sheet, corrected here so you don't have to edit the shared sheet.
+#   "pick text exactly as in the sheet": "corrected pick text"
+PICK_FIXES = {
+    "Kansas State (-8.5) vs. Georgia State": "Kennesaw State (-8.5) vs. Georgia State",
+}
 
 # ---------- My adjustments ----------
 # When you think the model is wrong about a team (QB injury or return, coaching
