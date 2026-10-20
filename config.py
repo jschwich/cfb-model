@@ -58,8 +58,9 @@ USE_FEI = True
 # week so next season they can be tested properly.
 OUTSIDE_WEIGHTS = {"fei": 0.10, "sp": 0.10, "fpi": 0.10}
 OUTSIDE_REFRESH_HOURS = 12   # SP+/FPI change weekly; refetch at most this often
-# FEI is points per possession; multiply by possessions to get points per game.
-FEI_POSSESSIONS = 12.0
+# FEI is points per possession; this converts it to points per game. 18 matches
+# SP+ and FPI (fit on 2026 ratings: 17.9 and 19.2); the old 12 squeezed spreads.
+FEI_POSSESSIONS = 18.0
 
 # ---------- Calibration ----------
 # Shrinkage makes raw ratings too cautious (spreads too narrow), which creates
