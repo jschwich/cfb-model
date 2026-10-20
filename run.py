@@ -16,6 +16,19 @@ from cfbmodel import report
 from cfbmodel import picks as K
 
 
+def _snapshot(year, data, R):
+    """Save this week's outside ratings (FEI, SP+, FPI) and the model's own, so
+    future tuning can test their weights using only what was known at the time."""
+    from pathlib import Path
+    g = data["games"]
+    todo = g[~g["completed"]]
+    wk = int(todo["wk"].min()) if len(todo) else int(g["wk"].max()) + 1
+    out = Path(__file__).resolve().parent / "data" / "snapshots" / str(year)
+    out.mkdir(parents=True, exist_ok=True)
+    cols = [c for c in ["data_rating", "prior_rating", "fei_rating", "sp_rating", "fpi_rating", "rating"] if c in R]
+    R.loc[R["fbs"], cols].round(2).to_csv(out / f"before_week_{wk:02d}.csv")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--year", type=int, default=config.YEAR)
@@ -31,6 +44,7 @@ def main():
     print(f"  FEI: {'loaded ' + str(len(fei)) + ' teams' if fei is not None else 'not used'}")
 
     R, meta = rate(data, fei=fei)
+    _snapshot(year, data, R)
     bt = backtest(data)
     meta["scale"] = fit_scale(bt)
     R = apply_scale(R, meta["scale"])
