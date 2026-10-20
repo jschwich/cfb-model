@@ -48,8 +48,12 @@ CALIBRATION_MIN, CALIBRATION_MAX = 0.8, 1.6
 # ---------- Home field ----------
 HFA_MIN, HFA_MAX, HFA_DEFAULT = 1.5, 3.5, 2.5   # points
 
-# ---------- Partial-game estimates ----------
-# Rough share of full-game spread/total that shows up in the first half.
+# ---------- Team totals, quarters and halves ----------
+# Each team's points are split by quarter using the league average, nudged by
+# that team's offense and the opponent's defense. Their tendencies are trusted
+# more as games pile up: weight = games / (games + PERIOD_SHRINK_GAMES).
+PERIOD_SHRINK_GAMES = 8.0
+# Fallback split, only used before there are enough quarter scores.
 FIRST_HALF_SPREAD_SHARE = 0.55
 FIRST_HALF_TOTAL_SHARE = 0.52
 

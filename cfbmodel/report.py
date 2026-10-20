@@ -129,6 +129,54 @@ def _games_table(games):
             "<th></th></tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
 
 
+def _periods_table(games):
+    if not len(games) or "1q_total" not in games:
+        return "<p class=muted>No upcoming games.</p>"
+    rows = []
+    for _, r in games.iterrows():
+        cells = [f"<td>{E(r['away'])} <b>{r['tt_away']:.1f}</b><br>{E(r['home'])} <b>{r['tt_home']:.1f}</b></td>"]
+        for k in ("1q", "3q", "1h", "2h"):
+            cells.append(f"<td>{_fav_line(r['home'], r['away'], r[k + '_spread'])}<br>"
+                         f"<b>{r[k + '_total']:.1f}</b> <span class=muted>({r[k + '_away']:.1f}–{r[k + '_home']:.1f})</span></td>")
+        rows.append(f"<tr><td class='gm stick'><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
+                    f"<div class=muted>{_when(r['start'])}</div></td>" + "".join(cells) + "</tr>")
+    cards = []
+    for _, r in games.iterrows():
+        lines = [f"<tr><td>TT</td><td>–</td><td>–</td><td>{r['tt_away']:.1f}</td><td>{r['tt_home']:.1f}</td></tr>"]
+        for k in ("1q", "3q", "1h", "2h"):
+            lines.append(f"<tr><td>{k.upper()}</td><td>{_fav_line(r['home'], r['away'], r[k + '_spread'])}</td>"
+                         f"<td><b>{r[k + '_total']:.1f}</b></td><td>{r[k + '_away']:.1f}</td><td>{r[k + '_home']:.1f}</td></tr>")
+        cards.append(f"<div class=pcard><div><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b> "
+                     f"<span class=muted>{_when(r['start'])}</span></div>"
+                     f"<table><thead><tr><th></th><th>Spread</th><th>Total</th><th>{E(r['away'])[:12]}</th>"
+                     f"<th>{E(r['home'])[:12]}</th></tr></thead><tbody>{''.join(lines)}</tbody></table></div>")
+    phone = "<div class=pcards>" + "".join(cards) + "</div>"
+    return phone + ("<div class='tw pwide'><table class=per><thead><tr><th class=stick>Game</th><th>Team totals</th>"
+            "<th>1Q</th><th>3Q</th><th>1H</th><th>2H</th></tr></thead><tbody>"
+            + "".join(rows) + "</tbody></table></div>")
+
+
+def _periods_grade(g):
+    if g is None or not len(g):
+        return ""
+    def cell(m, f):
+        if pd.isna(m):
+            return "<td>–</td>"
+        better = f - m
+        return f"<td>{m:.2f} <span class=muted>vs {f:.2f}</span></td>" if not pd.isna(f) else f"<td>{m:.2f}</td>"
+    rows = "".join(
+        f"<tr><td>{E(r['period'])}</td><td>{int(r['games'])}</td>"
+        + cell(r.get("tt_err"), r.get("flat_tt_err"))
+        + cell(r.get("total_err"), r.get("flat_total_err"))
+        + cell(r.get("spread_err"), r.get("flat_spread_err")) + "</tr>"
+        for _, r in g.iterrows())
+    return ("<h3>Team totals and periods</h3><p class=muted>Average miss in points, graded out of sample. "
+            "The grey number is a flat split (every team scores the league-average share in each quarter); "
+            "if the model's number isn't lower, the team-by-team quarter tendencies aren't adding anything yet.</p>"
+            "<div class=tw><table><thead><tr><th>Period</th><th>Games</th><th>Team total miss</th>"
+            "<th>Total miss</th><th>Spread miss</th></tr></thead><tbody>" + rows + "</tbody></table></div>")
+
+
 def _ratings_table(R):
     F = R[R["fbs"]].sort_values("rating", ascending=False)
     rows = []
@@ -177,7 +225,7 @@ def _track(bt_sum):
                  "</tr></thead><tbody>" + frows + "</tbody></table></div>")
     else:
         flags = ""
-    return head + weekly + flags
+    return head + weekly + _periods_grade(s.get("periods")) + flags
 
 
 CSS = """
@@ -218,6 +266,11 @@ td.gm{white-space:normal;min-width:180px}tr:last-child td{border-bottom:0}
 .stats span{display:block;font-size:18px;font-weight:700;color:var(--ink)}
 .demo{background:var(--warn);color:#fff;padding:8px 16px;text-align:center;font-weight:700}
 input{width:100%;max-width:320px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);margin-bottom:8px;font-size:15px}
+table.per td{white-space:nowrap}.stick{position:sticky;left:0;background:var(--card);z-index:1}
+th.stick{z-index:2}table.per td.gm{min-width:150px;white-space:normal}
+.pcards{display:none}.pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pcard table{font-size:13px;margin-top:4px}.pcard th,.pcard td{padding:4px 6px}
+@media (max-width:700px){.pcards{display:block}.pwide{display:none}}
 .legend{font-size:12.5px;color:var(--mut);margin:6px 0 10px}.legend b{color:var(--ink)}
 """
 
@@ -254,12 +307,15 @@ def write(R, meta, games, label, bt, bt_sum, info):
 {info.get('demo_banner', '')}
 <header><h1>CFB Model · {info['year']}</h1>
 <div class=muted>Updated {E(info['updated'])} · {E(label)} · home field {meta['hfa']:.1f} pts · {fei_note} · calibration ×{meta.get('scale', 1.0):.2f}</div></header>
-<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
+<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#periods">Team totals &amp; periods</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
 <main>
 <section id=value><h2>Value board · {E(label)}</h2>
 <p class=muted>Lean = {config.SPREAD_LEAN:g}+ pt spread / {config.TOTAL_LEAN:g}+ pt total edge; Strong = {config.SPREAD_STRONG:g}+ / {config.TOTAL_STRONG:g}+. Big edges often mean news the model can't see (injuries, QB changes, weather). Check before betting.</p>
 {_value_cards(games)}</section>
 <section id=games><h2>All games</h2>{legend}{_games_table(games)}</section>
+<section id=periods><h2>Team totals &amp; periods</h2>
+<p class=muted>Model numbers only. There's no market line for these here, so compare them with your book. Spreads are shown from the favorite's side; totals are bold, with each team's points in brackets (away–home). Team totals are full game; quarter and half numbers leave out overtime.</p>
+{_periods_table(games)}</section>
 <section id=ratings><h2>Power ratings</h2>
 <p class=muted>Points vs. an average FBS team on a neutral field. “This yr wt” is how much this season's games count versus the preseason prior.</p>
 <input id=q placeholder="Filter teams or conferences">{_ratings_table(R)}</section>

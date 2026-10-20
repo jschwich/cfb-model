@@ -11,6 +11,7 @@ import pandas as pd
 import config
 from .ratings import rate, lookup
 from .situations import Situations, against
+from . import periods as P
 
 
 def _phi(x):
@@ -164,6 +165,7 @@ def upcoming(data, R, meta):
     M = market_lines(data["lines"])
     data["_line_by_game"] = dict(zip(M["game_id"], M["spread"])) if len(M) else {}
     out = _evaluate(slate, R, meta, M, Situations(data))
+    out = P.add_periods(out, P.fit_shares(data))
     out["best_edge"] = out[["spread_edge", "total_edge"]].max(axis=1)
     return out.sort_values("start").reset_index(drop=True), label
 
@@ -189,6 +191,12 @@ def backtest(data):
         ev["home_rating"] /= k  # keep the raw gap for fitting the next week's scale
         ev["away_rating"] /= k
         ev["actual_margin"] = ev["home_pts"] - ev["away_pts"]
+        sh = P.fit_shares(data, through_week=wk)  # quarter tendencies from earlier weeks only
+        if sh is not None:
+            flat = P.add_periods(ev, {**sh, "off": {}, "def": {}})
+            ev = P.add_periods(ev, sh)
+            for c in [c for c in flat.columns if c[:2] in ("1q", "3q", "1h", "2h")]:
+                ev["flat_" + c] = flat[c]
         out.append(ev)
     if not out:
         return pd.DataFrame()
@@ -213,6 +221,7 @@ def backtest(data):
 
     bt["ats_win"] = bt.apply(ats, axis=1)
     bt["ou_win"] = bt.apply(ou, axis=1)
+    bt.attrs["periods"] = P.grade(bt, data["games"])
     return bt
 
 
@@ -265,4 +274,5 @@ def summarize_backtest(bt):
                        "market_mae": l["market_err"].mean() if len(l) else np.nan,
                        "ats_lean": _record(grp.loc[grp["spread_tier"] != "", "ats_win"])})
     s["weekly"] = weekly
+    s["periods"] = bt.attrs.get("periods")
     return s

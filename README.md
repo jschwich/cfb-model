@@ -31,6 +31,7 @@ Bookmark it. From then on it updates itself every 6 hours.
 
 - **Value board:** games where the model disagrees with the betting line by enough to matter, ranked by size of the edge.
 - **All games:** market line versus model line for the whole slate, plus projected scores and rough first-half numbers.
+- **Team totals & periods:** the model's team totals plus 1Q, 3Q, 1H and 2H spreads and totals for every game. These are model numbers only (the free data has no lines for these markets), so compare them with your book.
 - **Power ratings:** every FBS team in points versus an average team, split into offense and defense, with this season's data weighted against the preseason prior.
 - **Situational flags:** tags on games where a classic handicapping spot applies: letdown, look-ahead, sandwich, rest edge (bye or short week), and long trip. They are information only and never change the model's numbers. A value pick that a spot works against gets a ⚠ warning.
 - **Track record:** the model graded week by week against closing lines, using only information it had before each week. This is how you know whether to trust it.
@@ -46,9 +47,10 @@ Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
 5. **FEI blend.** Brian Fremeau's FEI (bcftoys.com) is mixed in at 30% as an independent second opinion. If that site can't be reached, the model runs without it.
 6. **Calibration.** Shrinkage makes raw ratings too cautious, which shows up as fake underdog value. Once 100+ games have been graded, the model measures how much its past projections undershot real margins (using only games before each week) and stretches rating gaps to match. Totals are left alone. The multiplier is shown at the top of the dashboard.
 7. **Projection.** Home rating minus away rating plus home field (fit from the data, about 2–3.5 pts) gives the spread; offense versus defense gives each side's points and the total.
-8. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
+8. **Team totals and periods.** Each team's projected points are its team total. Quarter numbers come from splitting those points by quarter: the league-average split, adjusted for how this offense spreads its scoring and how this opponent's defense spreads what it allows, trusted more as games pile up. Halves are quarters added together; overtime is left out. The track record compares this against a flat league-average split.
+9. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
 
-9. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
+10. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
 
 All of these knobs live in `config.py` with plain-English comments. Edit a number on GitHub (pencil icon) and the next run uses it.
 

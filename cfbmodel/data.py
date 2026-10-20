@@ -96,6 +96,8 @@ def _games(raw):
             "away_conf": _pick(g, "awayConference", "away_conference", default=""),
             "home_pts": _pick(g, "homePoints", "home_points"),
             "away_pts": _pick(g, "awayPoints", "away_points"),
+            "home_ls": _pick(g, "homeLineScores", "home_line_scores"),
+            "away_ls": _pick(g, "awayLineScores", "away_line_scores"),
         })
     df = pd.DataFrame(rows)
     if df.empty:
