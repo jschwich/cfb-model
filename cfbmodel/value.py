@@ -134,10 +134,15 @@ def fit_scale(rows):
 
 
 def apply_scale(R, k):
-    """Stretch every team's offense and defense (vs. average) by k."""
+    """Stretch every team's rating (vs. average) by k, for spreads only.
+
+    Offense and defense each get half the change, so off - def (what drives
+    totals) is untouched and projected totals don't move.
+    """
     R = R.copy()
-    for c in ("off", "def"):
-        R[c] = R[c] * k
+    bump = (k - 1) * (R["off"] + R["def"]) / 2
+    R["off"] += bump
+    R["def"] += bump
     R["rating"] = R["off"] + R["def"]
     return R
 
