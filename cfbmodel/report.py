@@ -253,7 +253,7 @@ def write(R, meta, games, label, bt, bt_sum, info):
 <title>CFB Model</title><style>{CSS}</style></head><body>
 {info.get('demo_banner', '')}
 <header><h1>CFB Model · {info['year']}</h1>
-<div class=muted>Updated {E(info['updated'])} · {E(label)} · home field {meta['hfa']:.1f} pts · {fei_note}</div></header>
+<div class=muted>Updated {E(info['updated'])} · {E(label)} · home field {meta['hfa']:.1f} pts · {fei_note} · calibration ×{meta.get('scale', 1.0):.2f}</div></header>
 <nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
 <main>
 <section id=value><h2>Value board · {E(label)}</h2>

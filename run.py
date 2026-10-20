@@ -11,7 +11,7 @@ import pandas as pd
 import config
 from cfbmodel import data as D
 from cfbmodel.ratings import rate
-from cfbmodel.value import upcoming, backtest, summarize_backtest
+from cfbmodel.value import upcoming, backtest, summarize_backtest, fit_scale, apply_scale
 from cfbmodel import report
 
 
@@ -30,11 +30,13 @@ def main():
     print(f"  FEI: {'loaded ' + str(len(fei)) + ' teams' if fei is not None else 'not used'}")
 
     R, meta = rate(data, fei=fei)
+    bt = backtest(data)
+    meta["scale"] = fit_scale(bt)
+    R = apply_scale(R, meta["scale"])
     games, label = upcoming(data, R, meta)
     print(f"Rated {int(R['fbs'].sum())} FBS teams; home field {meta['hfa']:.1f}; "
-          f"next slate: {label} ({len(games)} games)")
+          f"calibration x{meta['scale']:.2f}; next slate: {label} ({len(games)} games)")
 
-    bt = backtest(data)
     bt_sum = summarize_backtest(bt)
     if bt_sum:
         print(f"Backtest: {bt_sum['games']} games; model miss {bt_sum['model_mae']:.1f} "

@@ -37,6 +37,14 @@ USE_FEI = True
 FEI_WEIGHT = 0.30            # share of the final margin rating from FEI
 FEI_POSSESSIONS = 12.0
 
+# ---------- Calibration ----------
+# Shrinkage makes raw ratings too cautious (spreads too narrow), which creates
+# fake underdog "value". Once enough games have been graded out of sample, the
+# model measures how much it undershoots real margins and stretches ratings to match.
+CALIBRATE = True
+CALIBRATION_MIN_GAMES = 100     # graded games needed before calibrating
+CALIBRATION_MIN, CALIBRATION_MAX = 0.8, 1.6
+
 # ---------- Home field ----------
 HFA_MIN, HFA_MAX, HFA_DEFAULT = 1.5, 3.5, 2.5   # points
 

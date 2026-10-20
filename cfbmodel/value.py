@@ -119,6 +119,29 @@ def _evaluate(games, R, meta, M, sit):
     return pd.DataFrame(rows)
 
 
+def fit_scale(rows):
+    """How much to stretch rating gaps so projections match real margins.
+
+    Fit from games graded out of sample: actual margin = k * rating gap + home field.
+    """
+    if not getattr(config, "CALIBRATE", True) or rows is None or len(rows) < config.CALIBRATION_MIN_GAMES:
+        return 1.0
+    gap = rows["home_rating"] - rows["away_rating"]
+    hfa = (-rows["model_spread"]) - gap * rows.get("scale", 1.0)
+    y = rows["actual_margin"] - hfa
+    k = float((gap * y).sum() / (gap * gap).sum())
+    return float(np.clip(k, config.CALIBRATION_MIN, config.CALIBRATION_MAX))
+
+
+def apply_scale(R, k):
+    """Stretch every team's offense and defense (vs. average) by k."""
+    R = R.copy()
+    for c in ("off", "def"):
+        R[c] = R[c] * k
+    R["rating"] = R["off"] + R["def"]
+    return R
+
+
 def _relevant(games, fbs):
     return games[games["home"].isin(fbs) | games["away"].isin(fbs)]
 
@@ -154,7 +177,13 @@ def backtest(data):
         if wk < config.BACKTEST_FIRST_WEEK:
             continue
         R, meta = rate(data, fei=None, through_week=wk)  # no historical FEI available
-        ev = _evaluate(done[done["wk"] == wk], R, meta, M, sit)
+        prior = pd.concat(out, ignore_index=True) if out else None
+        k = fit_scale(prior)  # only uses weeks before this one
+        ev = _evaluate(done[done["wk"] == wk], apply_scale(R, k), meta, M, sit)
+        ev["scale"] = k
+        ev["home_rating"] /= k  # keep the raw gap for fitting the next week's scale
+        ev["away_rating"] /= k
+        ev["actual_margin"] = ev["home_pts"] - ev["away_pts"]
         out.append(ev)
     if not out:
         return pd.DataFrame()
