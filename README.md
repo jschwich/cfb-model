@@ -44,10 +44,11 @@ Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
 3. **Convert to points.** Each adjusted stat is turned into points using this season's scores, then blended: 45% EPA, 25% success rate, 30% points.
 4. **Preseason prior.** Last year's SP+, 247 team talent, and returning production give each team a starting point. It fades as games are played; after 6 games this season's data carries 75% of the weight.
 5. **FEI blend.** Brian Fremeau's FEI (bcftoys.com) is mixed in at 30% as an independent second opinion. If that site can't be reached, the model runs without it.
-6. **Projection.** Home rating minus away rating plus home field (fit from the data, about 2–3.5 pts) gives the spread; offense versus defense gives each side's points and the total.
-7. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
+6. **Calibration.** Shrinkage makes raw ratings too cautious, which shows up as fake underdog value. Once 100+ games have been graded, the model measures how much its past projections undershot real margins (using only games before each week) and stretches rating gaps to match. Totals are left alone. The multiplier is shown at the top of the dashboard.
+7. **Projection.** Home rating minus away rating plus home field (fit from the data, about 2–3.5 pts) gives the spread; offense versus defense gives each side's points and the total.
+8. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
 
-8. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
+9. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
 
 All of these knobs live in `config.py` with plain-English comments. Edit a number on GitHub (pencil icon) and the next run uses it.
 
