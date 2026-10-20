@@ -194,17 +194,51 @@ def load_all(year):
             "api_calls": _calls}
 
 
+_ALIASES = {"miamifl": "miami", "appstate": "appalachianstate", "floridainternational": "fiu",
+            "massachusetts": "umass", "northcarolinastate": "ncstate", "samhoustonstate": "samhouston",
+            "southernmississippi": "southernmiss", "connecticut": "uconn",
+            "louisianamonroe": "ulmonroe", "ulm": "ulmonroe", "louisianalafayette": "louisiana",
+            "ullafayette": "louisiana", "texassanantonio": "utsa", "centralflorida": "ucf",
+            "brighamyoung": "byu", "southerncalifornia": "usc", "louisianastate": "lsu",
+            "texaschristian": "tcu", "southernmethodist": "smu", "texaselpaso": "utep",
+            "nevadalasvegas": "unlv", "alabamabirmingham": "uab", "mississippi": "olemiss",
+            "pittsburgh": "pitt", "miamiohio": "miamioh", "kennesaw": "kennesawstate",
+            "middletennesseestate": "middletennessee", "westernkentuckyu": "westernkentucky"}
+
+
 def norm_name(s):
-    s = str(s).lower().replace("&", "and")
-    s = re.sub(r"\bst\.?$|\bst\.? ", "state ", s)
-    return re.sub(r"[^a-z0-9]", "", s.replace("state ", "state"))
+    """One spelling per school, so CFBD and FEI names line up."""
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().lower()
+    s = s.replace("&", "and")
+    s = re.sub(r"\bst\.?$", "state", s.strip())
+    k = re.sub(r"[^a-z0-9]", "", s)
+    return _ALIASES.get(k, k)
 
 
-_FEI_ALIASES = {"miamifl": "miami", "miamioh": "miamioh", "ucf": "ucf", "hawaii": "hawaii",
-                "sanjosestate": "sanjosestate", "louisianamonroe": "ulmonroe",
-                "ulmonroe": "ulmonroe", "southernmiss": "southernmississippi",
-                "connecticut": "uconn", "massachusetts": "umass", "texasam": "texasam",
-                "appstate": "appalachianstate", "sjsu": "sanjosestate"}
+def _warn(msg):
+    print(f"  warning: {msg}")
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::warning title=Model note::{msg}")
+
+
+def _parse_fei(page):
+    """bcftoys splits the ratings across several tables with grouped headers.
+    Read every table that has Team and FEI columns and stack them."""
+    from io import StringIO
+    parts = []
+    for t in pd.read_html(StringIO(page)):
+        names = [str(c[-1] if isinstance(c, tuple) else c).strip() for c in t.columns]
+        if "Team" not in names or "FEI" not in names:
+            continue
+        sub = pd.DataFrame({"team": t.iloc[:, names.index("Team")],
+                            "fei": t.iloc[:, names.index("FEI")]})
+        parts.append(sub)
+    if not parts:
+        return None
+    df = pd.concat(parts, ignore_index=True)
+    df = df[df["team"].astype(str).str.strip().ne("Team")]  # repeated header rows
+    return df.drop_duplicates("team")
 
 
 def load_fei(year, fbs=None):
@@ -220,27 +254,19 @@ def load_fei(year, fbs=None):
             r = requests.get(f"https://www.bcftoys.com/{year}-fei", timeout=30,
                              headers={"User-Agent": "Mozilla/5.0 (cfb-model)"})
             r.raise_for_status()
-            from io import StringIO
-            tables = pd.read_html(StringIO(r.text))
-            df = None
-            for t in tables:
-                cols = [" ".join(map(str, c)) if isinstance(c, tuple) else str(c) for c in t.columns]
-                t.columns = cols
-                team_col = next((c for c in cols if "team" in c.lower()), None)
-                fei_col = next((c for c in cols if re.fullmatch(r".*\bFEI\b.*", c)
-                                and "rk" not in c.lower() and "rank" not in c.lower()), None)
-                if team_col and fei_col:
-                    df = t[[team_col, fei_col]].rename(columns={team_col: "team", fei_col: "fei"})
-                    break
+            df = _parse_fei(r.text)
             if df is None:
-                print("  warning: FEI table not found on bcftoys.com")
+                _warn("FEI table not found on bcftoys.com; running without it")
                 return None
         df["fei"] = pd.to_numeric(df["fei"], errors="coerce")
         df = df.dropna(subset=["fei"])
-        df["key"] = df["team"].map(norm_name).map(lambda k: _FEI_ALIASES.get(k, k))
-        return df[["team", "key", "fei"]].reset_index(drop=True) if len(df) > 50 or fx else None
+        df["key"] = df["team"].map(norm_name)
+        if len(df) <= 50 and not fx:
+            _warn(f"FEI page only had {len(df)} teams; running without it")
+            return None
+        return df[["team", "key", "fei"]].reset_index(drop=True)
     except Exception as e:
-        print(f"  warning: FEI unavailable ({e}); running without it")
+        _warn(f"FEI unavailable ({type(e).__name__}: {e}); running without it")
         return None
 
 
