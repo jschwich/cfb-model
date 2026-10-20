@@ -53,7 +53,7 @@ def fit_shares(data, through_week=None):
     lg = df.loc[both_fbs, QS].sum()
     league = (lg / lg.sum()).to_dict()
 
-    k = getattr(config, "PERIOD_SHRINK_GAMES", 8.0)
+    k = getattr(config, "PERIOD_SHRINK_GAMES", 25.0)
 
     def dev(col):
         out = {}
