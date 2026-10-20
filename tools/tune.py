@@ -66,7 +66,9 @@ def season_rows(args):
             hp, ap = project(r, R, meta)
             gap = lookup(R, r["home"])["rating"] - lookup(R, r["away"])["rating"]
             mk = M.loc[r["id"]] if r["id"] in M.index else None
-            out.append({"year": year, "wk": wk, "pred_margin": hp - ap, "pred_total": hp + ap, "gap": gap,
+            out.append({"year": year, "wk": wk, "game_id": r["id"], "home": r["home"], "away": r["away"],
+                        "home_conf": r["home_conf"], "away_conf": r["away_conf"], "neutral": r["neutral"],
+                        "start": r["start"], "pred_margin": hp - ap, "pred_total": hp + ap, "gap": gap,
                         "hfa": (hp - ap) - gap,
                         "margin": r["home_pts"] - r["away_pts"], "total": r["home_pts"] + r["away_pts"],
                         "mkt_spread": mk["spread"] if mk is not None else np.nan,
