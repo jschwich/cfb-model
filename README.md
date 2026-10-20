@@ -54,6 +54,23 @@ Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
 
 All of these knobs live in `config.py` with plain-English comments. Edit a number on GitHub (pencil icon) and the next run uses it.
 
+## Your own adjustments
+
+When you think the model has a team wrong (QB hurt or back, coaching change, a team that has clearly changed), open `config.py` on GitHub, click the pencil icon, and add a line under `MY_ADJUSTMENTS`:
+
+```
+MY_ADJUSTMENTS = [
+    ("Ohio State", 3.0, 9, "QB back from injury"),
+    ("Northwestern", -4.0, 8, "starting QB out", 10),   # last number = until week 10
+]
+```
+
+Points move the team's rating (and every spread it plays in) by that much; totals don't change. Use the team name exactly as the power ratings table spells it, and the week number shown at the top of the dashboard. Commit, then run the workflow (or wait for the next 6-hour run). Games with an adjustment get a blue tag, and the track record shows whether your adjustments have made the model more or less accurate on games already played.
+
+## Your picks
+
+The dashboard reads your rows from the published Pick Log (`PICKS_CSV_URL` in `config.py`) and shows, for each pick, what the model projected before that week at the number you took, plus your record when the model agreed versus disagreed.
+
 ## Caveats
 
 - Closing lines are sharp. A large edge often means the model is missing news, such as an injury, a QB change, or weather. Check before betting.

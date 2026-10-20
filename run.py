@@ -14,12 +14,16 @@ from cfbmodel.ratings import rate
 from cfbmodel.value import upcoming, backtest, summarize_backtest, fit_scale, apply_scale
 from cfbmodel import report
 from cfbmodel import picks as K
+from cfbmodel import adjust as A
 
 
 def _snapshot(year, data, R):
     """Save this week's outside ratings (FEI, SP+, FPI) and the model's own, so
     future tuning can test their weights using only what was known at the time."""
+    import os
     from pathlib import Path
+    if os.environ.get("CFBD_FIXTURE_DIR"):
+        return  # test runs on saved data shouldn't write snapshots
     g = data["games"]
     soon = g["start"] > pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3)
     todo = g[~g["completed"] & soon]   # ignore old games that were never played
@@ -49,11 +53,18 @@ def main():
     bt = backtest(data)
     meta["scale"] = fit_scale(bt)
     R = apply_scale(R, meta["scale"])
+    g_all = data["games"]
+    todo = g_all[~g_all["completed"] & (g_all["start"] > pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3))]
+    next_wk = int(todo["wk"].min()) if len(todo) else int(g_all["wk"].max()) + 1
+    R = A.apply(R, next_wk)
     games, label = upcoming(data, R, meta)
+    games = A.tag(games)
     print(f"Rated {int(R['fbs'].sum())} FBS teams; home field {meta['hfa']:.1f}; "
           f"calibration x{meta['scale']:.2f}; next slate: {label} ({len(games)} games)")
 
     bt_sum = summarize_backtest(bt)
+    if bt_sum is not None:
+        bt_sum["my_adj"] = A.record(bt[bt["wk"] >= 1])
     if bt_sum:
         print(f"Backtest: {bt_sum['games']} games; model miss {bt_sum['model_mae']:.1f} "
               f"vs market {bt_sum['market_mae']:.1f}")

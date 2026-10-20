@@ -67,6 +67,34 @@ def _chips(flags, with_text=False):
     return "<div class=chips>" + "".join(out) + "</div>"
 
 
+def _adj_chip(r):
+    t = r.get("my_adj_text") if hasattr(r, "get") else None
+    if not t or (isinstance(t, float) and np.isnan(t)):
+        return ""
+    return f"<div class=chips><span class='chip f-mine'>Your adjustment: {E(t)}</span></div>"
+
+
+def _my_adj(m):
+    if m is None:
+        return ""
+    if not m.get("games"):
+        return ("<h3>Your adjustments</h3><p class=muted>None of your adjustments has covered a "
+                "finished game yet.</p>")
+    better = m["err_with"] < m["err_without"]
+    rows = "".join(f"<tr><td>{int(r['wk'])}</td><td class=gm>{E(r['game'])}</td><td>{r['shift']:+g}</td>"
+                   f"<td>{r['err_without']:.1f}</td><td>{r['err_with']:.1f}</td></tr>"
+                   for _, r in m["rows"].iterrows())
+    side = f"{m['side_w']}–{m['side_l']}" if m["side_w"] + m["side_l"] else "–"
+    return ("<h3>Your adjustments</h3><div class=stats>"
+            f"<div><span>{m['games']}</span>games affected</div>"
+            f"<div><span>{m['err_without']:.1f} → {m['err_with']:.1f}</span>avg miss without → with</div>"
+            f"<div><span>{side}</span>side you pushed toward, ATS</div></div>"
+            f"<p class=muted>{'Your adjustments made the model more accurate so far.' if better else 'So far the model was more accurate without your adjustments.'} "
+            "Small samples swing a lot.</p>"
+            "<div class=tw><table><thead><tr><th>Wk</th><th>Game</th><th>Shift</th><th>Miss without</th>"
+            "<th>Miss with</th></tr></thead><tbody>" + rows + "</tbody></table></div>")
+
+
 def _value_cards(games):
     if not len(games):
         return "<p class=muted>No games on the slate yet.</p>"
@@ -101,7 +129,7 @@ def _value_cards(games):
             f"<div class=pick>{pick}</div>"
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
-            f"{warn}{_chips(r['flags'], with_text=True)}</div>")
+            f"{warn}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}</div>")
     return "<div class=cards>" + "".join(cards) + "</div>"
 
 
@@ -116,7 +144,7 @@ def _games_table(games):
             "<tr>"
             f"<td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
             f"{' <span class=muted>(N)</span>' if r['neutral'] else ''}"
-            f"<div class=muted>{_when(r['start'])}</div>{_chips(r['flags'])}</td>"
+            f"<div class=muted>{_when(r['start'])}</div>{_chips(r['flags'])}{_adj_chip(r)}</td>"
             f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}</td>"
             f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b></td>"
             f"<td>{_n(r['market_total'], '{:g}')}</td>"
@@ -275,7 +303,7 @@ def _track(bt_sum):
                  "</tr></thead><tbody>" + frows + "</tbody></table></div>")
     else:
         flags = ""
-    return head + weekly + _periods_grade(s.get("periods")) + flags
+    return head + weekly + _periods_grade(s.get("periods")) + flags + _my_adj(s.get("my_adj"))
 
 
 CSS = """
@@ -306,7 +334,7 @@ h2{font-size:18px;margin:8px 0 10px}h3{font-size:16px;margin:22px 0 6px}.muted{c
 .chip{background:var(--chip);border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:600;border-left:3px solid var(--mut)}
 .ftxt{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
 .f-let{border-left-color:#d9480f}.f-look{border-left-color:#7048e8}.f-sand{border-left-color:#c2255c}
-.f-rest{border-left-color:#2b8a3e}.f-trip{border-left-color:#1971c2}
+.f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-trip{border-left-color:#1971c2}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
 th{font-size:12px;color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}

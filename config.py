@@ -98,3 +98,15 @@ EXTRA_RIVALRIES = []
 PICKS_CSV_URL = ("https://docs.google.com/spreadsheets/d/e/2PACX-1vTM0w9nlD9bsm-FkKBgZtdoANkl9CPovwThzyEgC3"
                  "-Ri7lbS-MtGUZEhW3xyL7uoTehU2vGlyI7ReNU/pub?gid=1435131979&single=true&output=csv")
 PICKS_PERSON = "Jerome"
+
+# ---------- My adjustments ----------
+# When you think the model is wrong about a team (QB injury or return, coaching
+# change, a team that has clearly changed), add a line here. Points move the
+# team's rating, so spreads move by that much; totals don't change.
+#   ("Team name", points, from week, "why", until week)   <- "until week" is optional
+# Week numbers are the model's (the "Week 8" shown at the top of the dashboard).
+# Team names must match the power ratings table exactly.
+MY_ADJUSTMENTS = [
+    # ("Ohio State", 3.0, 9, "QB back from injury"),
+    # ("Northwestern", -4.0, 8, "starting QB out", 10),
+]
