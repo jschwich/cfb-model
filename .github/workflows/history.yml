@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-model
+  group: pull-history   # separate from the 6-hour updates so they never wait on this
   cancel-in-progress: false
 
 jobs:
