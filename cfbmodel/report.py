@@ -345,6 +345,8 @@ def _ratings_table(R):
         rows.append(
             f"<tr><td>{int(r['rank'])}</td><td class=gm><b>{E(t)}</b>"
             + (" <span class='chip f-mine'>preseason ignored</span>" if t in getattr(config, "IGNORE_PRIOR", []) else "")
+            + (f" <span class='chip f-low'>new coach {r['coach_adj']:+g} preseason</span>"
+               if r.get("coach_adj") and not pd.isna(r.get("coach_adj")) and t not in getattr(config, "IGNORE_PRIOR", []) else "")
             + f"<div class=muted>{E(str(r['conference'] or ''))}</div></td>"
             f"<td><b>{r['rating']:+.1f}</b></td><td>{r['off']:+.1f}</td><td>{r['def']:+.1f}</td>"
             f"<td>{int(r['games'])}</td><td>{r['data_weight']:.0%}</td>"

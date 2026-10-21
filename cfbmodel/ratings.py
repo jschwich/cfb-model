@@ -92,10 +92,26 @@ def _prior(data, fbs_list, regress=None):
         sd = s.std()
         return ((s - s.mean()) / sd).fillna(0.0) if sd and sd > 0 else pd.Series(0.0, index=fbs_list)
 
+    # First-year head coaches (tested 2022-2026, weeks 3-8): at a program that was
+    # good last year the model ran ~3 pts too high; at one that bottomed out and
+    # brought in a big transfer class it ran ~2 pts too low.
+    P["coach_adj"] = 0.0
+    cc = data.get("coach")
+    if getattr(config, "NEW_COACH_ADJUST", False) and cc is not None and len(cc) and sp is not None and len(sp):
+        cc = cc.set_index("team").reindex(fbs_list)
+        last = sp["sp"].reindex(fbs_list) if "sp" in sp else (sp["sp_off"] - sp["sp_def"]).reindex(fbs_list)
+        lo, hi = last.quantile(1 / 3), last.quantile(2 / 3)
+        big = cc["transfers_in"] >= cc["transfers_in"].quantile(0.75)
+        new = cc["new_coach"].fillna(False).astype(bool)
+        P.loc[new & (last >= hi), "coach_adj"] = config.NEW_COACH_WAS_GOOD_PTS
+        P.loc[new & (last <= lo) & big, "coach_adj"] = config.NEW_COACH_REBUILD_PTS
+        P.loc[new & last.isna() & big, "coach_adj"] = config.NEW_COACH_REBUILD_PTS
     tz = z(data["talent"], "talent")
     rz = z(data["returning"], "ret_ppa")
     P["off"] += tz * config.TALENT_PTS_PER_SD / 2 + rz * config.RETURNING_PTS_PER_SD
     P["def"] += tz * config.TALENT_PTS_PER_SD / 2
+    P["off"] += P["coach_adj"] / 2
+    P["def"] += P["coach_adj"] / 2
     P["off"] -= P["off"].mean()
     P["def"] -= P["def"].mean()
     return P
@@ -214,6 +230,7 @@ def rate(data, fei=None, through_week=None):
         "fbs": True, "games": g.astype(int),
         "off_data": od, "def_data": dd, "data_rating": od + dd,
         "off_prior": P["off"], "def_prior": P["def"], "prior_rating": P["off"] + P["def"],
+        "coach_adj": P["coach_adj"] if "coach_adj" in P else 0.0,
         "data_weight": wdata, "off": off, "def": dfn, "tot_off": ot - ot.mean(), "tot_def": dt - dt.mean(),
     }, index=fbs_list)
 

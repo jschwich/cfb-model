@@ -69,6 +69,10 @@ MY_ADJUSTMENTS = [
 
 Points move the team's rating (and every spread it plays in) by that much; totals don't change. Use the team name exactly as the power ratings table spells it, and the week number shown at the top of the dashboard. Commit, then run the workflow (or wait for the next 6-hour run). Games with an adjustment get a blue tag, and the track record shows whether your adjustments have made the model more or less accurate on games already played.
 
+### First-year head coaches
+
+The preseason guess is adjusted for coaching changes (head coaches and 3-star+ transfers from CollegeFootballData). Tested on 2022–2026, weeks 3–8: a new coach at a program that was in the top third last year ran about 3 pts worse than the model and covered 42%, so those teams start 6 pts lower; a new coach at a bottom-third program with a big transfer class ran about 2 pts better, so those start 3 pts higher. Both fade as games are played. The ratings table tags these teams.
+
 ### Teams whose preseason guess you don't trust
 
 For a team with a new coach and a rebuilt roster, last year's SP+ and its returning production describe a different team. Add it to `IGNORE_PRIOR` in `config.py` and, once it has played 3 games, it's rated only on this season's results. Games involving those teams get a blue tag. A general version of this (fade the preseason guess faster whenever results disagree with it) was tested on 2022–2026 and made the model worse, because most such gaps shrink back. It's the reason behind the gap (coach, roster) that makes a team worth listing.

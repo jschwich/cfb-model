@@ -142,6 +142,15 @@ PICK_FIXES = {
     "Kansas State (-8.5) vs. Georgia State": "Kennesaw State (-8.5) vs. Georgia State",
 }
 
+# ---------- First-year head coaches ----------
+# Adjusts the preseason guess (so it fades as games are played). Groups use
+# last year's SP+ (thirds) and 3-star+ transfers in (top quarter = big class).
+# Tuned on 2022-2025: spread miss 12.50 -> 12.46, value picks ATS 48.9% -> 50.2%;
+# neutral on 2026 (12.158 -> 12.155). The "was good" effect is the solid one.
+NEW_COACH_ADJUST = True
+NEW_COACH_WAS_GOOD_PTS = -6.0    # new coach at a top-third program last year
+NEW_COACH_REBUILD_PTS = 3.0      # new coach, bottom-third program, big transfer class
+
 # ---------- Teams whose preseason guess you don't trust ----------
 # For a team with a new coach and a rebuilt roster, last year's SP+ and its
 # returning production describe a different team. Teams listed here are rated

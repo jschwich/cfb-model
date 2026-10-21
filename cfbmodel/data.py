@@ -220,6 +220,34 @@ def _locations(teams_raw, venues_raw):
     return teams, venues
 
 
+def _head_coach(rows, year):
+    best = {}
+    for c in rows or []:
+        for s in c.get("seasons") or []:
+            if s.get("year") == year:
+                g = s.get("games") or 0
+                if s["school"] not in best or g > best[s["school"]][1]:
+                    best[s["school"]] = (c.get("id"), g, f"{c.get('firstName', '')} {c.get('lastName', '')}".strip())
+    return best
+
+
+def _coach_changes(year):
+    """Per team: first-year head coach? and how many 3-star+ transfers came in."""
+    if not getattr(config, "NEW_COACH_ADJUST", False):
+        return pd.DataFrame(columns=["team", "new_coach", "coach", "transfers_in"])
+    now = _head_coach(_cached(f"coaches_{year}", "/coaches", {"year": year}, "coaches"), year)
+    prev = _head_coach(_cached(f"coaches_{year - 1}", "/coaches", {"year": year - 1}, "coaches_prev"), year - 1)
+    portal = pd.DataFrame(_cached(f"portal_{year}", "/player/portal", {"year": year}, "portal"))
+    inn = pd.Series(dtype=int)
+    if len(portal) and "destination" in portal:
+        st = pd.to_numeric(portal.get("stars"), errors="coerce")
+        rt = pd.to_numeric(portal.get("rating"), errors="coerce")
+        inn = portal[(st >= 3) | (rt >= 0.85)].groupby("destination").size()
+    rows = [{"team": t, "new_coach": t in prev and now[t][0] != prev[t][0], "coach": now[t][2],
+             "transfers_in": int(inn.get(t, 0))} for t in now]
+    return pd.DataFrame(rows, columns=["team", "new_coach", "coach", "transfers_in"])
+
+
 def load_all(year):
     global _calls
     _calls = 0
@@ -257,6 +285,8 @@ def load_all(year):
     ret = pd.DataFrame([{"team": _pick(t, "team"),
                          "ret_ppa": pd.to_numeric(_pick(t, "percentPPA", "percent_ppa"), errors="coerce")}
                         for t in returning])
+    coach = _coach_changes(year)
+
     # Game-time weather: saved history (tests) or this season's saved forecasts.
     wx_rows = read_fixture(fx_dir, "weather") if (fx_dir := os.environ.get("CFBD_FIXTURE_DIR")) else []
     wf = CACHE / f"weather_{year}.json"
@@ -266,7 +296,7 @@ def load_all(year):
         wx = pd.DataFrame(wx_rows).drop_duplicates("id", keep="last").set_index("id")
         games = games.join(wx[[c for c in ["wind", "gust", "temp", "precip", "dome"] if c in wx]], on="id")
     return {"year": year, "games": games, "lines": lines, "adv": adv, "pace": pace,
-            "sp_now": sp_now, "fpi_now": fpi_now, "fbs": fbs,
+            "sp_now": sp_now, "fpi_now": fpi_now, "fbs": fbs, "coach": coach,
             "teams": teams, "venues": venues, "sp": sp, "talent": tal, "returning": ret,
             "api_calls": _calls}
 
