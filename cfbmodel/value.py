@@ -211,7 +211,8 @@ def _power_set(data):
 def upcoming(data, R, meta):
     """Projections for the next week that still has unplayed games."""
     games = _relevant(data["games"], data["fbs"])
-    todo = games[~games["completed"]]
+    recent = games["start"] > pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3)
+    todo = games[~games["completed"] & (recent | games["start"].isna())]  # skip old games never played
     if not len(todo):
         return pd.DataFrame(), "Season complete"
     wk = int(todo["wk"].min())

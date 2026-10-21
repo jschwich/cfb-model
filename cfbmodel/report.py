@@ -95,9 +95,37 @@ def _my_adj(m):
             "<th>Miss with</th></tr></thead><tbody>" + rows + "</tbody></table></div>")
 
 
+def _badge(res):
+    return {"W": " <b class=win>✓ W</b>", "L": " <b class=loss>✗ L</b>", "P": " <span class=muted>push</span>"}.get(res or "", "")
+
+
+def _played(games):
+    """Value plays from games already finished this week, with results."""
+    if "final" not in games:
+        return ""
+    fin = games[games["final"].astype(bool)]
+    items = []
+    for _, r in fin.iterrows():
+        sc = f"{E(r['away'])} {int(r['away_pts'])} – {E(r['home'])} {int(r['home_pts'])}"
+        if r.get("spread_tier"):
+            items.append(f"<li><span class='tier {r['spread_tier'].lower()}'>{r['spread_tier']}</span> "
+                         f"{E(r['spread_pick_text'])}{_badge(r.get('spread_result'))} "
+                         f"<span class=muted>· Final: {sc}</span></li>")
+        if r.get("total_tier"):
+            items.append(f"<li><span class='tier {r['total_tier'].lower()}'>{r['total_tier']}</span> "
+                         f"{E(r['away'])} @ {E(r['home'])} {E(r['total_pick_text'])}{_badge(r.get('total_result'))} "
+                         f"<span class=muted>· Final: {sc}</span></li>")
+    if not items:
+        return ""
+    return "<h3>Already played this week</h3><ul class=played>" + "".join(items) + "</ul>"
+
+
 def _value_cards(games):
     if not len(games):
         return "<p class=muted>No games on the slate yet.</p>"
+    played = _played(games)
+    if "final" in games:
+        games = games[~games["final"].astype(bool)]
     items = []
     for _, r in games.iterrows():
         if r["spread_tier"]:
@@ -105,8 +133,8 @@ def _value_cards(games):
         if r["total_tier"]:
             items.append((r["total_edge"], r, "total"))
     if not items:
-        return ("<p class=muted>No edges big enough to flag this week "
-                f"(spreads {config.SPREAD_LEAN:g}+ pts, totals {config.TOTAL_LEAN:g}+ pts).</p>")
+        return ("<p class=muted>No edges big enough to flag in the games still to play "
+                f"(spreads {config.SPREAD_LEAN:g}+ pts, totals {config.TOTAL_LEAN:g}+ pts).</p>" + played)
     items.sort(key=lambda x: -x[0])
     cards = []
     for edge, r, kind in items:
@@ -133,7 +161,7 @@ def _value_cards(games):
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
             f"{warn}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}</div>")
-    return "<div class=cards>" + "".join(cards) + "</div>"
+    return "<div class=cards>" + "".join(cards) + "</div>" + played
 
 
 def _low_trust(r):
@@ -162,18 +190,30 @@ def _games_table(games):
         return "<p class=muted>No upcoming games.</p>"
     rows = []
     for _, r in games.iterrows():
+        fin = bool(r.get("final"))
         tiers = " ".join(f"<span class='tier {t.lower()}'>{t[0]}</span>"
                          for t in (r["spread_tier"], r["total_tier"]) if t)
+        if fin:
+            when = (f"<div class=final>Final: {E(r['away'])} {int(r['away_pts'])} – "
+                    f"{E(r['home'])} {int(r['home_pts'])}</div>")
+            actual = f"<div class=muted>actual {int(r['away_pts'])}–{int(r['home_pts'])}</div>"
+            tot_act = f"<div class=muted>actual {int(r['away_pts'] + r['home_pts'])}</div>"
+        else:
+            when, actual, tot_act = f"<div class=muted>{_when(r['start'])}</div>", "", ""
+        pick_s = (f"<div class=muted>model likes {E(r['spread_pick_text'])}{_badge(r.get('spread_result'))}</div>"
+                  if fin and r.get("spread_pick_text") else "")
+        pick_t = (f"<div class=muted>{E(r['total_pick_text'])}{_badge(r.get('total_result'))}</div>"
+                  if fin and r.get("total_pick_text") else "")
         rows.append(
-            "<tr>"
+            f"<tr class={'fin' if fin else 'live'}>"
             f"<td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
             f"{' <span class=muted>(N)</span>' if r['neutral'] else ''}"
-            f"<div class=muted>{_when(r['start'])}</div>{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}</td>"
+            f"{when}{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}</td>"
             f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}{_move(r, short=True)}</td>"
-            f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b></td>"
+            f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b>{pick_s}</td>"
             f"<td>{_n(r['market_total'], '{:g}')}</td>"
-            f"<td><b>{r['model_total']:.1f}</b></td>"
-            f"<td>{r['proj_away']:.0f}–{r['proj_home']:.0f}</td>"
+            f"<td><b>{r['model_total']:.1f}</b>{pick_t}{tot_act}</td>"
+            f"<td>{r['proj_away']:.0f}–{r['proj_home']:.0f}{actual}</td>"
             f"<td>{_fav_line(r['home'], r['away'], r['h1_spread'])} / {r['h1_total']:.1f}</td>"
             f"<td>{tiers}</td></tr>")
     return ("<div class=tw><table><thead><tr><th>Game</th><th>Market</th><th>Model</th>"
@@ -399,6 +439,8 @@ th.stick{z-index:2}table.per td.gm{min-width:150px;white-space:normal}
 .pcard{overflow-x:auto}.pcard table{font-size:13px;margin-top:4px}.pcard th,.pcard td{padding:4px 6px;white-space:normal}
 @media (max-width:700px){.pcards{display:block}.pwide{display:none}}
 .win{color:var(--strong)}.loss{color:var(--warn)}
+.final{font-weight:700;font-size:13px;margin-top:2px}tr.fin td{background:var(--chip)}
+.played{margin:6px 0 0;padding-left:18px;font-size:14px}.played li{margin:4px 0}
 .legend{font-size:12.5px;color:var(--mut);margin:6px 0 10px}.legend b{color:var(--ink)}
 """
 

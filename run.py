@@ -17,6 +17,74 @@ from cfbmodel import picks as K
 from cfbmodel import adjust as A
 
 
+def _with_finished(data, games, bt):
+    """Keep this week's finished games on the board with the model's pre-kickoff
+    numbers and the result. Each run saves the projections of games that haven't
+    started; once a game is final, that saved copy is what's shown."""
+    import json
+    import os
+    from pathlib import Path
+    if not len(games):
+        return games
+    wk = int(games["wk"].iloc[0])
+    year = data["year"]
+    store = Path(__file__).resolve().parent / "data" / "cache" / f"slate_{year}.json"
+    fixture = bool(os.environ.get("CFBD_FIXTURE_DIR"))
+    saved = {}
+    if store.exists() and not fixture:
+        saved = {r["game_id"]: r for r in json.loads(store.read_text())}
+    # save projections for games that haven't kicked off yet
+    now = pd.Timestamp.now(tz="UTC")
+    for _, r in games.iterrows():
+        if pd.isna(r["start"]) or r["start"] > now:
+            row = {k: (None if (not isinstance(v, (list, dict)) and pd.isna(v)) else v) for k, v in r.items()}
+            saved[r["game_id"]] = row
+    if not fixture:
+        keep = {k: v for k, v in saved.items() if int(v.get("wk", 0)) >= wk - 1}  # last two weeks is plenty
+        store.write_text(json.dumps(list(keep.values()), default=str))
+
+    g = data["games"]
+    done = g[(g["wk"] == wk) & g["completed"] & (g["home"].isin(data["fbs"]) | g["away"].isin(data["fbs"]))]
+    rows = []
+    btw = bt[bt["wk"] == wk].set_index("game_id") if len(bt) else pd.DataFrame()
+    for _, x in done.iterrows():
+        if x["id"] in saved:
+            r = dict(saved[x["id"]])
+            r["start"] = pd.to_datetime(r["start"], utc=True)
+            r["source"] = "saved before kickoff"
+        elif len(btw) and x["id"] in btw.index:
+            r = btw.loc[x["id"]].to_dict()
+            r["game_id"] = x["id"]
+            r["source"] = "rebuilt from games before this week"
+        else:
+            continue
+        r["home_pts"], r["away_pts"] = x["home_pts"], x["away_pts"]
+        rows.append(r)
+    out = games.assign(final=False)
+    if rows:
+        fin = pd.DataFrame(rows).assign(final=True)
+        for c in ("flags",):
+            if c in fin:
+                fin[c] = fin[c].map(lambda v: v if isinstance(v, list) else [])
+        out = pd.concat([fin, out], ignore_index=True)
+    out = out.sort_values("start").reset_index(drop=True)
+
+    def result(r):
+        if not r["final"]:
+            return pd.Series({"spread_result": "", "total_result": ""})
+        m = r["home_pts"] - r["away_pts"]
+        sr = tr = ""
+        if r.get("spread_pick") and not pd.isna(r.get("market_spread")):
+            c = m + r["market_spread"]
+            sr = "P" if c == 0 else ("W" if (c > 0) == (r["spread_pick"] == r["home"]) else "L")
+        if r.get("total_pick") and not pd.isna(r.get("market_total")):
+            t = r["home_pts"] + r["away_pts"]
+            tr = "P" if t == r["market_total"] else ("W" if (t > r["market_total"]) == (r["total_pick"] == "Over") else "L")
+        return pd.Series({"spread_result": sr, "total_result": tr})
+    out[["spread_result", "total_result"]] = out.apply(result, axis=1)
+    return out
+
+
 def _forecast(data, wk):
     """Fetch the wind forecast for the coming week's games and keep it, so later
     grading uses what was known before kickoff. Skipped in test runs."""
@@ -91,6 +159,7 @@ def main():
     _forecast(data, next_wk)
     games, label = upcoming(data, R, meta)
     games = A.tag(games)
+    games = _with_finished(data, games, bt)
     print(f"Rated {int(R['fbs'].sum())} FBS teams; home field {meta['hfa']:.1f}; "
           f"calibration x{meta['scale']:.2f}; next slate: {label} ({len(games)} games)")
 
@@ -120,7 +189,8 @@ def main():
     report.write(R, meta, games, label, bt, bt_sum, info)
 
     if len(games):
-        flagged = games[(games["spread_tier"] != "") | (games["total_tier"] != "")]
+        live = games[~games["final"]] if "final" in games else games
+        flagged = live[(live["spread_tier"] != "") | (live["total_tier"] != "")]
         print(f"\nValue plays ({len(flagged)}):")
         for _, r in flagged.iterrows():
             if r["spread_tier"]:
