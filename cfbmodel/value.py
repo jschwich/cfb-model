@@ -106,7 +106,9 @@ def _evaluate(games, R, meta, M, sit):
              "h1_total": model_total * config.FIRST_HALF_TOTAL_SHARE,
              "market_spread": spread, "market_total": total,
              "provider": mk["provider"] if mk is not None else "",
-             "home_pts": g.get("home_pts"), "away_pts": g.get("away_pts")}
+             "home_pts": g.get("home_pts"), "away_pts": g.get("away_pts"),
+             "wind": g.get("wind"), "gust": g.get("gust"), "dome": g.get("dome"),
+             "wind_cut": wind_effect(g)}
 
         # ---- spread value ----
         if not np.isnan(spread):

@@ -160,8 +160,23 @@ def _value_cards(games):
             f"<div class=pick>{pick}</div>"
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
-            f"{warn}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}</div>")
+            f"{warn}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}{_wind(r) if kind == 'total' else ''}</div>")
     return "<div class=cards>" + "".join(cards) + "</div>" + played
+
+
+def _wind(r):
+    w = r.get("wind")
+    if w is None or pd.isna(w):
+        if r.get("dome") is True:
+            return "<div class=chips><span class='chip f-low'>Dome</span></div>"
+        return ""
+    if w < getattr(config, "WIND_SHOW_MPH", 12):
+        return ""
+    cut = config.WIND_PTS_PER_MPH * max(w - config.WIND_START_MPH, 0)
+    g = r.get("gust")
+    gust = f", gusts {g:.0f}" if g is not None and not pd.isna(g) else ""
+    return (f"<div class=chips><span class='chip f-trip'>Wind {w:.0f} mph{gust}"
+            f"{f' · total −{cut:.1f}' if cut >= 0.1 else ''}</span></div>")
 
 
 def _low_trust(r):
@@ -208,7 +223,7 @@ def _games_table(games):
             f"<tr class={'fin' if fin else 'live'}>"
             f"<td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
             f"{' <span class=muted>(N)</span>' if r['neutral'] else ''}"
-            f"{when}{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}</td>"
+            f"{when}{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}{_wind(r)}</td>"
             f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}{_move(r, short=True)}</td>"
             f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b>{pick_s}</td>"
             f"<td>{_n(r['market_total'], '{:g}')}</td>"
