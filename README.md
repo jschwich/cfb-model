@@ -30,7 +30,7 @@ Bookmark it. From then on it updates itself every 6 hours.
 ## What's on the dashboard
 
 - **Value board:** games where the model disagrees with the betting line by enough to matter, ranked by size of the edge.
-- **All games:** market line versus model line for the whole slate, plus projected scores and rough first-half numbers.
+- **All games:** market line versus model line for the whole week, plus projected scores, the opening line and how far it has moved toward or away from the model. Games already played stay on the list with the model's pre-kickoff numbers, the final score, and whether its picks won.
 - **Team totals & periods:** the model's team totals plus 1Q, 3Q, 1H and 2H spreads and totals for every game. These are model numbers only (the free data has no lines for these markets), so compare them with your book.
 - **Power ratings:** every FBS team in points versus an average team, split into offense and defense, with this season's data weighted against the preseason prior.
 - **Situational flags:** tags on games where a classic handicapping spot applies: letdown, look-ahead, sandwich, rest edge (bye or short week), and long trip. They are information only and never change the model's numbers. A value pick that a spot works against gets a ⚠ warning.
@@ -71,6 +71,12 @@ Points move the team's rating (and every spread it plays in) by that much; total
 ## Your picks
 
 The dashboard reads your rows from the published Pick Log (`PICKS_CSV_URL` in `config.py`) and shows, for each pick, what the model projected before that week at the number you took, plus your record when the model agreed versus disagreed.
+
+## Where the model is (and isn't) useful
+
+- **Early in the week.** Against opening lines the model's bigger edges have run about 52–53% (2022–2026), and lines have moved toward its number about 56% of the time; against closing lines it's about 49%. Check the dashboard Sunday/Monday and act before lines move.
+- **Not in Power 4 vs non-Power 4 spreads.** Its picks there covered about 42% over 2022–2026, so those games are marked low trust instead of flagged as value.
+- **Shop lines.** Taking the best of the books in the data added about half a point per game.
 
 ## Caveats
 
