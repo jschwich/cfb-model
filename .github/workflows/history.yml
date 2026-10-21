@@ -7,7 +7,7 @@ on:
         description: "Seasons to download, separated by spaces"
         default: "2022 2023 2024 2025 2026"
       only:
-        description: "Optional: just these files (e.g. adv_all)"
+        description: "Optional: just these files (e.g. adv_all), or 'weather'"
         default: ""
 
 permissions:
@@ -30,7 +30,11 @@ jobs:
       - name: Download seasons
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        if: github.event.inputs.only != 'weather'
         run: python tools/fetch_history.py ${{ github.event.inputs.years }} ${{ github.event.inputs.only && format('--only {0}', github.event.inputs.only) || '' }}
+      - name: Download weather
+        if: github.event.inputs.only == 'weather'
+        run: python tools/fetch_weather.py ${{ github.event.inputs.years }}
       - name: Save
         run: |
           git config user.name "cfb-model-bot"
