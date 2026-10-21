@@ -181,15 +181,31 @@ def rate(data, fei=None, through_week=None):
     # ---- blend with the preseason prior ----
     P = _prior(data, fbs_list)
     g = games_played.reindex(fbs_list)
-    wdata = g / (g + config.PRIOR_FADE_GAMES)
     # center this season's numbers on the FBS average before blending
     od = off_data[fbs_list] - off_data[fbs_list].mean()
     dd = def_data[fbs_list] - def_data[fbs_list].mean()
+    # When a team's results are far from its preseason guess, the guess fades faster.
+    fade = pd.Series(config.PRIOR_FADE_GAMES, index=g.index, dtype=float)
+    gp_pts = getattr(config, "PRIOR_GAP_PTS", 0)
+    if gp_pts:
+        big = (od + dd - (P["off"] + P["def"])).abs().reindex(g.index) >= gp_pts
+        fade[big & (g >= getattr(config, "PRIOR_GAP_MIN_GAMES", 3))] = config.PRIOR_GAP_FADE
+    wdata = g / (g + fade)
+    # Teams you've said the preseason guess doesn't describe (new coach, rebuilt
+    # roster): once they've played a few games, use only this season's data.
+    skip = [t for t in getattr(config, "IGNORE_PRIOR", []) if t in wdata.index]
+    need = getattr(config, "IGNORE_PRIOR_MIN_GAMES", 3)
+    for t in skip:
+        if g[t] >= need:
+            wdata[t] = 1.0
     off = wdata * od + (1 - wdata) * P["off"]
     dfn = wdata * dd + (1 - wdata) * P["def"]
     Pt = _prior(data, fbs_list, getattr(config, "TOTAL_PRIOR_REGRESS", None))
     fade_t = getattr(config, "TOTAL_PRIOR_FADE_GAMES", None) or config.PRIOR_FADE_GAMES
     wt = g / (g + fade_t)
+    for t in skip:
+        if g[t] >= need:
+            wt[t] = 1.0
     ot = wt * (off_tot[fbs_list] - off_tot[fbs_list].mean()) + (1 - wt) * Pt["off"]
     dt = wt * (def_tot[fbs_list] - def_tot[fbs_list].mean()) + (1 - wt) * Pt["def"]
 

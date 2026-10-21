@@ -142,6 +142,14 @@ PICK_FIXES = {
     "Kansas State (-8.5) vs. Georgia State": "Kennesaw State (-8.5) vs. Georgia State",
 }
 
+# ---------- Teams whose preseason guess you don't trust ----------
+# For a team with a new coach and a rebuilt roster, last year's SP+ and its
+# returning production describe a different team. Teams listed here are rated
+# only on this season's games once they've played IGNORE_PRIOR_MIN_GAMES.
+# Names must match the power ratings table exactly.
+IGNORE_PRIOR = ["Kentucky", "Oklahoma State", "UCLA"]
+IGNORE_PRIOR_MIN_GAMES = 3
+
 # ---------- My adjustments ----------
 # When you think the model is wrong about a team (QB injury or return, coaching
 # change, a team that has clearly changed), add a line here. Points move the

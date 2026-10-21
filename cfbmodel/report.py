@@ -68,10 +68,15 @@ def _chips(flags, with_text=False):
 
 
 def _adj_chip(r):
+    out = ""
     t = r.get("my_adj_text") if hasattr(r, "get") else None
-    if not t or (isinstance(t, float) and np.isnan(t)):
-        return ""
-    return f"<div class=chips><span class='chip f-mine'>Your adjustment: {E(t)}</span></div>"
+    if t and not (isinstance(t, float) and np.isnan(t)):
+        out += f"<span class='chip f-mine'>Your adjustment: {E(t)}</span>"
+    ig = [x for x in (r.get("away"), r.get("home")) if x in getattr(config, "IGNORE_PRIOR", [])]
+    if ig:
+        out += (f"<span class='chip f-mine'>Your setting: preseason guess ignored for "
+                f"{E(' and '.join(ig))}</span>")
+    return f"<div class=chips>{out}</div>" if out else ""
 
 
 def _my_adj(m):
@@ -339,7 +344,8 @@ def _ratings_table(R):
     for t, r in F.iterrows():
         rows.append(
             f"<tr><td>{int(r['rank'])}</td><td class=gm><b>{E(t)}</b>"
-            f"<div class=muted>{E(str(r['conference'] or ''))}</div></td>"
+            + (" <span class='chip f-mine'>preseason ignored</span>" if t in getattr(config, "IGNORE_PRIOR", []) else "")
+            + f"<div class=muted>{E(str(r['conference'] or ''))}</div></td>"
             f"<td><b>{r['rating']:+.1f}</b></td><td>{r['off']:+.1f}</td><td>{r['def']:+.1f}</td>"
             f"<td>{int(r['games'])}</td><td>{r['data_weight']:.0%}</td>"
             f"<td>{r['data_rating']:+.1f}</td><td>{r['prior_rating']:+.1f}</td>"

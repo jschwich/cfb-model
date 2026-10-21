@@ -69,6 +69,10 @@ MY_ADJUSTMENTS = [
 
 Points move the team's rating (and every spread it plays in) by that much; totals don't change. Use the team name exactly as the power ratings table spells it, and the week number shown at the top of the dashboard. Commit, then run the workflow (or wait for the next 6-hour run). Games with an adjustment get a blue tag, and the track record shows whether your adjustments have made the model more or less accurate on games already played.
 
+### Teams whose preseason guess you don't trust
+
+For a team with a new coach and a rebuilt roster, last year's SP+ and its returning production describe a different team. Add it to `IGNORE_PRIOR` in `config.py` and, once it has played 3 games, it's rated only on this season's results. Games involving those teams get a blue tag. A general version of this (fade the preseason guess faster whenever results disagree with it) was tested on 2022–2026 and made the model worse, because most such gaps shrink back. It's the reason behind the gap (coach, roster) that makes a team worth listing.
+
 ## Your picks
 
 The dashboard reads your rows from the published Pick Log (`PICKS_CSV_URL` in `config.py`) and shows, for each pick, what the model projected before that week at the number you took, plus your record when the model agreed versus disagreed.
