@@ -59,8 +59,8 @@ RETURNING_PTS_PER_SD = 2.5   # points (offense) per 1 SD of returning PPA %
 # ---------- Wind (totals) ----------
 # Average wind over the first 3 hours from kickoff (Open-Meteo forecast; domes
 # skipped). Points come off the total for each mph above WIND_START_MPH.
-# Tested on 2024-2025 (1,026 outdoor games): wind under ~12 mph does nothing;
-# above it the model ran about 0.4-0.7 pts high per mph. The market already
+# Tested on 2023-2025 (1,398 outdoor games): wind under ~12 mph does nothing;
+# above it the model ran about 0.4 pts high per mph (0.5 tested as well as any). The market already
 # prices wind, so this mainly stops false "Over" flags in windy games.
 WIND_START_MPH = 12.0
 WIND_PTS_PER_MPH = 0.5
