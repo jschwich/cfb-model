@@ -43,6 +43,9 @@ def main():
             "returning": ("/player/returning", {"year": y}),
             "sp_final": ("/ratings/sp", {"year": y}),      # reference only (hindsight)
             "fpi_final": ("/ratings/fpi", {"year": y}),    # reference only (hindsight)
+            "coaches": ("/coaches", {"year": y}),          # head coaches this season
+            "coaches_prev": ("/coaches", {"year": y - 1}), # ...and last season, to spot changes
+            "portal": ("/player/portal", {"year": y}),     # transfers counting for this season
         }
         for name, (path, params) in jobs.items():
             if a.only and name not in a.only:
