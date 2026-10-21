@@ -115,6 +115,9 @@ def _value_cards(games):
             pick = E(r["spread_pick_text"])
             detail = (f"Model {_fav_line(r['home'], r['away'], r['model_spread'])} · "
                       f"Market {_fav_line(r['home'], r['away'], r['market_spread'])}")
+            mv = _move(r)
+            if mv:
+                detail += mv.replace("<div class=muted>", " · ").replace("</div>", "")
             prob = r["spread_prob"]
         else:
             pick = E(r["total_pick_text"])
@@ -133,6 +136,27 @@ def _value_cards(games):
     return "<div class=cards>" + "".join(cards) + "</div>"
 
 
+def _low_trust(r):
+    if not r.get("cross_tier") or not r.get("spread_tier_raw") or r.get("spread_tier"):
+        return ""
+    return ("<div class=chips><span class='chip f-low'>Power 4 vs non-Power 4: model's spread view is "
+            "low trust here (≈42% ATS historically)</span></div>")
+
+
+def _move(r, short=False):
+    """'open Texas -4.5 · moved 2.5 toward model' style note."""
+    op = r.get("open_spread")
+    if op is None or pd.isna(op):
+        return ""
+    mv = r.get("spread_move")
+    base = f"open {_fav_line(r['home'], r['away'], op)}"
+    if mv is None or pd.isna(mv) or mv == 0:
+        return f"<div class=muted>{base}{'' if short else ' · no move'}</div>"
+    tw = r.get("move_toward_model")
+    cls, word = ("win", "toward") if tw and tw > 0 else ("loss", "away from")
+    return f"<div class=muted>{base} · <span class={cls}>moved {abs(mv):g} {word} model</span></div>"
+
+
 def _games_table(games):
     if not len(games):
         return "<p class=muted>No upcoming games.</p>"
@@ -144,8 +168,8 @@ def _games_table(games):
             "<tr>"
             f"<td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
             f"{' <span class=muted>(N)</span>' if r['neutral'] else ''}"
-            f"<div class=muted>{_when(r['start'])}</div>{_chips(r['flags'])}{_adj_chip(r)}</td>"
-            f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}</td>"
+            f"<div class=muted>{_when(r['start'])}</div>{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}</td>"
+            f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}{_move(r, short=True)}</td>"
             f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b></td>"
             f"<td>{_n(r['market_total'], '{:g}')}</td>"
             f"<td><b>{r['model_total']:.1f}</b></td>"
@@ -284,9 +308,15 @@ def _track(bt_sum):
         f"<div><span>{_rec(s['ats_lean'])}</span>spread Lean+ ATS</div>"
         f"<div><span>{_rec(s['ats_strong'])}</span>spread Strong ATS</div>"
         f"<div><span>{_rec(s['ou_lean'])}</span>total Lean+ O/U</div>"
+        f"<div><span>{_rec(s.get('ats_open_lean'))}</span>spread {config.SPREAD_LEAN:g}+ vs. <b>opening</b> line</div>"
+        f"<div><span>{_rec(s.get('ats_open_strong'))}</span>spread {config.SPREAD_STRONG:g}+ vs. opening line</div>"
+        f"<div><span>{_n((s.get('clv') or {}).get('pct'), '{:.0%}')}</span>of moves went toward the model (3+ pt edge at open)</div>"
         "</div><p class=muted>Each week is re-rated using only games played before it, then compared "
         "with that week's line. Lower miss is better; beating the market's miss is very hard. "
-        "Break-even against -110 is 52.4%. FEI isn't blended in here because past FEI isn't available.</p>")
+        "Break-even against -110 is 52.4%. FEI isn't blended in here because past FEI isn't available. "
+        "The model has done better against opening lines than closing ones (2022–2026: about 52–53% at "
+        "5+ pt edges vs. the opener), and lines have moved toward it about 56% of the time, so its "
+        "opinion is worth most early in the week, before the market catches up.</p>")
     wk = "".join(
         f"<tr><td>{w['wk']}</td><td>{w['games']}</td><td>{_n(w['model_mae'])}</td>"
         f"<td>{_n(w['market_mae'])}</td><td>{_rec(w['ats_lean'])}</td></tr>" for w in s["weekly"])
@@ -353,7 +383,7 @@ h2{font-size:18px;margin:8px 0 10px}h3{font-size:16px;margin:22px 0 6px}.muted{c
 .chip{background:var(--chip);border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:600;border-left:3px solid var(--mut)}
 .ftxt{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
 .f-let{border-left-color:#d9480f}.f-look{border-left-color:#7048e8}.f-sand{border-left-color:#c2255c}
-.f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-trip{border-left-color:#1971c2}
+.f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-low{border-left-color:var(--mut);font-weight:400}.f-trip{border-left-color:#1971c2}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
 th{font-size:12px;color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}

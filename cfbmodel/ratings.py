@@ -13,29 +13,58 @@ from .data import norm_name
 FCS = "FCS"  # every non-FBS opponent shares this one rating
 
 
-def _ridge(rows, teams, alpha):
+def _ridge(rows, teams, alpha, power=None):
     """Fit stat = mu + hfa*h + off[offense] + dfn[defense] with ridge shrinkage.
 
     rows: DataFrame with off, dfn (team names), h (+1 home, -1 away, 0 neutral), y, w.
+    power: optional 0/1 per team (Power 4 = 1). When given, the fit also learns an
+    unshrunk Power 4 offense and defense level, so teams are pulled toward their
+    own tier's average instead of one FBS-wide average.
     Returns (mu, hfa, off Series, dfn Series). dfn is 'stat allowed above average'.
     """
     n = len(teams)
     idx = {t: i for i, t in enumerate(teams)}
     m = len(rows)
-    X = np.zeros((m, 2 + 2 * n))
+    extra = 2 if power is not None else 0
+    k = 2 + extra
+    X = np.zeros((m, k + 2 * n))
     X[:, 0] = 1.0
     X[:, 1] = rows["h"].to_numpy()
     oi = rows["off"].map(idx).to_numpy()
     di = rows["dfn"].map(idx).to_numpy()
-    X[np.arange(m), 2 + oi] = 1.0
-    X[np.arange(m), 2 + n + di] = 1.0
+    if extra:
+        pw = np.asarray(power, dtype=float)
+        X[:, 2] = pw[oi]
+        X[:, 3] = pw[di]
+    X[np.arange(m), k + oi] = 1.0
+    X[np.arange(m), k + n + di] = 1.0
     w = rows["w"].to_numpy(float)
     y = rows["y"].to_numpy(float)
     XtW = X.T * w
-    pen = np.full(2 + 2 * n, alpha)
-    pen[:2] = 1e-6  # don't shrink the league average or home field
+    pen = np.full(k + 2 * n, alpha)
+    pen[:k] = 1e-6  # don't shrink the league average, home field, or tier levels
     beta = np.linalg.solve(XtW @ X + np.diag(pen), XtW @ y)
-    return beta[0], beta[1], pd.Series(beta[2:2 + n], teams), pd.Series(beta[2 + n:], teams)
+    off = pd.Series(beta[k:k + n], teams)
+    dfn = pd.Series(beta[k + n:], teams)
+    if extra:
+        off = off + beta[2] * pd.Series(pw, teams)
+        dfn = dfn + beta[3] * pd.Series(pw, teams)
+    return beta[0], beta[1], off, dfn
+
+
+def power_flags(data, teams):
+    """1 for Power 4 teams (SEC, Big Ten, Big 12, ACC, plus Notre Dame; the
+    Pac-12 counts through 2023), else 0."""
+    year = data.get("year", 2026)
+    confs = set(getattr(config, "POWER_CONFERENCES", ["SEC", "Big Ten", "Big 12", "ACC"]))
+    if year <= getattr(config, "PAC12_POWER_THROUGH", 2023):
+        confs.add("Pac-12")
+    extra = set(getattr(config, "POWER_TEAMS", ["Notre Dame"]))
+    out = []
+    for t in teams:
+        c = (data["teams"].get(t, {}) or {}).get("conference", "")
+        out.append(1 if (c in confs or t in extra) else 0)
+    return out
 
 
 def _team(name, fbs):
@@ -82,6 +111,7 @@ def rate(data, fei=None, through_week=None):
 
     fbs_list = sorted(fbs)
     teams = fbs_list + [FCS]
+    power = power_flags(data, teams) if getattr(config, "TIER_LEVELS", False) else None
 
     # ---- team-game rows (one per offense per game) ----
     side = []
@@ -122,7 +152,7 @@ def rate(data, fei=None, through_week=None):
             """Opponent-adjusted points per stat, at the given shrinkage."""
             key = ("pts", alpha_game)
             if key not in cache:
-                _, h_pts, o_pts, d_pts = _ridge(side.assign(y=side["pts"], w=1.0), teams, alpha_game)
+                _, h_pts, o_pts, d_pts = _ridge(side.assign(y=side["pts"], w=1.0), teams, alpha_game, power)
                 cache[key] = (o_pts, -d_pts, h_pts)
             comps = {"pts": cache[key][:2]}
             for stat in [k for k, wt in W.items() if k != "pts" and wt > 0]:
@@ -133,7 +163,7 @@ def rate(data, fei=None, through_week=None):
                     aa = a.dropna(subset=[stat])
                     # points per unit of this stat, from this season's games
                     b = np.cov(aa[stat], aa["pts"])[0, 1] / max(aa[stat].var(), 1e-9)
-                    _, _, o_s, d_s = _ridge(aa.assign(y=aa[stat], w=aa["plays"]), teams, alpha_play)
+                    _, _, o_s, d_s = _ridge(aa.assign(y=aa[stat], w=aa["plays"]), teams, alpha_play, power)
                     cache[key] = (o_s * b, -d_s * b)
                 comps[stat] = cache[key]
             return comps

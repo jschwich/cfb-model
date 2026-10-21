@@ -17,6 +17,37 @@ from cfbmodel import picks as K
 from cfbmodel import adjust as A
 
 
+def _forecast(data, wk):
+    """Fetch the wind forecast for the coming week's games and keep it, so later
+    grading uses what was known before kickoff. Skipped in test runs."""
+    import json
+    import os
+    from pathlib import Path
+    from cfbmodel import weather as W
+    if os.environ.get("CFBD_FIXTURE_DIR") or not getattr(config, "WIND_PTS_PER_MPH", 0):
+        return
+    g = data["games"]
+    slate = g[(g["wk"] == wk) & ~g["completed"] & (g["home"].isin(data["fbs"]) | g["away"].isin(data["fbs"]))]
+    if not len(slate):
+        return
+    venues = W.venue_table(D._cached("venues_all", "/venues", {}, "venues"))
+    wx = W.for_games(slate[["id", "start", "venue_id"]], venues, past=False)
+    if not len(wx):
+        print("  weather: no forecast this run")
+        return
+    f = Path(__file__).resolve().parent / "data" / "cache" / f"weather_{data['year']}.json"
+    rows = json.loads(f.read_text()) if f.exists() else []
+    keep = {r["id"]: r for r in rows}
+    for gid, r in wx.iterrows():
+        keep[gid] = {"id": gid, **{k: (None if pd.isna(v) else v) for k, v in r.to_dict().items()}}
+    f.write_text(json.dumps(list(keep.values()), default=float))
+    data["games"] = data["games"].drop(columns=[c for c in ["wind", "gust", "temp", "precip", "dome"]
+                                                 if c in data["games"]]).join(
+        pd.DataFrame(list(keep.values())).set_index("id"), on="id")
+    windy = wx[wx["wind"] >= config.WIND_START_MPH]
+    print(f"  weather: forecast for {len(wx)} games, {len(windy)} at {config.WIND_START_MPH}+ mph")
+
+
 def _snapshot(year, data, R):
     """Save this week's outside ratings (FEI, SP+, FPI) and the model's own, so
     future tuning can test their weights using only what was known at the time."""
@@ -57,6 +88,7 @@ def main():
     todo = g_all[~g_all["completed"] & (g_all["start"] > pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3))]
     next_wk = int(todo["wk"].min()) if len(todo) else int(g_all["wk"].max()) + 1
     R = A.apply(R, next_wk)
+    _forecast(data, next_wk)
     games, label = upcoming(data, R, meta)
     games = A.tag(games)
     print(f"Rated {int(R['fbs'].sum())} FBS teams; home field {meta['hfa']:.1f}; "

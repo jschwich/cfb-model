@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 import config
-from .ratings import rate, lookup
+from .ratings import rate, lookup, power_flags
 from .situations import Situations, against
 from . import periods as P
 
@@ -21,7 +21,7 @@ def _phi(x):
 def market_lines(lines):
     """One line per game, using the first provider in config.LINE_PROVIDERS that has one."""
     if not len(lines):
-        return pd.DataFrame(columns=["game_id", "spread", "total", "provider", "spread_open"])
+        return pd.DataFrame(columns=["game_id", "spread", "total", "provider", "spread_open", "total_open"])
     order = {p.lower(): i for i, p in enumerate(config.LINE_PROVIDERS)}
     L = lines.assign(rank=lines["provider"].str.lower().map(order).fillna(len(order)))
     out = []
@@ -33,8 +33,20 @@ def market_lines(lines):
                     "spread": s["spread"].iloc[0] if len(s) else np.nan,
                     "spread_open": s["spread_open"].iloc[0] if len(s) else np.nan,
                     "provider": s["provider"].iloc[0] if len(s) else (t["provider"].iloc[0] if len(t) else ""),
-                    "total": t["total"].iloc[0] if len(t) else np.nan})
+                    "total": t["total"].iloc[0] if len(t) else np.nan,
+                    # opener: median across books that report one
+                    "spread_open_any": grp["spread_open"].median() if "spread_open" in grp else np.nan,
+                    "total_open": grp["total_open"].median() if "total_open" in grp else np.nan})
     return pd.DataFrame(out)
+
+
+def wind_effect(g):
+    """Points taken off the total for wind above config.WIND_START_MPH."""
+    k = getattr(config, "WIND_PTS_PER_MPH", 0.0)
+    w = g.get("wind") if hasattr(g, "get") else None
+    if not k or w is None or pd.isna(w):
+        return 0.0
+    return k * max(float(w) - config.WIND_START_MPH, 0.0)
 
 
 def project(g, R, meta):
@@ -48,6 +60,7 @@ def project(g, R, meta):
         # Totals use their own stat mix; the spread (hp - ap) stays as above.
         total = 2 * mu + (h["tot_off"] - a["tot_def"]) + (a["tot_off"] - h["tot_def"])
         margin = hp - ap
+        total -= wind_effect(g)
         hp, ap = (total + margin) / 2, (total - margin) / 2
     k = config.PACE_PTS_PER_PLAY  # extra points per extra play above average tempo
     if k:
@@ -107,7 +120,27 @@ def _evaluate(games, R, meta, M, sit):
                      spread_prob=p_home if take_home else 1 - p_home)
         else:
             r.update(spread_edge=np.nan, spread_pick="", spread_pick_text="", spread_prob=np.nan)
+        # ---- opening line and movement ----
+        op = mk["spread_open"] if mk is not None else np.nan
+        if mk is not None and pd.isna(op):
+            op = mk.get("spread_open_any", np.nan)
+        ot = mk.get("total_open", np.nan) if mk is not None else np.nan
+        r["open_spread"], r["open_total"] = op, ot
+        r["spread_move"] = spread - op if not (pd.isna(op) or pd.isna(spread)) else np.nan
+        r["total_move"] = total - ot if not (pd.isna(ot) or pd.isna(total)) else np.nan
+        # +: the line has moved toward the model's number since it opened
+        r["move_toward_model"] = (np.sign(r["spread_move"]) * np.sign(model_spread - op)
+                                  if not pd.isna(r["spread_move"]) and r["spread_move"] != 0 else np.nan)
+        r["open_edge"] = abs(model_spread - op) if not pd.isna(op) else np.nan
+        r["open_pick"] = (g["home"] if model_spread < op else g["away"]) if not pd.isna(op) else ""
         r["spread_tier"] = _tier(r["spread_edge"], config.SPREAD_LEAN, config.SPREAD_STRONG)
+        # Power 4 vs Group of 5: the model's spread picks have covered ~42% over
+        # 2022-2026, so they're shown as low trust instead of flagged as value.
+        r["cross_tier"] = bool(meta.get("power") and
+                               (g["home"] in meta["power"]) != (g["away"] in meta["power"]))
+        r["spread_tier_raw"] = r["spread_tier"]
+        if r["cross_tier"] and not getattr(config, "FLAG_P4_VS_G5_SPREADS", True):
+            r["spread_tier"] = ""
 
         # ---- total value ----
         if not np.isnan(total):
@@ -170,6 +203,11 @@ def _relevant(games, fbs):
     return games[games["home"].isin(fbs) | games["away"].isin(fbs)]
 
 
+def _power_set(data):
+    teams = sorted(data["fbs"])
+    return {t for t, f in zip(teams, power_flags(data, teams)) if f}
+
+
 def upcoming(data, R, meta):
     """Projections for the next week that still has unplayed games."""
     games = _relevant(data["games"], data["fbs"])
@@ -182,6 +220,7 @@ def upcoming(data, R, meta):
     label = f"Week {int(slate['week'].iloc[0])}" if stype == "regular" else "Postseason"
     M = market_lines(data["lines"])
     data["_line_by_game"] = dict(zip(M["game_id"], M["spread"])) if len(M) else {}
+    meta = {**meta, "power": _power_set(data)}
     out = _evaluate(slate, R, meta, M, Situations(data))
     out = P.add_periods(out, P.fit_shares(data))
     out["best_edge"] = out[["spread_edge", "total_edge"]].max(axis=1)
@@ -204,6 +243,7 @@ def backtest(data):
         R, meta = rate(data, fei=None, through_week=wk)  # no historical FEI available
         prior = pd.concat(out, ignore_index=True) if out else None
         k = fit_scale(prior)  # only uses weeks before this one
+        meta["power"] = _power_set(data)
         ev = _evaluate(done[done["wk"] == wk], apply_scale(R, k), meta, M, sit)
         ev["scale"] = k
         ev["home_rating"] /= k  # keep the raw gap for fitting the next week's scale
@@ -238,6 +278,15 @@ def backtest(data):
         return float((row["actual_total"] > row["market_total"]) == (row["total_pick"] == "Over"))
 
     bt["ats_win"] = bt.apply(ats, axis=1)
+
+    def ats_open(row):
+        if not row["open_pick"] or pd.isna(row["open_spread"]) or row["open_edge"] < config.SPREAD_LEAN:
+            return np.nan
+        cover = row["actual_margin"] + row["open_spread"]
+        if cover == 0:
+            return np.nan
+        return float((cover > 0) == (row["open_pick"] == row["home"]))
+    bt["ats_open_win"] = bt.apply(ats_open, axis=1)
     bt["ou_win"] = bt.apply(ou, axis=1)
     graded = bt["wk"] >= config.BACKTEST_FIRST_WEEK
     bt.attrs["periods"] = P.grade(bt[graded], data["games"])
@@ -289,6 +338,11 @@ def summarize_backtest(bt):
          "ats_strong": _record(bt.loc[bt["spread_tier"] == "Strong", "ats_win"]),
          "ou_lean": _record(bt.loc[bt["total_tier"] != "", "ou_win"]),
          "ou_strong": _record(bt.loc[bt["total_tier"] == "Strong", "ou_win"]),
+         "ats_open_lean": _record(bt["ats_open_win"]) if "ats_open_win" in bt else None,
+         "ats_open_strong": _record(bt.loc[bt.get("open_edge", pd.Series(dtype=float)) >= config.SPREAD_STRONG,
+                                           "ats_open_win"]) if "ats_open_win" in bt else None,
+         "clv": _record((bt["move_toward_model"].dropna()[bt["open_edge"].reindex(
+             bt["move_toward_model"].dropna().index) >= 3] > 0).astype(float)) if "move_toward_model" in bt else None,
          "flags": flag_record(bt)}
     weekly = []
     for wk, grp in bt.groupby("wk"):

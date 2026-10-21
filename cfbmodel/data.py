@@ -137,8 +137,9 @@ def _lines(raw):
                 "spread": pd.to_numeric(_pick(ln, "spread"), errors="coerce"),
                 "spread_open": pd.to_numeric(_pick(ln, "spreadOpen", "spread_open"), errors="coerce"),
                 "total": pd.to_numeric(_pick(ln, "overUnder", "over_under"), errors="coerce"),
+                "total_open": pd.to_numeric(_pick(ln, "overUnderOpen", "over_under_open"), errors="coerce"),
             })
-    return pd.DataFrame(rows, columns=["game_id", "provider", "spread", "spread_open", "total"])
+    return pd.DataFrame(rows, columns=["game_id", "provider", "spread", "spread_open", "total", "total_open"])
 
 
 def _adv(raw):
@@ -256,6 +257,14 @@ def load_all(year):
     ret = pd.DataFrame([{"team": _pick(t, "team"),
                          "ret_ppa": pd.to_numeric(_pick(t, "percentPPA", "percent_ppa"), errors="coerce")}
                         for t in returning])
+    # Game-time weather: saved history (tests) or this season's saved forecasts.
+    wx_rows = read_fixture(fx_dir, "weather") if (fx_dir := os.environ.get("CFBD_FIXTURE_DIR")) else []
+    wf = CACHE / f"weather_{year}.json"
+    if not fx_dir and wf.exists():
+        wx_rows = json.loads(wf.read_text())
+    if wx_rows and len(games):
+        wx = pd.DataFrame(wx_rows).drop_duplicates("id", keep="last").set_index("id")
+        games = games.join(wx[[c for c in ["wind", "gust", "temp", "precip", "dome"] if c in wx]], on="id")
     return {"year": year, "games": games, "lines": lines, "adv": adv, "pace": pace,
             "sp_now": sp_now, "fpi_now": fpi_now, "fbs": fbs,
             "teams": teams, "venues": venues, "sp": sp, "talent": tal, "returning": ret,

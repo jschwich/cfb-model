@@ -39,6 +39,14 @@ TOTAL_PRIOR_FADE_GAMES = 2.0
 PACE_PTS_PER_PLAY = 0.2     # tuned: 0.15-0.25 best; moves totals only
 PACE_ALPHA = 3.0             # shrinkage for tempo, in games
 
+# Pull each team toward its own tier's average (Power 4 vs Group of 5) instead
+# of one FBS-wide average. Tested 2022-2026: cut the miss in P4-vs-G5 games
+# from 13.55 to 13.35 pts with no cost elsewhere.
+TIER_LEVELS = True
+POWER_CONFERENCES = ["SEC", "Big Ten", "Big 12", "ACC"]
+POWER_TEAMS = ["Notre Dame"]
+PAC12_POWER_THROUGH = 2023   # the Pac-12 counts as Power through 2023
+
 # ---------- Preseason prior ----------
 # Starting point for each team, built from last year's SP+, roster talent,
 # and returning offensive production. It fades as games are played:
@@ -47,6 +55,12 @@ PRIOR_FADE_GAMES = 3.0       # tuned (was 2.0)
 PRIOR_REGRESS = 0.80         # how much of last year's rating carries over (tuned; was 0.60)
 TALENT_PTS_PER_SD = 3.0      # points per 1 SD of 247 team talent
 RETURNING_PTS_PER_SD = 2.5   # points (offense) per 1 SD of returning PPA %
+
+# ---------- Wind (totals) ----------
+# Average wind over the first 3 hours from kickoff (Open-Meteo forecast; domes
+# skipped). Points come off the total for each mph above WIND_START_MPH.
+WIND_START_MPH = 10.0
+WIND_PTS_PER_MPH = 0.0       # set after testing on past seasons
 
 # ---------- Outside opinions ----------
 # Independent ratings blended into the final margin rating, as shares.
@@ -87,6 +101,9 @@ FIRST_HALF_TOTAL_SHARE = 0.52
 
 # ---------- Value flags ----------
 SPREAD_LEAN, SPREAD_STRONG = 4.0, 7.0   # points of disagreement with market
+# Power 4 vs Group of 5 spreads: the model's picks covered ~42% over 2022-2026
+# (about 150 picks), so they're marked low trust instead of flagged as value.
+FLAG_P4_VS_G5_SPREADS = False
 TOTAL_LEAN, TOTAL_STRONG = 5.0, 8.0
 # Markets are sharp, so the model's opinion is only partly trusted when
 # turning an edge into a cover probability (0 = trust market, 1 = trust model).
