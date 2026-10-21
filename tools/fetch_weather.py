@@ -31,7 +31,7 @@ def main():
         rows = wx.reset_index().to_dict("records")
         with gzip.open(folder / "weather.json.gz", "wt") as f:
             json.dump(rows, f, default=float)
-        print(f"{y}: weather for {len(rows)} of {len(g)} games")
+        print(f"{y}: weather for {len(rows)} of {len(g)} games", flush=True)
 
 
 if __name__ == "__main__":

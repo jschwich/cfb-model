@@ -29,7 +29,7 @@ def venue_table(venues_raw):
     return pd.DataFrame(rows).dropna(subset=["lat", "lon"]).drop_duplicates("venue_id").set_index("venue_id")
 
 
-def _request(url, games, extra, tries=3):
+def _request(url, games, extra, tries=6):
     """One multi-location call; returns {game_id: dict of game-window averages}."""
     params = {"latitude": ",".join(f"{x:.4f}" for x in games["lat"]),
               "longitude": ",".join(f"{x:.4f}" for x in games["lon"]),
@@ -38,7 +38,8 @@ def _request(url, games, extra, tries=3):
     for i in range(tries):
         r = requests.get(url, params=params, timeout=90)
         if r.status_code == 429:
-            time.sleep(30 * (i + 1))
+            print(f"    rate limited; waiting {65 * (i + 1)}s", flush=True)
+            time.sleep(65 * (i + 1))
             continue
         r.raise_for_status()
         break
@@ -66,7 +67,7 @@ def _request(url, games, extra, tries=3):
     return out
 
 
-def for_games(games, venues, past, chunk=60, pause=7.0):
+def for_games(games, venues, past, chunk=40, pause=12.0):
     """Weather for games (DataFrame with id, start, venue_id). Domes get wind 0."""
     g = games.dropna(subset=["start"]).copy()
     g = g.join(venues, on="venue_id")
