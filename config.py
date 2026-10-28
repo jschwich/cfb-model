@@ -169,4 +169,7 @@ IGNORE_PRIOR_MIN_GAMES = 3
 MY_ADJUSTMENTS = [
     # ("Ohio State", 3.0, 9, "QB back from injury"),
     # ("Northwestern", -4.0, 8, "starting QB out", 10),
+    ("Ohio State", -6.0, 9, "QB Julian Sayin out for season; leaning on defense, slower pace"),
+    ("Oregon", -3.5, 9, "QB Dante Moore out for season (concussion)"),
+    ("Mississippi State", -3.0, 9, "QB Kamario Taylor out for season (foot surgery)"),
 ]
