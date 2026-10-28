@@ -183,4 +183,5 @@ MY_ADJUSTMENTS = [
     ("Ohio State", -6.0, 9, "QB Julian Sayin out for season; leaning on defense, slower pace"),
     ("Oregon", -3.5, 9, "QB Dante Moore out for season (concussion)"),
     ("Mississippi State", -3.0, 9, "QB Kamario Taylor out for season (foot surgery)"),
+    ("Pittsburgh", -4.5, 9, "QB Mason Heintschel out for season (ACL); Geriner 0-3 as starter"),
 ]
