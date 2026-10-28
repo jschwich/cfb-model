@@ -139,7 +139,6 @@ USE_SPLITS = True
 SHARP_PUBLIC_PCT = 65        # a side with this share of bets is "the public side"
 SHARP_SPREAD_MOVE = 0.5      # spread move (pts) AGAINST the public side since open = reverse line move
 SHARP_TOTAL_MOVE = 1.5       # same for totals (openers are sometimes averaged across books, so higher)
-SHARP_HOLD_PCT = 75          # this share of bets and no move toward that side = "line holding"
 SHARP_MONEY_GAP = 15         # a side with under 50% of bets but this many points more of the money
 
 # ---------- Your picks ----------

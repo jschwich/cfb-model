@@ -6,14 +6,12 @@ spread, total and moneyline. Those numbers are saved to
 data/snapshots/<year>/splits.csv every run, so the track record can grade the
 flags on finished games using only what was known before kickoff.
 
-Three signals, all INFO ONLY (they never change the model's numbers):
+Two signals, both INFO ONLY (they never change the model's numbers):
 
   Reverse line move   A side has most of the bets, but the line has moved the
                       OTHER way since it opened. Books moved against the
                       crowd, which usually means respected money is on the
                       other side.
-  Line holding        A side has a big majority of bets and the line hasn't
-                      moved toward it at all. Weaker than a reverse move.
   Money vs tickets    One side has a minority of the bets but most of the
                       money: fewer, bigger bets are on that side.
 
@@ -37,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 URL = "https://www.scoresandodds.com/ncaaf/consensus-picks"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                          "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
-TYPES = ["Reverse line move", "Line holding", "Money vs tickets"]
+TYPES = ["Reverse line move", "Money vs tickets"]
 
 # ScoresAndOdds spelling -> CollegeFootballData spelling, where they differ.
 ALIASES = {"appalachian state": "app state", "miami fl": "miami", "miami oh": "miami oh",
@@ -162,7 +160,6 @@ def signals(market, bets_a, bets_b, money_a, money_b, move):
     if any(pd.isna(x) for x in (bets_a, bets_b, money_a, money_b)):
         return out
     pub = _cfg("SHARP_PUBLIC_PCT", 65)
-    hold = _cfg("SHARP_HOLD_PCT", 75)
     gap = _cfg("SHARP_MONEY_GAP", 15)
     need = _cfg("SHARP_SPREAD_MOVE", 0.5) if market == "spread" else _cfg("SHARP_TOTAL_MOVE", 1.5)
     # How far the line moved toward side a (away team / Over), in points.
@@ -176,9 +173,6 @@ def signals(market, bets_a, bets_b, money_a, money_b, move):
         if toward <= -need:
             out.append({"type": "Reverse line move", "side": other,
                         "text": f"{bets:.0f}% of bets on {{{side}}}, but the line moved {abs(toward):g} toward {{{other}}}"})
-        elif bets >= hold and toward <= 0:
-            out.append({"type": "Line holding", "side": other,
-                        "text": f"{bets:.0f}% of bets on {{{side}}} and the line hasn't moved toward it"})
     for side, bets, money in (("a", bets_a, money_a), ("b", bets_b, money_b)):
         # Fewer tickets but most of the money. A side with most of BOTH is
         # usually just big public bettors (VSiN 2022-25: sides with 75%+ of

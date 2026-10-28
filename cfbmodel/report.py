@@ -459,7 +459,6 @@ def _sharp_section(games, note):
             "move since it opened. A <b>Sharp side</b> is flagged when "
             f"<b>Reverse line move</b>: {config.SHARP_PUBLIC_PCT}%+ of bets on one side but the line moved "
             f"{config.SHARP_SPREAD_MOVE:g}+ (totals {config.SHARP_TOTAL_MOVE:g}+) the other way · "
-            f"<b>Line holding</b>: {config.SHARP_HOLD_PCT}%+ of bets on one side and no move toward it · "
             f"<b>Money vs tickets</b>: a side with under half the bets but {config.SHARP_MONEY_GAP}+ points more of the money. "
             "Info only: these never change the model's numbers. They're new this season and untested on past "
             "seasons (no free history of splits exists), so check the track record before leaning on them.</p>")
