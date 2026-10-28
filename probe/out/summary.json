@@ -1,0 +1,37 @@
+{
+ "an_v1": {
+  "status": 200,
+  "len": 693433,
+  "ctype": "application/json; charset=utf-8"
+ },
+ "an_v1_week": {
+  "status": 200,
+  "len": 693433,
+  "ctype": "application/json; charset=utf-8"
+ },
+ "an_v2": {
+  "status": 200,
+  "len": 498124,
+  "ctype": "application/json; charset=utf-8"
+ },
+ "an_page": {
+  "status": 202,
+  "len": 2395,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ "vsin": {
+  "status": 200,
+  "len": 357179,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ "vsin_dk": {
+  "status": 200,
+  "len": 357211,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ "thespread": {
+  "status": 403,
+  "len": 5845,
+  "ctype": "text/html; charset=UTF-8"
+ }
+}
