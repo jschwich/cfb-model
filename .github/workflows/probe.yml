@@ -1,0 +1,16 @@
+name: Probe splits
+on:
+  push:
+    branches: [splits-probe]
+    paths: [probe/probe.py, .github/workflows/probe.yml]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests && python probe/probe.py
+      - run: |
+          git config user.name "cfb-model-bot"; git config user.email "actions@users.noreply.github.com"
+          git add probe/out && git commit -m "probe output" && git push
