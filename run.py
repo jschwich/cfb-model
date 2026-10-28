@@ -15,6 +15,7 @@ from cfbmodel.value import upcoming, backtest, summarize_backtest, fit_scale, ap
 from cfbmodel import report
 from cfbmodel import picks as K
 from cfbmodel import adjust as A
+from cfbmodel import splits as SP
 
 
 def _with_finished(data, games, bt):
@@ -159,6 +160,7 @@ def main():
     _forecast(data, next_wk)
     games, label = upcoming(data, R, meta)
     games = A.tag(games)
+    games, info_splits = SP.attach(games, year)
     games = _with_finished(data, games, bt)
     print(f"Rated {int(R['fbs'].sum())} FBS teams; home field {meta['hfa']:.1f}; "
           f"calibration x{meta['scale']:.2f}; next slate: {label} ({len(games)} games)")
@@ -166,12 +168,13 @@ def main():
     bt_sum = summarize_backtest(bt)
     if bt_sum is not None:
         bt_sum["my_adj"] = A.record(bt[bt["wk"] >= 1])
+        bt_sum["sharp"] = SP.record(data, year)
     if bt_sum:
         print(f"Backtest: {bt_sum['games']} games; model miss {bt_sum['model_mae']:.1f} "
               f"vs market {bt_sum['market_mae']:.1f}")
 
     info = {"updated": pd.Timestamp.now(tz="America/New_York").strftime("%b %-d, %-I:%M %p ET"),
-            "year": year, "fei": fei is not None}
+            "year": year, "fei": fei is not None, "splits": info_splits}
     pk = K.fetch()
     if pk is not None and len(pk):
         P = K.match(pk, data["games"])

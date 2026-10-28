@@ -165,7 +165,7 @@ def _value_cards(games):
             f"<div class=pick>{pick}</div>"
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
-            f"{warn}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}{_wind(r) if kind == 'total' else ''}</div>")
+            f"{warn}{_sharp_note(r, kind)}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}{_wind(r) if kind == 'total' else ''}</div>")
     return "<div class=cards>" + "".join(cards) + "</div>" + played
 
 
@@ -228,7 +228,7 @@ def _games_table(games):
             f"<tr class={'fin' if fin else 'live'}>"
             f"<td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b>"
             f"{' <span class=muted>(N)</span>' if r['neutral'] else ''}"
-            f"{when}{_chips(r['flags'])}{_adj_chip(r)}{_low_trust(r)}{_wind(r)}</td>"
+            f"{when}{_chips(r['flags'])}{_sharp_chips(r)}{_adj_chip(r)}{_low_trust(r)}{_wind(r)}</td>"
             f"<td>{_fav_line(r['home'], r['away'], r['market_spread'])}{_move(r, short=True)}</td>"
             f"<td><b>{_fav_line(r['home'], r['away'], r['model_spread'])}</b>{pick_s}</td>"
             f"<td>{_n(r['market_total'], '{:g}')}</td>"
@@ -415,7 +415,111 @@ def _track(bt_sum):
                  f"<th>{E(hist.get('years', 'Past seasons'))}</th></tr></thead><tbody>" + frows + "</tbody></table></div>")
     else:
         flags = ""
-    return head + weekly + _periods_grade(s.get("periods")) + flags + _my_adj(s.get("my_adj"))
+    return (head + weekly + _periods_grade(s.get("periods")) + flags + _sharp_track(s.get("sharp"))
+            + _my_adj(s.get("my_adj")))
+
+
+# ---------------------------------------------------------------- public vs. sharp
+
+def _s(v):
+    return "" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v)
+
+
+def _sharp_chips(r, kinds=("spread", "total")):
+    out = []
+    for k in kinds:
+        side, types, text = _s(r.get(f"sharp_{k}_side")), _s(r.get(f"sharp_{k}_types")), _s(r.get(f"sharp_{k}_text"))
+        if not side:
+            continue
+        out.append(f"<span class='chip f-sharp' title='{E(text)}'>Sharp side: {E(side)} "
+                   f"<span class=muted>({E(types)})</span></span>")
+    return f"<div class=chips>{''.join(out)}</div>" if out else ""
+
+
+def _sharp_note(r, kind):
+    """On a value card: do the sharp signals agree with the model's pick?"""
+    ag = _s(r.get(f"sharp_{kind}_agree"))
+    side, types = _s(r.get(f"sharp_{kind}_side")), _s(r.get(f"sharp_{kind}_types"))
+    if ag == "yes":
+        return f"<div class='chips'><span class='chip f-sharp'>✓ Sharp signals agree ({E(types)})</span></div>"
+    if ag == "no":
+        return f"<div class=warn>⚠ Sharp signals on the other side: {E(side)} ({E(types)})</div>"
+    return ""
+
+
+def _pct_pair(a, b):
+    if pd.isna(a) or pd.isna(b):
+        return "–"
+    return f"{a:.0f} / {b:.0f}"
+
+
+def _sharp_section(games, note):
+    head = ("<section id=sharp><h2>Public vs. sharp</h2>"
+            "<p class=muted>% of bets (tickets) and % of money (handle) from ScoresAndOdds, with the line's "
+            "move since it opened. A <b>Sharp side</b> is flagged when "
+            f"<b>Reverse line move</b>: {config.SHARP_PUBLIC_PCT}%+ of bets on one side but the line moved "
+            f"{config.SHARP_SPREAD_MOVE:g}+ (totals {config.SHARP_TOTAL_MOVE:g}+) the other way · "
+            f"<b>Line holding</b>: {config.SHARP_HOLD_PCT}%+ of bets on one side and no move toward it · "
+            f"<b>Money vs tickets</b>: a side with under half the bets but {config.SHARP_MONEY_GAP}+ points more of the money. "
+            "Info only: these never change the model's numbers. They're new this season and untested on past "
+            "seasons (no free history of splits exists), so check the track record before leaning on them.</p>")
+    if note in ("off",):
+        return ""
+    if not len(games) or "sp_bets_a" not in games:
+        return head + "<p class=muted>No games on the slate yet.</p></section>"
+    g = games[~games["final"].astype(bool)] if "final" in games else games
+    g = g[g["sp_bets_a"].notna() | g["tot_bets_a"].notna()]
+    if not len(g):
+        why = "the splits page couldn't be read this run" if note == "unavailable" else "none posted yet"
+        return head + f"<p class=muted>No splits this run ({why}).</p></section>"
+    g = g.assign(_f=(g["sharp_spread_key"].fillna("").astype(str) != "").astype(int) +
+                 (g["sharp_total_key"].fillna("").astype(str) != "").astype(int)).sort_values(["_f", "start"], ascending=[False, True])
+    rows = []
+    for _, r in g.iterrows():
+        def sig(k):
+            side = _s(r.get(f"sharp_{k}_side"))
+            if not side:
+                return "<span class=muted>–</span>"
+            ag = _s(r.get(f"sharp_{k}_agree"))
+            mark = {"yes": " <span class=win>· model agrees</span>", "no": " <span class=loss>· model disagrees</span>"}.get(ag, "")
+            return (f"<b>{E(side)}</b>{mark}<div class=muted>{E(_s(r.get(f'sharp_{k}_types')))}</div>"
+                    f"<div class=ftxt style='white-space:normal;max-width:280px'>{E(_s(r.get(f'sharp_{k}_text')))}</div>")
+        op = r.get("open_spread")
+        sp_line = (f"{_fav_line(r['home'], r['away'], op)} → {_fav_line(r['home'], r['away'], r['market_spread'])}"
+                   if not pd.isna(op) else _fav_line(r["home"], r["away"], r["market_spread"]))
+        ot = r.get("open_total")
+        t_line = (f"{ot:g} → {_n(r['market_total'], '{:g}')}" if not pd.isna(ot) else _n(r["market_total"], "{:g}"))
+        rows.append(
+            f"<tr><td class=gm><b>{E(r['away'])}</b> @ <b>{E(r['home'])}</b><div class=muted>{_when(r['start'])}</div></td>"
+            f"<td>{_pct_pair(r['sp_bets_a'], r['sp_bets_b'])}<div class=muted>money {_pct_pair(r['sp_money_a'], r['sp_money_b'])}</div></td>"
+            f"<td>{sp_line}</td><td>{sig('spread')}</td>"
+            f"<td>{_pct_pair(r['tot_bets_a'], r['tot_bets_b'])}<div class=muted>money {_pct_pair(r['tot_money_a'], r['tot_money_b'])}</div></td>"
+            f"<td>{t_line}</td><td>{sig('total')}</td></tr>")
+    return (head + "<div class=tw><table><thead><tr><th>Game</th><th>Spread bets % (away / home)</th>"
+            "<th>Line open → now</th><th>Spread signal</th><th>Total bets % (over / under)</th>"
+            "<th>Total open → now</th><th>Total signal</th></tr></thead><tbody>" + "".join(rows) +
+            "</tbody></table></div></section>")
+
+
+def _sharp_track(sh):
+    if sh is None:
+        return ("<h3>Sharp-side signals</h3><p class=muted>Grading starts once games with saved splits "
+                "are final (splits are saved every run from week 9 of 2026 on).</p>")
+
+    def wl(x):
+        w, l = x["w"], x["l"]
+        return f"{w}–{l} ({w / (w + l):.0%})" if w + l else "–"
+    rows = "".join(f"<tr><td>{E(r['market'].title())}</td><td>{E(r['type'])}</td><td>{wl(r)}</td></tr>"
+                   for r in sh["by_type"])
+    m = sh["model"]
+    tiles = "".join(f"<div><span>{wl(v)}</span>model value picks: {E(k.lower())}</div>" for k, v in m.items())
+    return ("<h3>Sharp-side signals</h3><p class=muted>How the side each signal pointed to did against the "
+            "line at the last check before kickoff, and how the model's Lean/Strong picks did depending on "
+            f"whether the signals agreed. {sh['games']} games graded so far. Break-even at -110 is 52.4%; "
+            "with under a few hundred picks, anything near 50% is noise.</p>"
+            f"<div class=stats>{tiles}</div>"
+            "<div class=tw><table><thead><tr><th>Market</th><th>Signal</th><th>Sharp side ATS / O-U</th></tr>"
+            "</thead><tbody>" + rows + "</tbody></table></div>")
 
 
 CSS = """
@@ -446,7 +550,7 @@ h2{font-size:18px;margin:8px 0 10px}h3{font-size:16px;margin:22px 0 6px}.muted{c
 .chip{background:var(--chip);border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:600;border-left:3px solid var(--mut)}
 .ftxt{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
 .f-let{border-left-color:#d9480f}.f-look{border-left-color:#7048e8}.f-sand{border-left-color:#c2255c}
-.f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-low{border-left-color:var(--mut);font-weight:400}.f-trip{border-left-color:#1971c2}
+.f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-low{border-left-color:var(--mut);font-weight:400}.f-trip{border-left-color:#1971c2}.f-sharp{border-left-color:#0ca678}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
 th{font-size:12px;color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}
@@ -505,12 +609,13 @@ def write(R, meta, games, label, bt, bt_sum, info):
 {info.get('demo_banner', '')}
 <header><h1>CFB Model · {info['year']}</h1>
 <div class=muted>Updated {E(info['updated'])} · {E(label)} · home field {meta['hfa']:.1f} pts · {fei_note} · calibration ×{meta.get('scale', 1.0):.2f}</div></header>
-<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#periods">Team totals &amp; periods</a><a href="#mine">Your picks</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
+<nav><div><a href="#value">Value board</a><a href="#games">All games</a><a href="#sharp">Public vs. sharp</a><a href="#periods">Team totals &amp; periods</a><a href="#mine">Your picks</a><a href="#ratings">Power ratings</a><a href="#track">Track record</a></div></nav>
 <main>
 <section id=value><h2>Value board · {E(label)}</h2>
 <p class=muted>Lean = {config.SPREAD_LEAN:g}+ pt spread / {config.TOTAL_LEAN:g}+ pt total edge; Strong = {config.SPREAD_STRONG:g}+ / {config.TOTAL_STRONG:g}+. Big edges often mean news the model can't see (injuries, QB changes, weather). Check before betting.</p>
 {_value_cards(games)}</section>
 <section id=games><h2>All games</h2>{legend}{_games_table(games)}</section>
+{_sharp_section(games, info.get('splits', 'off'))}
 <section id=periods><h2>Team totals &amp; periods</h2>
 <p class=muted>Model numbers only. There's no market line for these here, so compare them with your book. Spreads are shown from the favorite's side; totals are bold, with each team's points in brackets (away–home). Team totals are full game; quarter and half numbers leave out overtime.</p>
 {_periods_table(games)}</section>

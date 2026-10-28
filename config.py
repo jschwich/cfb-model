@@ -130,6 +130,18 @@ LONG_TRIP_TIMEZONES = 2
 # EXTRA_RIVALRIES = [("Appalachian State", "Georgia Southern")]
 EXTRA_RIVALRIES = []
 
+# ---------- Public betting / sharp-side flags (info only: they never change the numbers) ----------
+# Reads % of bets and % of money from ScoresAndOdds every run and saves them to
+# data/snapshots/<year>/splits.csv, so the track record can grade these flags.
+# There's no free history of splits, so they couldn't be tested on past seasons;
+# the track record is where you find out whether they help.
+USE_SPLITS = True
+SHARP_PUBLIC_PCT = 65        # a side with this share of bets is "the public side"
+SHARP_SPREAD_MOVE = 0.5      # spread move (pts) AGAINST the public side since open = reverse line move
+SHARP_TOTAL_MOVE = 1.5       # same for totals (openers are sometimes averaged across books, so higher)
+SHARP_HOLD_PCT = 75          # this share of bets and no move toward that side = "line holding"
+SHARP_MONEY_GAP = 15         # a side with under 50% of bets but this many points more of the money
+
 # ---------- Your picks ----------
 # Published-to-web CSV link of the Pick Log tab (File > Share > Publish to web).
 # Only rows for PICKS_PERSON are read. Leave the link blank to turn this off.

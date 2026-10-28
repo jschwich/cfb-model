@@ -34,6 +34,7 @@ Bookmark it. From then on it updates itself every 6 hours.
 - **Team totals & periods:** the model's team totals plus 1Q, 3Q, 1H and 2H spreads and totals for every game. These are model numbers only (the free data has no lines for these markets), so compare them with your book.
 - **Power ratings:** every FBS team in points versus an average team, split into offense and defense, with this season's data weighted against the preseason prior.
 - **Situational flags:** tags on games where a classic handicapping spot applies: letdown, look-ahead, sandwich, rest edge (bye or short week), and long trip. They are information only and never change the model's numbers. A value pick that a spot works against gets a ⚠ warning.
+- **Public vs. sharp:** % of bets and % of money on every game's spread and total (from ScoresAndOdds), the line's move since it opened, and a **Sharp side** tag where the betting points one way and the market points the other: a *reverse line move* (65%+ of bets on one side but the line moved against it), *line holding* (75%+ of bets and no move toward that side), or *money vs tickets* (a side with under half the bets but 15+ points more of the money). Value picks show whether the sharp signals agree (✓) or are on the other side (⚠). Info only; never changes the numbers.
 - **Track record:** the model graded week by week against closing lines, using only information it had before each week. This is how you know whether to trust it.
 
 Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
@@ -53,6 +54,8 @@ Raw numbers are in `docs/data/*.csv` if you want them in a spreadsheet.
 11. **Value.** Edges of 4+ pts on spreads or 5+ on totals are flagged Lean; 7+ and 8+ are Strong.
 
 12. **Situational flags (info only).** A "big game" is one against a model top-25 team or a rivalry opponent. *Letdown*: a favored team coming off a big win (beat a top-25 team, a rivalry win, or a win as a 7+ pt underdog). *Look-ahead*: a favored team with a big game next week. *Sandwich*: a favored team between two big games. *Rest edge*: one team off a bye (13+ days) or the other on a short week (5 or fewer days). *Long trip*: a road team traveling 1,500+ miles or 2+ time zones. The track record shows how each spot has done this season.
+
+13. **Public betting (info only).** Every run saves the splits to `data/snapshots/<year>/splits.csv`. No free history of betting splits exists, so these flags couldn't be tested on past seasons the way everything else was. The track record grades each signal on finished games using the last check before kickoff, and shows how the model's value picks did when the signals agreed vs. disagreed. For reference, VSiN's study of DraftKings splits (2022–25) found simply following or fading the majority was close to a coin flip; sides with 75%+ of the money covered 47%.
 
 All of these knobs live in `config.py` with plain-English comments. Edit a number on GitHub (pencil icon) and the next run uses it.
 
