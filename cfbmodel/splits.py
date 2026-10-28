@@ -199,6 +199,13 @@ def is_primary(tier, pick, key, types):
             and all(t in types for t in TYPES))
 
 
+def is_backed(tier, pick, key, types):
+    """Model value pick with at least one sharp signal on its side and none against
+    (mixed signals give no key, so they never count). Primary plays are excluded."""
+    return (isinstance(tier, str) and tier in ("Lean", "Strong") and bool(key) and key == pick
+            and len(types) > 0 and not is_primary(tier, pick, key, types))
+
+
 def describe(r, market):
     """Flags for one game row (works on live games and saved snapshot rows).
 
@@ -242,6 +249,7 @@ def attach(games, year):
         for c in ("side", "key", "types", "text", "agree"):
             games[f"sharp_{m}_{c}"] = ""
         games[f"primary_{m}"] = False
+        games[f"backed_{m}"] = False
     if not _cfg("USE_SPLITS", True) or not len(games):
         return games, "off"
     fixture = bool(os.environ.get("CFBD_FIXTURE_DIR"))
@@ -276,12 +284,14 @@ def attach(games, year):
             if key and pick:
                 games.at[i, f"sharp_{m}_agree"] = "yes" if key == pick else "no"
             games.at[i, f"primary_{m}"] = is_primary(r.get(f"{m}_tier"), pick, key, types)
+            games.at[i, f"backed_{m}"] = is_backed(r.get(f"{m}_tier"), pick, key, types)
     n = int(games["sp_bets_a"].notna().sum())
     if not fixture:
         _save(games, year)
     print(f"  splits: {n} games matched, {int((games['sharp_spread_key'] != '').sum())} spread and "
           f"{int((games['sharp_total_key'] != '').sum())} total sharp-side flags, "
-          f"{int(games['primary_spread'].sum() + games['primary_total'].sum())} primary plays")
+          f"{int(games['primary_spread'].sum() + games['primary_total'].sum())} primary and "
+          f"{int(games['backed_spread'].sum() + games['backed_total'].sum())} sharp-backed plays")
     return games, f"{n} games"
 
 
@@ -339,6 +349,7 @@ def graded(data, year):
             tier = tier if isinstance(tier, str) else ""
             rows.append({"game_id": r["game_id"], "wk": r["wk"], "market": m, "key": key,
                          "primary": is_primary(tier, pick, key, types),
+                         "backed": is_backed(tier, pick, key, types),
                          "types": types, "sharp_res": res.get(key, np.nan) if key else np.nan,
                          "pick": pick, "tier": tier,
                          "pick_res": res.get(pick, np.nan) if pick else np.nan})
@@ -368,5 +379,6 @@ def record(data, year):
     against = val[(val["key"] != "") & (val["key"] != val["pick"])]
     none = val[val["key"] == ""]
     return {"games": int(G["game_id"].nunique()), "by_type": by_type,
-            "model": {"Primary (all three agree)": wl(G.loc[G["primary"], "pick_res"]),"Sharps agreed": wl(agree["pick_res"]), "Sharps on the other side": wl(against["pick_res"]),
+            "model": {"Primary (all three agree)": wl(G.loc[G["primary"], "pick_res"]),
+                      "Sharp-backed (one signal agrees)": wl(G.loc[G["backed"], "pick_res"]),"Sharps agreed": wl(agree["pick_res"]), "Sharps on the other side": wl(against["pick_res"]),
                       "No sharp signal": wl(none["pick_res"])}}
