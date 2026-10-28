@@ -140,10 +140,20 @@ def _value_cards(games):
     if not items:
         return ("<p class=muted>No edges big enough to flag in the games still to play "
                 f"(spreads {config.SPREAD_LEAN:g}+ pts, totals {config.TOTAL_LEAN:g}+ pts).</p>" + played)
-    items.sort(key=lambda x: -x[0])
+    def prim(r, kind):
+        v = r.get(f"primary_{kind}")
+        return bool(v) and not (isinstance(v, float) and np.isnan(v))
+    items.sort(key=lambda x: (not prim(x[1], x[2]), -x[0]))
+    n_prim = sum(prim(r, k) for _, r, k in items)
+    top = (f"<p class=prim-note><b>{n_prim} primary play{'s' if n_prim != 1 else ''}</b> this week "
+           "(model value pick + reverse line move + money vs tickets all on the same side), shown first.</p>"
+           if n_prim else
+           "<p class=muted>No primary plays this week (model value pick + reverse line move + money vs "
+           "tickets all on the same side). They're rare by design.</p>")
     cards = []
     for edge, r, kind in items:
         tier = r[f"{kind}_tier"]
+        pb = "<span class='tier primary'>★ Primary</span> " if prim(r, kind) else ""
         if kind == "spread":
             pick = E(r["spread_pick_text"])
             detail = (f"Model {_fav_line(r['home'], r['away'], r['model_spread'])} · "
@@ -160,13 +170,13 @@ def _value_cards(games):
         if kind == "spread" and r["flag_conflict"]:
             warn = "<div class=warn>⚠ A situational spot works against this pick</div>"
         cards.append(
-            f"<div class='card {tier.lower()}'><div class=row1><span class='tier {tier.lower()}'>{tier}</span>"
+            f"<div class='card {tier.lower()}{' primary' if pb else ''}'><div class=row1><span>{pb}<span class='tier {tier.lower()}'>{tier}</span></span>"
             f"<span class=edge>{edge:.1f} pt edge</span></div>"
             f"<div class=pick>{pick}</div>"
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
             f"{warn}{_sharp_note(r, kind)}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}{_wind(r) if kind == 'total' else ''}</div>")
-    return "<div class=cards>" + "".join(cards) + "</div>" + played
+    return top + "<div class=cards>" + "".join(cards) + "</div>" + played
 
 
 def _wind(r):
@@ -550,6 +560,8 @@ h2{font-size:18px;margin:8px 0 10px}h3{font-size:16px;margin:22px 0 6px}.muted{c
 .ftxt{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
 .f-let{border-left-color:#d9480f}.f-look{border-left-color:#7048e8}.f-sand{border-left-color:#c2255c}
 .f-rest{border-left-color:#2b8a3e}.f-mine{border-left-color:var(--acc)}.f-low{border-left-color:var(--mut);font-weight:400}.f-trip{border-left-color:#1971c2}.f-sharp{border-left-color:#0ca678}
+.tier.primary{background:#0ca678;color:#fff}.card.primary{border-color:#0ca678;border-width:2px;border-left-width:6px;box-shadow:0 0 0 3px rgba(12,166,120,.12)}
+.prim-note{font-size:14px;margin:0 0 10px;color:var(--ink)}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
 th{font-size:12px;color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}
