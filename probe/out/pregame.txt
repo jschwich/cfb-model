@@ -1,0 +1,2631 @@
+
+
+<!doctype html>
+<!--[if lt IE 8]>      <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js"> <!--<![endif]-->
+	<head><!-- HEAD --><link rel="stylesheet" href="/cfs-filesystemfile/__key/system/h-00000000e516ebcc-http-pregamecom-80-css/platform.less?_=637970616142728309" type="text/css" media="screen"><style>
+.contextual-administration-handle::after {
+	width: 80%;
+	height: 80%;
+	top: 10%;
+	left: 10%;
+	background-image: url('/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/edit.svg?_=637940629050915440');
+}
+#_tc_ap.contextual-administration-panel-container .contextual-administration-panel-wrapper .contextual-panel .contextual-panel-heading .navigation-list .search a {
+	background-image: url('/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/glass.svg?_=637940629023058594');
+	background-repeat: no-repeat;
+}
+#_tc_ap.contextual-administration-panel-container .contextual-administration-panel-wrapper .contextual-panel .contextual-panel-heading .navigation-list .close a {
+	background-image: url('/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/cross.svg?_=637940629140950908');
+	background-repeat: no-repeat;
+}
+}
+#_tc_ap.contextual-administration-panel-container .contextual-administration-panel-wrapper .contextual-panel .contextual-panel-heading-search a.exit-search {
+	background-image: url('/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/cross.svg?_=637940629140950908');
+	background-repeat: no-repeat;
+}
+#_tc_ap.contextual-administration-panel-container .contextual-administration-panel-wrapper .contextual-panel .contextual-panel-heading .navigation-list .back a .icon {
+	background-image: url('/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/back.svg?_=637940629088818674');
+	background-repeat: no-repeat;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<title>Game Center</title>
+<meta key="og:site_name" content="Pregame.com">
+<meta name="GENERATOR" content="Telligent Community 12"><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/screen.less?_=637970616148064405"><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/print.css?_=637970616164081394" media="print"><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/handheld.less?_=637970616164081394" media="only screen and (max-width: 670px)"><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/tablet.less?_=637970616166905390" media="only screen and (min-device-width: 671px) and (max-device-width: 1024px) and (orientation: landscape), only screen and (min-device-width: 671px) and (max-device-width: 1024px) and (orientation: portrait)">
+
+	
+	
+
+
+
+
+<meta name="msvalidate.01" content="636FC88EEABED92492D13E58D44368E4">
+<link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-header_5F00_0010-277-f-3-637940598096700000-http-pregamecom-80/style.less?_=637970616203381830">
+<link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-header_5F00_0010-278-f-3-637940598096700000-http-pregamecom-80/style.less?_=637970616203538225">
+<link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-pcommon_2D00_home_5F00_0000-10902-f-3-637950666673800000-http-pregamecom-80/style.less?_=637970616231606235">
+<link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-footer_5F00_0010-270-f-3-637940595810730000-http-pregamecom-80/style.less?_=637970616203381830"><link rel="alternate" type="application/rss+xml" title="Anonymous&#39;s Activities (RSS 2.0)" href="/members/anonymous/activities/rss"><link rel="alternate" type="application/rss+xml" title="Anonymous&#39;s Groups Activities (RSS 2.0)" href="/members/anonymous/activities/groupsrss"><link rel="alternate" type="application/rss+xml" title=" (RSS 2.0)" href="/rss"><meta property="og:title" content="Game Center" /><meta property="og:site_name" content="Pregame" /><meta property="og:description" content="Game Center" /><meta property="og:url" content="https://pregame.com/game-center" /><meta property="og:type" content="website" /><!-- END HEAD --><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="description" content="Game Center" /><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /><link rel="manifest" href="/site.webmanifest" /><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" /><meta name="msapplication-TileColor" content="#000000" /><meta name="theme-color" content="#ffffff" /><link rel="canonical" href="https://pregame.com/game-center" /><link rel="stylesheet" href="/cfs-filesystemfile/__key/system/h-00000000e516ebcc-http-pregamecom-80-css/platform.less?_=637970616142728309" type="text/css" media="screen" /><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/screen.less?_=637970616148064405" /><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/print.css?_=637970616164081394" media="print" /><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/handheld.less?_=637970616164081394" media="only screen and (max-width: 670px)" /><link type="text/css" rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-theme_5F00_000-theme-f-1-637940595810470000-http-pregamecom-80/tablet.less?_=637970616166905390" media="only screen and (min-device-width: 671px) and (max-device-width: 1024px) and (orientation: landscape), only screen and (min-device-width: 671px) and (max-device-width: 1024px) and (orientation: portrait)" /><link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-header_5F00_0010-277-f-3-637940598096700000-http-pregamecom-80/style.less?_=637970616203381830"  /><link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-header_5F00_0010-278-f-3-637940598096700000-http-pregamecom-80/style.less?_=637970616203538225"  /><link rel="stylesheet" href="/cfs-filesystemfile/__key/uifiles/h-00000000e516ebcb-3fc3f82483d14ec485ef92e206116d49-s-00000000000000000000000000000000-0-footer_5F00_0010-270-f-3-637940595810730000-http-pregamecom-80/style.less?_=637970616203381830"  /><link rel="stylesheet" href="/assets/styles/side-by-side-for-sitecore.css?v=17a" /><link rel="stylesheet" href="/assets/styles/main.css?v=17a" /><link rel="stylesheet" href="/assets/styles/extra.css?v=17a" /><link rel="stylesheet" href="/assets/styles/supplemental.css?v=17a" />
+
+	<script src="/assets/scripts/vendor/modernizr.js"></script>
+	
+		<!-- Facebook Pixel Code -->
+		<script>
+		!function(f,b,e,v,n,t,s)
+		{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+		n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+		if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+		n.queue=[];t=b.createElement(e);t.async=!0;
+		t.src=v;s=b.getElementsByTagName(e)[0];
+		s.parentNode.insertBefore(t,s)}(window,document,'script',
+			'https://connect.facebook.net/en_US/fbevents.js');
+
+			(function (p,i,l) {
+				//closure to init multiple pixels
+				p = '550387952245256|515188432711037'.split('|'); i = 0; l = p.length;
+				for (; i < l; i++) { fbq('init', p[i]); }
+				fbq('track', 'PageView');
+			})();
+		</script>
+		<noscript>
+		 <img height="1" width="1" src="https://www.facebook.com/tr?id=515188432711037&ev=PageView&noscript=1"/>
+		</noscript>
+		<!-- End Facebook Pixel Code -->
+	
+
+<link rel="stylesheet" type="text/css" href="/assets/styles/pggc-styles.css?v=17a" /><link rel="stylesheet" type="text/css" href="/assets/styles/pggc-desktop-v6.css?v=17a" /><style type="text/css" id="pggc-update-css"></style></head>
+	<body>
+		
+	<script>
+		window.fbAsyncInit = function () {
+			FB.init({
+				appId: '180249731362',
+				xfbml: true,
+				version: 'v2.9'
+			});
+		};
+
+		(function(d, s, id){
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+		<form method="post" action="/game-center" id="fForm">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="52/TG7mtgCk+TUbQ4p4yYXpuP8BPZQ2b7hKjtwqIK3UVqK/rIBfi/4rL3P8/p0l5rW/UOzDgnWOkgWmbe7NP3zU6Glo=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="5344A12E" />
+</div>
+			
+<div class="pg-outer-contain">
+	
+<nav class="pg-mobile-nav">
+	<ul class="pg-mobile-main">
+	
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/">
+					
+					Home
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item" omit-desktop="1">
+				<a href="https://pregame.com/">
+					
+					Pregame Home
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item  pg-mobile-nav-item--active">
+				<a href="https://pregame.com/game-center">
+					
+					Game Center
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item  pg-mobile-nav-item--active">
+				<a href="https://pregame.com/game-center">
+					
+					Game Center Home
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/game-center/specific-game-hq">
+					
+					Specific Game HQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/game-center/game-center-guide">
+					
+					Game Center Guide
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/game-center/sports-betting-terms">
+					
+					Sports Betting Terms
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/free-pick-center">
+					
+					Free Picks
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/free-pick-center">
+					
+					Standings &amp; Streaks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/free-pick-center/team-experts">
+					
+					Team Experts
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/free-pick-center/find-picks">
+					
+					Find Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/buy-picks/free-pick-hq">
+					
+					Free Pick HQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/pros/free-premium-pick">
+					
+					Free Premium Pick
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/free-pick-center/make-picks">
+					
+					Make Picks
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/free-pick-center/make-picks">
+					
+					Make Picks Home
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/contests">
+					
+					Contests
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/contests">
+					
+					Contests Home
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/contests/find-and-join-contests">
+					
+					Find Contests
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/contests/contest-standings">
+					
+					Contest Standings HQ
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/pregame-forums/p/main-forums">
+					
+					Forums
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/pregame-forums/p/main-forums">
+					
+					Main Forums
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/pros">
+					
+					Pregame Pros
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/pros">
+					
+					Pros Spotlight
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/pros/free-premium-pick">
+					
+					Free Premium Pick
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/pros/pros-profiles">
+					
+					Pro&#39;s Profiles
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item" omit-desktop="1">
+				<a href="https://pregame.com/buy-picks">
+					
+					Buy Picks
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item" omit-desktop="1">
+				<a href="https://pregame.com/buy-picks">
+					
+					Main
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item" omit-desktop="1">
+				<a href="https://pregame.com/buy-picks/pro-pick-hq">
+					
+					Every Pro Pick Ever
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item" omit-desktop="1">
+				<a href="https://pregame.com/buy-picks/free-pick-hq">
+					
+					Free Pick HQ (Pros)
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/search">
+					<i class="pg-icon-search--header"></i>
+					
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/members">
+					<i class="pg-icon-user-search--header"></i>
+					
+				</a>
+				
+				<ul class="pg-mobile-drop">
+	
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/members/all-about-member-pages">
+					
+					Specific Member Profile
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-drop-item">
+				<a href="https://pregame.com/members">
+					
+					Member Search
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</li>
+		
+</ul>
+	<ul class="pg-mobile-aside">
+	
+			<li class="pg-mobile-nav-item">
+				<a href="/sports/stories/b/news">
+					
+					News
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/news-wire">
+					
+					Wire
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/podcasts">
+					
+					Podcasts
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-mobile-nav-item">
+				<a href="https://pregame.com/videos">
+					
+					Videos
+				</a>
+				
+				
+			</li>
+		
+</ul>
+	<ul class="pg-mobile-cart">
+	
+			<li class="">
+				<a href="https://pregame.com/purchased-picks">
+					<i class="pg-icon-header--purchased"></i>
+					Purchased Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="/buy-picks/members.aspx">
+					<i class="pg-icon-header--money"></i>
+					$0.00
+				</a>
+				
+				
+			</li>
+		
+			<li class="" omit-desktop="1">
+				 Bulk Dollars: $0.00
+				
+				
+			</li>
+		
+			<li class="" omit-desktop="1">
+				 Discount Dollars: $0.00
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="/pregamepros/secure/mp_editcart.aspx">
+					<i class="pg-icon-header--cart"></i>
+					0
+				</a>
+				
+				
+			</li>
+		
+</ul>
+	<footer class="pg-mobile-footer">
+		<div class="pg-input--search-inline">
+			<input id="pg-mobile-search-inline-text" type="text">
+			<a href="#" id="pg-mobile-search-inline-button" class="pg-search-inline-button--orange"></a>
+		</div>
+		<ul class="">
+	
+			<li class="">
+				<a href="/sitemap">
+					
+					Site Map
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/sportsbook-spy">
+					
+					Sportsbook Spy
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/advertising-with-us">
+					
+					Advertise With Us
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/affiliate-program">
+					
+					Affiliate Program
+				</a>
+				
+				
+			</li>
+		
+</ul>
+		<ul class="">
+	
+			<li class="">
+				<a href="https://pregame.com/about-us">
+					
+					About Us
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/terms-of-service">
+					
+					Terms of Service
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/privacy-pledge">
+					
+					Privacy Pledge
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/support">
+					
+					Support
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/faq">
+					
+					FAQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="--sign-in">
+				<a href="https://pregame.com/user/createuser?returnUrl=/welcome-to-pregame">
+					
+					Sign Up
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/support">
+					
+					Contact Us
+				</a>
+				
+				
+			</li>
+		
+</ul>
+	</footer>
+</nav> 
+	<div class="pg-inner-contain">
+		
+
+<header class="pg-main-header header-fragments">
+		<div class="pg-top-bar">
+			<nav class="pg-top-bar-nav">
+				<ul class="pg-top-bar-nav--aside">
+	
+			<li class="pg-top-bar-support">
+				<a href="https://pregame.com/support">
+					
+					Support
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-top-bar">
+				<a href="https://pregame.com/faq">
+					
+					FAQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-top-bar-number">
+				<i class="pg-icon-phone"></i> 1-800-Pregame
+				
+				
+			</li>
+		
+</ul>
+				<ul class="pg-top-bar-nav--account">
+	
+			<li class="pg-top-bar-item--sign-in">
+				<a href="https://pregame.com/login">
+					
+					Sign In/Register
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</nav>
+		</div>
+		
+<div class="pg-notification-container">
+	<div class="pg-notification-bar">
+		<div class="pg-notification-message">
+			FREE $25 when you <a href="https://pregame.com/user/createuser?returnUrl=%2Fwelcome-to-pregame&amp;_z=z" onclick="pg_ext.trackLink(this, event, 'Promotion', 'Click', 'Free 25', '0')">Join Now</a> &ndash;Use your Free $25 to get a FREE Pick!
+		</div>
+	</div>
+</div>
+		<div class="pg-header">
+			
+				<div class="pg-header-top">
+					<a href="#" class="pg-mobile-bar-item--menu"></a>
+					<a href="layout/pregame/common/#" class="pg-mobile-bar-item--account"></a>
+					<nav class="pg-header-top-nav--aside">
+						<ul class="pg-horizontal-list">
+	
+			<li class="">
+				<a href="/sports/stories/b/news">
+					<i class="pg-icon-header--news"></i>
+					News
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/news-wire">
+					<i class="pg-icon-header--wire"></i>
+					Wire
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/podcasts">
+					<i class="pg-icon-header--podcast"></i>
+					Podcasts
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/videos">
+					<i class="pg-icon-header--video"></i>
+					Videos
+				</a>
+				
+				
+			</li>
+		
+</ul>
+					</nav>
+					<nav class="pg-header-top-nav--cart">
+						<ul class="pg-horizontal-list">
+	
+			<li class="">
+				<a href="https://pregame.com/purchased-picks">
+					<i class="pg-icon-header--purchased"></i>
+					Purchased Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-money-action">
+				<a class="pg-money-action-trigger" onclick="pregame.panels.trigger(this);return false;" href="javascript:;"><i class="pg-icon-header--money"></i> $0.00</a>
+				
+<div class="pg-panel-box pg-panel-box--money">
+	<div class="pg-panel-content">
+		
+				<div class="pg-panel-item">
+					 Bulk Dollars: $0.00
+				</div>
+			
+				<div class="pg-panel-item">
+					 Discount Dollars: $0.00
+				</div>
+			
+		
+			<div class="pg-panel-item">
+				<p>You have no discounts. <a href="https://pregame.com/buy-picks/how-to-get-discounts" onclick="pg_ext.trackLink(this, event, 'Navigation', 'Click', 'Top Nav Get Disc', '0')">Click here to get some</a>.</p>
+			</div>
+		
+	</div>
+</div>
+				
+			</li>
+		
+			<li class="">
+				<a href="/pregamepros/secure/mp_editcart.aspx">
+					<i class="pg-icon-header--cart"></i>
+					0
+				</a>
+				
+				
+			</li>
+		
+</ul>
+					</nav>
+					
+						<a href="/" class="pg-header-logo">
+							Pregame.com - Connect Before You Bet
+						</a>
+					
+				</div>
+			
+			<div class="pg-header-bar">
+				<nav class="pg-header-bar-nav">
+					<ul class="">
+	
+			<li class="pg-header-bar-item--home">
+				<a href="https://pregame.com/">
+					
+					Home
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--game-center pg-header-bar-item--active">
+				<a href="https://pregame.com/game-center">
+					
+					Game Center
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--contests">
+				<a href="https://pregame.com/free-pick-center">
+					
+					Free Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--contests">
+				<a href="https://pregame.com/free-pick-center/make-picks">
+					
+					Make Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--contests">
+				<a href="https://pregame.com/contests">
+					
+					Contests
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--forums">
+				<a href="https://pregame.com/pregame-forums/p/main-forums">
+					
+					Forums
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--pregame-pros">
+				<a href="https://pregame.com/pros">
+					
+					Pregame Pros
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--buy-picks" omit-mobile="1">
+				<a href="https://pregame.com/buy-picks">
+					
+					Buy Picks
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--search">
+				<a href="https://pregame.com/search">
+					<i class="pg-icon-search--header"></i>
+					
+				</a>
+				
+				
+			</li>
+		
+			<li class="pg-header-bar-item--search">
+				<a href="https://pregame.com/members">
+					<i class="pg-icon-user-search--header"></i>
+					
+				</a>
+				
+				
+			</li>
+		
+</ul>
+				</nav>
+			</div>
+		</div>
+		<div class="pg-header-sub">
+			<nav class="pg-header-sub-nav">
+				<ul class="pg-horizontal-list">
+	
+			<li class="pg-header-sub-item--active">
+				<a href="https://pregame.com/game-center">
+					
+					Game Center Home
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/game-center/specific-game-hq">
+					
+					Specific Game HQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/game-center/game-center-guide">
+					
+					Game Center Guide
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/game-center/sports-betting-terms">
+					
+					Sports Betting Terms
+				</a>
+				
+				
+			</li>
+		
+</ul>
+			</nav>
+		</div>
+</header>
+		<div class="pg-page-contain">
+			<!-- FIX FOR MESSAGES -->
+			<div class="single-column header-fragments evolution-reflow-container" data-related="ctl02_ctl01_page" id="ctl02_ctl01_singlecolumn" ></div>
+
+			<p style="font-size: 18px;">
+Sport Quick Links - 
+<span id="pggcFilterSportLinks">...</span>
+</p>
+<p>&nbsp;</p>
+<p style="font-size: 18px;">
+Section Quick Links - 
+<a href="#" onclick="$('.pggc-navbar-trigger.pggc-navbar-trigger--overview').click();return false;">Overview</a> | 
+<a href="#" onclick="$('.pggc-navbar-trigger.pggc-navbar-trigger--odds').click();return false;">Odds</a> | 
+<a href="#" onclick="$('.pggc-navbar-trigger.pggc-navbar-trigger--consensus').click();return false;">Consensus</a>
+</p>
+<p>&nbsp;</p><div class="pg-tearing-container" data-tear-qtk="ts_i" data-tear-qsk="ts_s" data-tear-url="https://pregame.com/game-center" data-tear-key="game-center">
+
+
+
+
+	<div id="pggc-gamecenter" class="pggc-module pg-disabled">
+		<div class="pggc-module-header">
+			<div class="pggc-module-header-box--title">
+				<h1 class="pggc-module-header-title">Game Center</h1>
+				<div class="pggc-module-header-connector">
+					<a class="pggc-connector" onclick="return pg_ext.refreshPage();" href="#">
+						<i class="pggc-icon--connector"></i>
+						<span>Connecting...</span>
+					</a>
+				</div>
+			</div>
+			<div class="pggc-module-header-box--aside">
+				<div class="pggc-module-header-clock">
+					<div class="pggc-clock">
+						<div class="pggc-clock-number">-</div>
+						<div class="pggc-clock-number">-</div>
+						<div class="pggc-clock-colon">:</div>
+						<div class="pggc-clock-number">-</div>
+						<div class="pggc-clock-number">-</div>
+						<div class="pggc-clock-colon">:</div>
+						<div class="pggc-clock-number">-</div>
+						<div class="pggc-clock-number">-</div>
+					</div>
+				</div>
+				<div class="pggc-module-header-share">
+					<div class="pg-share"
+						data-mode="modal"
+						data-calculating="..." 
+						data-zero="Be 1st" 
+						data-direction="left" 
+						data-title="Share Game Center" 
+						data-label="# Shares" 
+						data-share="Pregame Game Center"></div>
+					<div class="pggc-info-action">
+						<a href="javascript:;" onclick="return pregame.panels.trigger(this);" class="pggc-panel-trigger pggc-info-action-trigger">
+							<i class="pggc-icon-info"></i>Info
+						</a>
+						<div class="pg-panel-box pggc-panel-box pggc-panel-box--info">
+							<div class="pggc-share-panel-content">
+								<div class="pggc-recent-legend">
+									<span class="pggc-recent-legend-title">Recent Moves</span>
+									<span class="pggc-recent-legend-data--recent-2">2 min</span>
+									<span class="pggc-recent-legend-data--recent-5">5 min</span>
+								</div>
+								<div class="pggc-info-panel-content">
+									<p>Information about the Game Center</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pggc-info-action pggc-info-action--settings pggc-info-action--pending">
+						<a href="javascript:;" onclick="pggc.fillSportsbooksSettings();pregame.panels.trigger(this);return false;" class="pggc-panel-trigger pggc-settings-action-trigger">
+							<i class="pg-icon-admin"></i>Settings
+						</a>
+						<div class="pg-panel-box pggc-panel-box pggc-panel-box--settings">
+							<div class="pggc-share-panel-content">
+								<div class="pggc-info-panel-content">
+									<p>Put the sportsbooks in your preferred order.</p>
+									<table class="pg-module-table">
+										<thead>
+											<tr>
+												<th class="pg-table-col-1-12"><p class="pg-table-text--center">#</p></th>
+												<th class="pg-table-col-3-12"><p class="pg-table-text">Sportbook</p></th>
+												<th class="pg-table-col-1-12"><p class="pg-table-text--center">#</p></th>
+												<th class="pg-table-col-3-12"><p class="pg-table-text">Sportbook</p></th>
+												<th class="pg-table-col-1-12"><p class="pg-table-text--center">#</p></th>
+												<th class="pg-table-col-3-12"><p class="pg-table-text">Sportbook</p></th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+										<tfoot></tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pggc-module-filters-contain">
+			<div class="pggc-module-filters">
+				<div class="pggc-module-filter">
+					<label class="pggc-label" for="pggcFilterGameDate">Game Date<sub id="pggcFilterGameDateClear">(<a href="#" onclick="$('#pggcFilterGameDate').val('Active Dates').change();return false;">Goto Active Dates</a>)</sub></label>
+					<div class="pg-input--date">
+						<input type="text" class="pggc-input pggc-datepicker" id="pggcFilterGameDate" readonly="readonly">
+					</div>
+				</div>
+				<div class="pggc-module-filter">
+					<label class="pggc-label" for="pggcFilterSport">Sport</label>
+					<div class="pggc-input--select">
+						<span class="pggc-select">All Sports</span>
+						<select class="pggc-input" id="pggcFilterSport" onchange="pggc.selectAndReload(this, true, true);">
+							<option value="" selected="selected">All Sports</option>
+							<option value="-10">10 Biggest Bet Games</option>
+						</select>
+					</div>
+				</div>
+				<div class="pggc-module-filter">
+					<label class="pggc-label" for="pggcFilterBetType">Bet Type</label>
+					<div class="pggc-input--select">
+						<!--<span class="pggc-select">Side/Total</span>-->
+						<span class="pggc-select">Sides</span>
+						<select class="pggc-input pggc-input--actiontype" id="pggcFilterBetType" onchange="pggc.selectAndReload(this, false);">
+							<option value="0">Side/Total</option>
+							<option value="1">Sides</option>
+							<option value="2">Totals</option>
+							<option value="3">ML | RL | PL</option>
+						</select>
+					</div>
+				</div>
+				<div class="pggc-module-filter">
+					<label class="pggc-label" for="pggcFilterSortBy">Sort By</label>
+					<div class="pggc-input--select">
+						<span class="pggc-select">Rotation #</span>
+						<select class="pggc-input" id="pggcFilterSortBy" onchange="pggc.selectAndReload(this, true);">
+							<option value="AwayRot">Rotation #</option>
+							<option value="StartTimeDate">Start Time</option>
+							<option value="Completed">Completed Games</option>
+
+							<option value="Action" data-subsort="Cash">Most Action - Cash</option>
+							<option value="Action" data-subsort="Tickets">Most Action - Tickets</option>
+							<option value="Action" data-subsort="Picks">Most Action - Picks</option>
+							<option value="Action" data-subsort="Friends">Most Action - Friends</option>
+							<option value="Action" data-subsort="Groups">Most Action - Legends</option>
+							<option value="Action" data-subsort="Experts">Most Action - Experts</option>
+
+							<option value="Lopsided" data-subsort="Cash">Most Lopsided - Cash</option>
+							<option value="Lopsided" data-subsort="Tickets">Most Lopsided - Tickets</option>
+							<option value="Lopsided" data-subsort="Picks">Most Lopsided - Picks</option>
+							<option value="Lopsided" data-subsort="Friends">Most Lopsided - Friends</option>
+							<option value="Lopsided" data-subsort="Groups">Most Lopsided - Legends</option>
+							<option value="Lopsided" data-subsort="Experts">Most Lopsided - Experts</option>
+						</select>
+					</div>
+				</div>
+				<div class="pggc-module-filter">
+					<div class="pggc-input--checkbox--mygames">
+						<input id="pggc_MyGamesOnly" class="pggc-input" type="checkbox" onchange="pggc.toggleMyEvents(this)" disabled>
+						<span class="pggc-checkbox"></span>
+						<label for="pggc_MyGamesOnly" class="pggc-label">MY GAMES only</label>
+					</div>
+				</div>
+				<div class="pggc-module-filter--search">
+					<label class="pggc-label" for="pggcFilterSearch"><sub id="pggcFilterSearchClear">(<a href="#" onclick="$('#pggcFilterSearch').val('');pggc.search();return false;">Clear Search</a>)</sub>&nbsp;</label>
+					<div class="pggc-input--search-inline">
+						<input placeholder="Search Game Center" class="pggc-input" id="pggcFilterSearch" type="text">
+						<a href="#" onclick="return pggc.search();" class="pggc-search-button"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pgcc-module-navbar pggc-view--overview">
+			<ul class="pggc-navbar">
+				<li class="pggc-navbar-item"><a href="#" onclick="pggc.toggleView(this, 0);return false;" class="pggc-navbar-trigger pggc-navbar-trigger--overview">Overview</a></li>
+				<li class="pggc-navbar-item"><a href="#" onclick="pggc.toggleView(this, 1);return false;" class="pggc-navbar-trigger pggc-navbar-trigger--odds">Odds</a></li>
+				<li class="pggc-navbar-item"><a href="#" onclick="pggc.toggleView(this, 2);return false;" class="pggc-navbar-trigger pggc-navbar-trigger--consensus">Consensus</a></li>
+			</ul>
+			<div class="pggc-module-navbar-filter pggc-view-odds">
+				<div class="pggc-input-group--inline">
+					<label class="pggc-label" for="pggcOddsDisplay">Odds Display</label>
+					<div class="pggc-input--select">
+						<span class="pggc-select">Current #</span>
+						<select class="pggc-input" id="pggcOddsDisplay" onchange="pggc.selectAndReload(this, false);">
+							<option value="Current">Current #</option>
+							<option value="Previous">Previous #</option>
+							<option value="Opener">Opener #</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!--
+			<div class="pggc-module-navbar-filter pggc-view-consensus">
+				<div class="pggc-input-group--inline">
+					<label class="pggc-label" for="pggcConsensusDisplay">Consensus Display</label>
+					<div class="pggc-input--select">
+						<span class="pggc-select">All Action</span>
+						<select class="pggc-input" id="pggcConsensusDisplay" onchange="pggc.selectAndReload(this, false);">
+							<option value="All">All Action</option>
+							<option value="LastHour">Action Last Hour</option>
+							<option value="AtCurrent">Action at Current Number</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+		<!-- GAMECENTER VIEWS -->
+		<div class="pggc-module-view">
+			<div id="pggc-games-message--no-results" class="pggc-games-message">
+				<p>No current games match your filter/search criteria.</p>
+			</div>				
+			<div id="pggc-games-message--loading" class="pggc-games-message">
+				<p>Connecting...</p>
+			</div>				
+			<!-- GAMECENTER OVERVIEW -->
+			<div class="pggc-overview pggc-group">
+				<div class="pggc-games-box">
+					<a href="#" onclick="pggc.toggleGroup(this);return false;" class="pggc-games-bar">
+						<i class="pggc-games-bar-trigger"></i>
+						<h5 class="pggc-games-bar-title">
+							<span class="pggc-games-bar-date">$date</span>
+							<span class="pggc-games-bar-subtitle">$title</span>
+						</h5>
+					</a>
+					<div class="pggc-games-content-wrap">
+						<div class="pggc-games-content-scroll">
+							<div class="pggc-games-content">
+								<div class="pggc-games-header">
+									<div class="pggc-game-col--expander">
+										&nbsp;
+									</div>
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--score">
+													<p class="pggc-col-data">Score</p>
+												</td>
+												<td class="pggc-col pggc-col--time">
+													<p class="pggc-col-data">Time</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data">#</p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data">Team</p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<p class="pggc-col-data">Open</p>
+												</td>
+												<td class="pggc-col pggc-col--moves">
+													<p class="pggc-col-data">Moves</p>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<p class="pggc-col-data">Current</p>
+												</td>
+												<td class="pggc-col pggc-col--cash">
+													<p class="pggc-col-data">Cash</p>
+												</td>
+												<td class="pggc-col pggc-col--tickets">
+													<p class="pggc-col-data">Tickets</p>
+												</td>
+												<td class="pggc-col pggc-col--picks">
+													<p class="pggc-col-data">Picks</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--actions"><p class="pggc-actions-header--mygames">My</p></div>
+								</div>
+								<div class="pggc-game">
+									<div class="pggc-game-col--expander">
+										<a href="#" onclick="pggc.toggleGameDetail(this);return false;" class="pggc-game-expander"></a>
+									</div>
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--score">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--time">
+													<p class="pggc-col-data pggc-col-data--date">--/--/--</p>
+													<p class="pggc-col-data pggc-col-data--time">--:-- --</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+												<td class="pggc-col pggc-col--moves">
+													<p class="pggc-col-data pggc-away"><a class="pggc-graph pggc-link--odds"></a></p>
+													<p class="pggc-col-data pggc-home"><a class="pggc-graph pggc-link--odds"></a></p>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+												<td class="pggc-col pggc-col--cash">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+												<td class="pggc-col pggc-col--tickets">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+												<td class="pggc-col pggc-col--picks">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--actions">
+										<div class="pggc-game-action--details">
+											<div class="pggc-detail-indicator--video">
+												<i class="pggc-icon-indicator-video"></i>
+											</div>
+											<div class="pggc-detail-indicator--comments">
+												<i class="pggc-icon-indicator-comments"></i>
+												<span></span>
+											</div>
+										</div>
+										<div class="pggc-game-action--picks">
+											<div class="pggc-game-action-pick pggc-game-action-pick--free">
+												<a href="#" class="pggc-link--find-picks">
+													<span class="pggc-action-pick-text">Free Picks</span>
+													<span class="pggc-action-pick-count">(<span></span>)</span>
+												</a>
+											</div>
+											<div class="pggc-game-action-pick pggc-game-action-pick--paid">
+												<a href="#" class="pggc-link--buy-pick">
+													<span class="pggc-action-pick-text">Buy Picks</span>
+													<span class="pggc-action-pick-count">(<span></span>)</span>
+												</a>
+											</div>
+										</div>
+										<div class="pggc-game-action--buttons">
+											<a href="#" class="pggc-action--pregame-pick pggc-link--make-pick">Pk</a>
+											<div class="pggc-action--share-box"
+													data-calculating="..." 
+													data-zero="Be 1st" 
+													data-direction="left" 
+													data-title="Share" 
+													data-label="" 
+													data-share="Share">
+												<a href="javascript:;" onclick="pg_share.openModal(null, this, this.parentNode, this.parentNode);" class="pggc-panel-trigger pggc-action--share"></a>
+											</div>
+											<div class="pggc-action--mygames">
+												<div class="pggc-input--checkbox--mygames">
+													<input class="pggc-input" type="checkbox" onclick="pggc.toggleMyEvent(this);" disabled>
+													<span class="pggc-checkbox"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="pggc-game-info pggc-game-info--details">
+										<div class="pggc-game-info-header">
+											<a href="#" onclick="pggc.toggleGameDetailTab(this);return false;" class="pggc-game-info-trigger pggc-game-info-trigger--details">
+												Game Details
+											</a>
+											<a href="#" onclick="pggc.toggleGameDetailTab(this);return false;" class="pggc-game-info-trigger pggc-game-info-trigger--comments">
+												Comments (<span class="pg-comment-stream--deferred" data-type="count"></span>)
+											</a>
+										</div>
+										<div class="pggc-game-info-box">
+											<div class="pggc-game-details">
+												<div class="pggc-row">
+													<div class="pggc-col-4">
+														<div class="pggc-text-block pggc-text-block--location">
+															<p class="pggc-text-header">Game Location</p>
+														</div>
+														<div class="pggc-text-block pggc-text-block--broadcast">
+															<p class="pggc-text-header">TV Broadcast</p>
+														</div>
+														<div class="pggc-text-block pggc-text-block--newswire">
+															<p class="pggc-text-header">Recent Changes</p>
+														</div>
+													</div>
+													<div class="pggc-col-4">
+														<div class="pggc-text-block pggc-text-block--weather">
+															<p class="pggc-text-header">Current Weather Conditions</p>
+														</div>
+														<div class="pggc-text-block pggc-text-block--umpires">
+															<p class="pggc-text-header">Umpires</p>
+														</div>
+													</div>
+													<div class="pggc-col-4">
+														<div class="pggc-video-container">
+															<a href="#" class="pggc-video-link">
+																<div class="pggc-video-image">
+																	<img />
+																	<div class="pggc-video-timestamp"></div>
+																	<i class="pggc-icon-videoplay"></i>
+																</div>
+																<div class="pggc-video-text">
+																	<span class="pggc-video-date"></span>
+																	<span class="pggc-video-time"></span>
+																	<p class="pggc-video-title"></p>
+																</div>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="pggc-game-comments">
+											</div>
+										</div>
+										<div class="pggc-aside-nav-box">
+											<p class="pggc-aside-nav-text">Complete Game Details:</p>
+											<ul class="pggc-aside-nav">
+												
+														<li class="pggc-aside-nav-item"><a href="https://pregame.com/game-center/,-w-,">Game Details</a></li>
+													
+														<li class="pggc-aside-nav-item"><a href="https://pregame.com/game-center/,-w-,/odds-archive">Odds Archive</a></li>
+													
+														<li class="pggc-aside-nav-item"><a href="https://pregame.com/game-center/,-w-,/consensus-archive">Consensus Archive</a></li>
+													
+														<li class="pggc-aside-nav-item"><a href="https://pregame.com/game-center/,-w-,/free-picks">Free Picks</a></li>
+													
+														<li class="pggc-aside-nav-item"><a href="https://pregame.com/game-center/,-w-,/buy-picks">Buy Picks</a></li>
+													
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END: GAMECENTER OVERVIEW -->
+			<!-- GAMECENTER ODDS -->
+			<div class="pggc-odds pggc-group">
+				<div class="pggc-games-box">
+					<a href="#" onclick="pggc.toggleGroup(this);return false;" class="pggc-games-bar">
+						<i class="pggc-games-bar-trigger"></i>
+						<h5 class="pggc-games-bar-title">
+							<span class="pggc-games-bar-date">$date</span>
+							<span class="pggc-games-bar-subtitle">$title</span>
+						</h5>
+					</a>
+					<div class="pggc-games-portion-bar"></div>
+					<div class="pggc-games-content-wrap">
+						<div class="pggc-games-content-scroll">
+							<div class="pggc-games-content">
+								<div class="pggc-games-subbar">
+									<div class="pggc-game-col--table">
+									</div>
+									<div class="pggc-game-col--table-books">
+										<div class="pggc-subbar-nav"></div>
+									</div>
+									<div class="pggc-game-col--actions">
+									</div>
+								</div>
+								<div class="pggc-games-header">
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--time-score">
+													<p class="pggc-col-data">Time/Score</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data">#</p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data">Team</p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<p class="pggc-col-data">Open</p>
+												</td>
+												<td class="pggc-col pggc-col--moves">
+													<p class="pggc-col-data">Moves</p>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<p class="pggc-col-data">Current</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-books"></div>
+									<div class="pggc-game-col--actions">
+										<p class="pggc-actions-header--mygames">
+											My
+										</p>
+									</div>
+								</div>
+								<div class="pggc-game">
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--time-score">
+													<p class="pggc-col-data pggc-col-data--date">--/--/--</p>
+													<p class="pggc-col-data pggc-col-data--time">--:-- --</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+												<td class="pggc-col pggc-col--moves">
+													<p class="pggc-col-data pggc-away"><a class="pggc-graph pggc-link--odds"></a></p>
+													<p class="pggc-col-data pggc-home"><a class="pggc-graph pggc-link--odds"></a></p>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-books"></div>
+									<div class="pggc-game-col--actions">
+										<div class="pggc-game-action--buttons">
+											<a href="#" class="pggc-action--pregame-pick pggc-link--make-pick">Pk</a>
+											<div class="pggc-action--share-box"
+													data-calculating="..." 
+													data-zero="Be 1st" 
+													data-direction="left" 
+													data-title="Share" 
+													data-label="" 
+													data-share="Share">
+												<a href="javascript:;" onclick="pg_share.openModal(null, this, this.parentNode, this.parentNode);" class="pggc-panel-trigger pggc-action--share"></a>
+											</div>
+											<div class="pggc-action--mygames">
+												<div class="pggc-input--checkbox--mygames">
+													<input class="pggc-input" type="checkbox" onclick="pggc.toggleMyEvent(this);" disabled>
+													<span class="pggc-checkbox"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END: GAMECENTER ODDS -->
+			<!-- GAMECENTER CONSENSUS -->
+			<div class="pggc-consensus pggc-group">
+				<div class="pggc-games-box">
+					<a href="#" onclick="pggc.toggleGroup(this);return false;" class="pggc-games-bar">
+						<i class="pggc-games-bar-trigger"></i>
+						<h5 class="pggc-games-bar-title">
+							<span class="pggc-games-bar-date">$date</span>
+							<span class="pggc-games-bar-subtitle">$title</span>
+						</h5>
+					</a>
+					<div class="pggc-games-content-wrap">
+						<div class="pggc-games-content-scroll">
+							<div class="pggc-games-content pggc-games-books--online7">
+								<div class="pggc-games-subbar">
+									<div class="pggc-game-col--table">
+									</div>
+									<div class="pggc-game-col--table-book-consensus">
+										<div class="pggc-subbar-nav">
+											<div class="pggc-subbar-title">
+												Sportsbook Consensus
+											</div>
+										</div>
+									</div>
+									<div class="pggc-game-col--table-pregame-consensus">
+										<div class="pggc-subbar-nav">
+											<div class="pggc-subbar-title">
+												Pregame Member Consensus
+											</div>
+										</div>
+									</div>
+									<div class="pggc-game-col--actions">
+									</div>
+								</div>
+								<div class="pggc-games-header">
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--time-score">
+													<p class="pggc-col-data">Time/Score</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data">#</p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data">Team</p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<p class="pggc-col-data">Open</p>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<p class="pggc-col-data">Current</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-book-consensus">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--cash-action">
+													<p class="pggc-col-data">$ Bet</p>
+												</td>
+												<td class="pggc-col pggc-col--cash">
+													<p class="pggc-col-data">Cash %</p>
+												</td>
+												<td class="pggc-col pggc-col--ticket-action">
+													<p class="pggc-col-data">Ticket #</p>
+												</td>
+												<td class="pggc-col pggc-col--ticket">
+													<p class="pggc-col-data">Ticket %</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-pregame-consensus">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--pick-action">
+													<p class="pggc-col-data">Pick #</p>
+												</td>
+												<td class="pggc-col pggc-col--cash">
+													<p class="pggc-col-data">Pick %</p>
+												</td>
+												<td class="pggc-col pggc-col--friends">
+													<p class="pggc-col-data">Friends</p>
+												</td>
+												<td class="pggc-col pggc-col--groups">
+													<p class="pggc-col-data">Legends</p>
+												</td>
+												<td class="pggc-col pggc-col--experts">
+													<p class="pggc-col-data">Experts</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--actions">
+										<p class="pggc-actions-header--mygames">
+											My
+										</p>
+									</div>
+								</div>
+								<div class="pggc-game">
+									<div class="pggc-game-col--table">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--time-score">
+													<p class="pggc-col-data pggc-col-data--date">--/--/--</p>
+													<p class="pggc-col-data pggc-col-data--time">--:-- --</p>
+												</td>
+												<td class="pggc-col pggc-col--game-number">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--team">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--open">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+												<td class="pggc-col pggc-col--current">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--odds"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--odds"></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-book-consensus">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--action pggc-col--cash-action">
+													<a href="#" class="pggc-col-data pggc-action-data pggc-link--consensus pggc-action-data-amount"></a>
+												</td>
+												<td class="pggc-col pggc-col--cash">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+												<td class="pggc-col pggc-col--action pggc-col--ticket-action">
+													<a href="#" class="pggc-col-data pggc-action-data pggc-link--consensus pggc-action-data-amount"></a>
+												</td>
+												<td class="pggc-col pggc-col--ticket">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--table-pregame-consensus">
+										<table class="pggc-table">
+											<tr>
+												<td class="pggc-col pggc-col--action pggc-col--pick-action">
+													<a href="#" class="pggc-col-data pggc-action-data pggc-link--consensus pggc-action-data-amount">
+													</a>
+												</td>
+												<td class="pggc-col pggc-col--pick">
+													<a href="#" class="pggc-col-data pggc-away pggc-link--consensus"></a>
+													<a href="#" class="pggc-col-data pggc-home pggc-link--consensus"></a>
+												</td>
+												<td class="pggc-col pggc-col--friends">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--groups">
+													<p class="pggc-col-data pggc-away"></p>
+													<p class="pggc-col-data pggc-home"></p>
+												</td>
+												<td class="pggc-col pggc-col--experts">
+													<a class="pggc-col-data pggc-link--experts pggc-away"></a>
+													<a class="pggc-col-data pggc-link--experts pggc-home"></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="pggc-game-col--actions">
+										<div class="pggc-game-action--buttons">
+											<a href="#" class="pggc-action--pregame-pick pggc-link--make-pick">Pk</a>
+											<div class="pggc-action--share-box"
+													data-calculating="..." 
+													data-zero="Be 1st" 
+													data-direction="left" 
+													data-title="Share" 
+													data-label="" 
+													data-share="Share">
+												<a href="javascript:;" onclick="pg_share.openModal(null, this, this.parentNode, this.parentNode);" class="pggc-panel-trigger pggc-action--share"></a>
+											</div>
+											<div class="pggc-action--mygames">
+												<div class="pggc-input--checkbox--mygames">
+													<input class="pggc-input" type="checkbox" onclick="pggc.toggleMyEvent(this);" disabled>
+													<span class="pggc-checkbox"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END: GAMECENTER CONSENSUS -->
+		</div>
+		<!-- END: GAMECENTER VIEWS -->
+	</div>
+
+<div class="mfp-hide" id="pg-modal--gamecenterdisconnected">
+	<div class="pg-modal--dark">
+		<header class="pg-module-header">
+			<a onclick="return pg_ext.refreshPage();" href="#">
+				<h2 class="pg-module-header-text" style="color:rgb(223, 253, 68)">Click Here to Connect</h2>
+			</a>
+		</header>
+		<a href="#" class="pg-modal-close pg-modal-close--corner">x</a>
+	</div>
+</div></div>
+		</div>
+		
+
+<footer class="pg-main-footer">
+	<div class="pg-sub-footer">
+		<ul class="pg-horizontal-list">
+	
+			<li class="">
+				<a href="/sitemap">
+					
+					Site Map
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/sportsbook-spy">
+					
+					Sportsbook Spy
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/advertising-with-us">
+					
+					Advertise With Us
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/affiliate-program">
+					
+					Affiliate Program
+				</a>
+				
+				
+			</li>
+		
+</ul>
+	</div>
+	<div class="pg-footer">
+		
+			<a href="/" class="pg-footer-logo">
+				Pregame.com - Connect Before You Bet
+			</a>
+		
+		<nav class="pg-footer-aside-nav">
+			<ul class="pg-horizontal-list">
+	
+			<li class="">
+				<a href="https://pregame.com/about-us">
+					
+					About Us
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/terms-of-service">
+					
+					Terms of Service
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/privacy-pledge">
+					
+					Privacy Pledge
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/support">
+					
+					Support
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/faq">
+					
+					FAQ
+				</a>
+				
+				
+			</li>
+		
+			<li class="--sign-in">
+				<a href="https://pregame.com/user/createuser?returnUrl=/welcome-to-pregame">
+					
+					Sign Up
+				</a>
+				
+				
+			</li>
+		
+			<li class="">
+				<a href="https://pregame.com/support">
+					
+					Contact Us
+				</a>
+				
+				
+			</li>
+		
+</ul>
+		</nav>
+		<div class="pg-footer-text">
+			<ul class="pg-horizontal-list">
+    <li><img height="64" alt="FaceBook" width="64" src="/-/media/images/social/5296499_fb_facebook_facebook-logo_icon.ashx?la=en&amp;hash=324AB03756CDFD6A21C585017EF4D27C5AB0FD9E" />&nbsp;<a href="https://www.facebook.com/PregameDotCom/">Facebook</a></li>
+    <li><img height="64" alt="YouTube" width="64" src="/-/media/images/social/5296521_play_video_vlog_youtube_youtube-logo_icon.ashx?la=en&amp;hash=4BFDFC844633414B9141F7DBBAE343406673DEA4" />&nbsp;<a href="https://www.youtube.com/@PregameTV">Youtube</a></li>
+    <li><img height="64" alt="Instagram" width="64" src="/-/media/images/social/5296765_camera_instagram_instagram-logo_icon.ashx?la=en&amp;hash=8A51E5842CFA55E49FB4BC3BE61F0501A04EC5CD" />&nbsp;<a href="https://www.instagram.com/pregamenow/">IG</a></li>
+    <li><img height="64" alt="Tik Tok" width="64" src="/-/media/images/social/tiktok.ashx?la=en&amp;hash=76B776DF021FAABD36ECDD7DFD4A7D514764E4C5" />&nbsp;<a href="https://www.tiktok.com/@pregamenow">Tik Tok</a></li>
+    <li><img height="64" alt="X" width="63" src="/-/media/images/social/x-logo-white.ashx?h=64&amp;w=63&amp;la=en&amp;hash=6470F781225ACB104815CC94D41886387AC658B7" />&nbsp;<a href="https://twitter.com/PregameNow">X</a></li>
+    <li><img height="64" alt="Threads" width="64" src="/-/media/images/social/10984531_threads_thread_app_mobile_icon.ashx?la=en&amp;hash=90C4E03B42ACA8D374D203D5156E1740C0B82547" />&nbsp;<a href="https://www.threads.net/@pregamenow">Threads</a></li>
+</ul>
+<p>&nbsp;</p>
+<p>Pregame.com does not accept or place bets, and is NOT a gambling site.</p>
+			<p class="pg-copyright">
+				&#169; 2006 - 2026 Pregame.com. Pregame.com is located and licensed in Las Vegas, Nevada.
+			</p>
+		</div>
+		
+			<ul class="pg-horizontal-list">
+				
+						<li>
+							<a Class="pg-module--image-with-link">
+	<img src="/-/media/images/ads/footer/no-spam.ashx?h=61&amp;la=en&amp;w=56&amp;hash=66E50A22C48A9A6F48B074B50995A249B63BD890" alt="No SPAM" />
+</a>
+						</li>
+					
+						<li>
+							<a href="https://www.verisigninc.com/" Class="pg-module--image-with-link" rel="noopener noreferrer" target="_blank">
+	<img src="/-/media/images/ads/footer/verisign.ashx?h=61&amp;la=en&amp;w=119&amp;hash=F5D9C02C43BACB5BBF569B4CBC0C784A6A09D9EB" alt="Verisign Trusted" />
+</a>
+						</li>
+					
+						<li>
+							<a href="https://www.bbb.org/" Class="pg-module--image-with-link" rel="noopener noreferrer" target="_blank">
+	
+</a>
+						</li>
+					
+			</ul>
+		
+	</div>
+</footer>
+
+	</div>
+</div>
+
+<!-- MODALS -->
+<div class="mfp-hide" id="pg-modal--email-share-sent">
+	<div class="pg-modal--dark">
+		<header class="pg-module-header">
+			<h2 class="pg-module-header-text">Email Share Sent</h2>
+		</header>
+		<div class="pg-page-contain">
+			<p><strong>Your share has been sent.</strong></p>
+		</div>
+		<a href="#" class="pg-modal-close pg-modal-close--corner">x</a>
+	</div>
+</div>
+
+<!-- Modal: Pick Quick View -->
+<div class="mfp-hide pg-modal--quickview" id="pg-modal--quickview-pick">
+	<div class="pg-modal--dark">
+		<header class="pg-module-header">
+			<h2 class="pg-module-header-text">Quick View</h2>
+		</header>
+		<div class="pg-page-contain">
+			<!-- ko if:loading() -->
+				<p>Loading...</p>
+			<!-- /ko -->
+			<!-- ko ifnot:loading() -->
+				<!-- ko if:future() -->
+					<p><b><i class="pg-icon-calendar--grey"></i></b><span>Future Game</span></p>
+				<!-- /ko -->
+				<p><b>League: </b><span data-bind="text:league"></span></p>
+				<p><b>Teams: </b><span data-bind="text:teams"></span></p>
+				<p><b>Date: </b><span data-bind="text:date"></span></p>
+				<p><b>Time: </b><span data-bind="text:time"></span></p>
+				<p><b>Pick: </b><span data-bind="text:pick"></span></p>
+				<p><b>Bet Type: </b><span data-bind="text:type"></span></p>
+				<p><b>Odds: </b><span data-bind="html:odds"></span></p>
+				<p><b>Picked: </b><span data-bind="text:stamp"></span></p>
+				<!-- ko if:contests().length > 0 -->
+				<p>
+					<b>Contests: </b>
+					<span>
+						<!-- ko foreach: { data: contests} --><!-- ko if: $index() > 0 -->, <!-- /ko --><a data-bind="attr: {'href': '/contests/' + id}, text:name"></a><!-- /ko -->
+				  </span>
+				</p>
+				<!-- /ko -->
+			<!-- /ko -->
+			<p class="pg-center"><b><a data-bind="attr: { href: link }">Full Pick Details</a></b></p>
+		</div>
+		<a href="#" class="pg-modal-close pg-modal-close--corner">x</a>
+	</div>
+</div>
+
+<!-- Modal: Multi Pick Quick View -->
+<div class="mfp-hide pg-modal--quickview" id="pg-modal--quickview-multipick">
+	<div class="pg-modal--dark">
+		<header class="pg-module-header">
+			<h2 class="pg-module-header-text">Multi Quick View</h2>
+		</header>
+		<div class="pg-page-contain">
+			<!-- ko if:loading() -->
+				<p>Loading...</p>
+			<!-- /ko -->
+			<!-- ko ifnot:loading() -->
+				<!-- ko foreach: { data: picks} -->
+					<p>
+						<a href="#" class="pg-pick-quickview" data-bind="attr: { href: '/picks/' + id, title: title }"><span data-bind="text:title">Pick Name</span></a>
+						<br /><b>Odds:</b> <span data-bind="text:odds">Odds</span> 
+						<br /><b>Picked:</b> <span data-bind="text:pg_ext.utility.formatDateTime(stamp, ' at ', 'M d, yy', '')">Stamp</span>
+					</p>
+				<!-- /ko -->
+			<!-- /ko -->
+		</div>
+		<a href="#" class="pg-modal-close pg-modal-close--corner">x</a>
+	</div>
+</div>
+
+<!-- Modal: Pick Quick View -->
+<div class="mfp-hide pg-modal--quickview" id="pg-modal--quickview-standing">
+	<div class="pg-modal--dark">
+		<header class="pg-module-header">
+			<h2 class="pg-module-header-text">Quick View</h2>
+		</header>
+		<div class="pg-page-contain">
+			<p><b>Rank: </b><span data-bind="text:rank"></span></p>
+			<p><b>Member: </b><a data-bind="text: username, attr: { href: '/api/user/r?Username=' + escape(username()) }"></a></p>
+			<!-- ko if:team() !== undefined && team().length > 0 -->
+			<p><b>Team: </b><span data-bind="text:team"></span></p>
+			<!-- /ko -->
+			<p><b>Wins: </b><span data-bind="text:wins"></span></p>
+			<p><b>Losses: </b><span data-bind="text:losses"></span></p>
+			<p><b>Ties: </b><span data-bind="text:pushes"></span></p>
+			<p><b data-bind="text: basis() + ': ';"></b><span data-bind="text:value"></span></p>
+		</div>
+		<a href="#" class="pg-modal-close pg-modal-close--corner">x</a>
+	</div>
+</div>
+
+<!-- Modal: Join Contest-->
+<div class="mfp-hide" id="pg-modal--join-contest">
+    <div class="pg-modal--dark">
+      <header class="pg-module-header">
+        <h2 class="pg-module-header-text"><span class="pg-module-header-subtext">Pregame.com</span>
+          Join Contest
+        </h2>
+      </header>
+      <div class="pg-modal-login-contain">
+        <div class="pg-sign-in-box">
+          <p class="pg-contest-description">
+            Join the Contest
+          </p>
+          <div class="pg-modal-login-or">
+            <span>
+              Enter Optional Code
+            </span>
+          </div>
+          <div class="pg-sign-in-email">
+            <input type="text" class="pg-contest-code" placeholder="Optional Code">
+            <div class="pg-top-bar-sign-in">
+              <a href="#" class="pg-button-arrow">
+                <i class="pg-icon-arrow-right"></i>
+                Join Contest
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="pg-modal-close pg-modal-close--corner">
+        x
+      </a>
+    </div>
+</div>
+
+<script src="/assets/scripts/jquery/jquery.min.js?v=17a"></script>
+<script src="/assets/scripts/knockout/knockout-3.4.2.js?v=17a"></script>
+<script src="/assets/scripts/knockout/knockout-switch-case.min.js?v=17a"></script>
+
+
+
+<script src="/assets/scripts/main.jsbeautifier.org.js?v=17a"></script>
+<script>
+	pg_settings = {
+		captcha_site_key: '6LdyoA8UAAAAADYCwGYEpK8Dimq98kiUkWA10A2r',
+	};
+</script>
+<script src="/assets/scripts/supplemental.js?v=17a"></script>
+
+
+
+
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-230920-1', 'auto');
+		ga('send', 'pageview');
+
+		(function () {
+			var userId = "Anonymous";
+			if (userId !== "Anonymous") {
+				ga('set', 'Member', userId);
+				ga('send');
+			}
+		})();
+	</script>
+
+		
+<script src="/assets/scripts/modules/gamecenter6.0-desktop.js?v=17a"></script><script src="/assets/scripts/modules/gamecenter6.0-datapump.js?v=17a"></script></form>
+		
+	<script src="/cfs-filesystemfile/__key/system/js/jquery.migrate.js?_=637940626966721191"></script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/system/js/telligent.glow.min.js?_=637940626896280030"></script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/system/js/telligent.evolution.min.js?_=637940626858954653"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+// <![CDATA[
+try { jQuery.telligent.evolution.site.configure({baseUrl:'/',cookieSameSiteSetting:'Lax',loginReturnUrl:'/',isLogout:false,enableGlobalForm:true,scheduledFileStatusUrl:'/callback.ashx?__type=Telligent.Evolution.Platform.Scripting.Plugins.ScheduledFileSupportPlugin%2C%20Telligent.Evolution.Platform',badgeablePanelCountUrl:'/callback.ashx?__type=Telligent.Evolution.CoreServices.Administration.Plugins.BadgeablePanelsServicePlugin%2C%20Telligent.Evolution.Platform',contentPeekUrl:'/callback.ashx?__type=Telligent.Evolution.CoreServices.Peek.Implementations.ContentPeekSupportPlugin%2C%20Telligent.Evolution.Platform',contextQueryString:'_pcurl=~%2F',editorConfigVersionKey:'AAAADhXWTtY%3D-AAAAANXz5ng%3D-637768940520000000-AAAAD9yvizw%3D',maxMediaWidth:0,mediaMaxHeight:0,defaultMediaWidth:320,defaultMediaHeight:240,directUploadContext:'91678671-5601-4d0e-ac96-bf4fe42ea2b5',directUploadUrl:'/api.ashx/v2/cfs/temporary.json?UploadContextId=91678671-5601-4d0e-ac96-bf4fe42ea2b5',alphaBlendUrl:'/cfs-filesystemfile/__key/system/images/alpha_5F00_blend.png?_=637940626876118752',blankUrl:'/cfs-filesystemfile/__key/system/images/blank.gif?_=637940626993430110',collapsedUrl:'/cfs-filesystemfile/__key/system/images/collapsed.gif?_=637940626910756630',hueBlendUrl:'/cfs-filesystemfile/__key/system/images/hue_5F00_blend.png?_=637940626845906925',blendUrl:'/cfs-filesystemfile/__key/system/images/blend.png?_=637940626882525950',ddlButtonUrl:'/cfs-filesystemfile/__key/system/images/ddl_5F00_button.gif?_=637940626899129268',expandedUrl:'/cfs-filesystemfile/__key/system/images/expanded.gif?_=637940626876101811',transparentUrl:'/cfs-filesystemfile/__key/system/images/transparent.png?_=637940626997964436',datePattern:{
+	pattern: '<Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec> <1-31> <0001-9999>',
+    yearIndex: 2,
+    monthIndex: 0,
+    dayIndex: 1,
+    hourIndex: -1,
+    minuteIndex: -1,
+    amPmIndex: -1,
+    parseDateOnLoad: true
+},timePattern:{
+	pattern: '<1-12>:<00-59> <AM,PM>',
+    yearIndex: -1,
+    monthIndex: -1,
+    dayIndex: -1,
+    hourIndex: 0,
+    minuteIndex: 1,
+    amPmIndex: 2,
+    parseDateOnLoad: true
+},dateTimePattern:{
+	pattern: '<Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec> <1-31> <0001-9999> <1-12>:<00-59> <AM,PM>',
+    yearIndex: 2,
+    monthIndex: 0,
+    dayIndex: 1,
+    hourIndex: 3,
+    minuteIndex: 4,
+    amPmIndex: 5,
+    parseDateOnLoad: true
+},monthNames:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],dayNames:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],authorizationCookieName:'.te.csrf',accessingUserId:2101,accessingUserIsSystemAccount:true,accessingUserTemporary:false,accessingUserIsAuthenticated:false,restUiContext:"p\u0026common-home\u00260c647246673542f9875dc8b991fe739b\u002600000000000000000000000000000000\u00260",versionKey:'639077260980000000',directionality:'ltr',editorLanguage:'en-US',autoLinkPattern:/((?:http|ftp|https):\/\/)([\w\-]{1,63}(?:\.[\w\-]{1,63}){0,127}(?:\([\w\-\.,@?!^=%&:/~\+#]{0,2046}\)|[\w\-\.,@?!^=%&:/~\+#]{0,2047}[\w\-@?^=%&:/~\+#]){0,2048})/i,defaultErrorMessage:'An error occurred.  Please try again or contact your administrator.',quoteText:'Quote',dateMinuteInFutureFormat:'in a few seconds',dateMinutesInFutureFormat:'in {0} minutes',dateHourInFutureFormat:'in over an hour',dateHoursInFutureFormat:'in {0} hours',dateDayInFutureFormat:'in {0} day',dateDaysInFutureFormat:'in {0} days',dateMonthInFutureFormat:'in {0} month',dateMonthsInFutureFormat:'in {0} months',dateYearInFutureFormat:'in over {0} year',dateYearsInFutureFormat:'in over {0} years',dateNowAgoFormat:'now',dateMinuteAgoFormat:'a few seconds ago',dateMinutesAgoFormat:'{0} minutes ago',dateHourAgoFormat:'{0} hour ago',dateHoursAgoFormat:'{0} hours ago',dateDayAgoFormat:'{0} day ago',dateDaysAgoFormat:'{0} days ago',dateMonthAgoFormat:'{0} month ago',dateMonthsAgoFormat:'{0} months ago',dateYearAgoFormat:'over {0} year ago',dateYearsAgoFormat:'over {0} years ago',previewZoomIn:'Zoom in',previewZoomOut:'Zoom out',previewClose:'Close',collapseExpandedItem:'Collapse',beforeUnloadMessageTip:'Progress will cancel if you leave.',pendingTip:'Progress will begin soon…',beforeUnloadMessageLabel:'Please wait…',clearText:'Clear',okText:'OK'});
+jQuery.extend($.fn.evolutionUserFileTextBox.defaults,{removeText:'Remove',selectText:'Select/Upload...',noFileText:'No File Selected'});
+jQuery.telligent.evolution.validation.registerExtensions({password:'Password contains invalid chars ...',passwordRegex:'^(.*)$',email:'Your email address is invalid.',emailRegex:'^[!$\u0026*\\-=^`|~#%\u0027\\.\"+/?_{}\\\\a-zA-Z0-9]+@[\\-\\.a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)+$',username:'Your sign in name does not meet the requirements for this site.',usernameRegex:'^[a-zA-Z0-9_\\- @\\.]+$',emails:'One or more emails is invalid',url:'URL not in correct format',urlRegex:'^(?:(?:http|https|mailto|ftp|mms):|/|#|~/|data:image/(?:png|gif|jpe?g);base64,)',required:'This field is required.',date:'Please enter a valid date.',dateISO:'Please enter a valid date (ISO).',number:'Please enter a valid number.',digits:'Please enter only digits.',equalTo:'Please enter the same value again.',pattern:'Please enter valid value.',emailexists:'This email address is already in use.',groupnameexists:'This name is already in use.',mailinglistnameexists:'This name is already in use.',usernameexists:'This name is already in use.',wikipageexists:'This name is already in use.',maxlength:'Please enter no more than {0} characters.',minlength:'Please enter at least {0} characters.',rangelength:'Please enter a value between {0} and {1} characters long.',range:'Please enter a value between {0} and {1}.',max:'Please enter a value less than or equal to {0}.',min:'Please enter a value greater than or equal to {0}.',step:'Please enter a value that is a multiple of {0}.'});
+jQuery.extend(jQuery.fn.evolutionLike.defaults,{likeText:'Like',unlikeText:'Unlike',modalTitleText:'People who like this',modalShowMoreText:'Show More',whoLikesOtherText:'\u003ca href=\"{user_profile_url}\" class=\"internal-link view-user-profile\"\u003e{user_display_name}\u003c/a\u003e likes this',whoLikesOtherTwoText:'\u003ca href=\"{user_profile_url}\" class=\"internal-link view-user-profile\"\u003e{user_display_name}\u003c/a\u003e and \u003cspan class=\"who-likes\"\u003e1 other\u003c/span\u003e like this',whoLikesOtherMultipleText:'\u003ca href=\"{user_profile_url}\" class=\"internal-link view-user-profile\"\u003e{user_display_name}\u003c/a\u003e and \u003cspan class=\"who-likes\"\u003e{count} others\u003c/span\u003e like this',whoLikesAccessingText:'You like this',whoLikesAccessingTwoText:'You and \u003cspan class=\"who-likes\"\u003e1 other\u003c/span\u003e like this',whoLikesAccessingMultipleText:'You and \u003cspan class=\"who-likes\"\u003e{count} others\u003c/span\u003e like this'});
+jQuery.extend(jQuery.fn.evolutionInlineTagEditor.defaults,{editButtonText:'Edit tags',selectTagsText:'Select tags',saveTagsText:'Save',cancelText:'Cancel'});
+jQuery.extend(jQuery.fn.evolutionStarRating.defaults,{titles:['Terrible','Poor','Fair','Average','Good','Excellent'],ratingMessageFormat:'Average rating: {rating} out of {max_rating} with {count} ratings.'});
+jQuery.extend(jQuery.fn.evolutionModerate.defaults,{moderateLinkText:'moderate',reportLinkText:'Report as abusive',reportedLinkText:'Reported as abusive',reportedNotificationMessageText:'{NAME}\u0027s post has been reported. \u003cstrong\u003eThank you for your feedback.\u003c/strong\u003e'});
+jQuery.extend(jQuery.fn.evolutionBookmark.defaults,{deleteBookmarkText:'Unbookmark {content_type_name}',addBookmarkText:'Bookmark this {content_type_name}',processingText:'...'});
+jQuery.extend($.fn.evolutionCodeEditor.defaults,{editorUrl:'/cfs-file/__key/system/ace/ace.js'});
+jQuery.extend(jQuery.telligent.evolution.ui.components.forumvotes.defaults,{modalTitleTextThread:'People who had this question',modalTitleTextReply:'People helped by this answer',noVotesText:'No Votes',modalShowMoreText:'More'});
+jQuery.extend(jQuery.telligent.evolution.ui.components.forumqualityvotes.defaults,{modalTitleText:'People who voted on this thread',tipTextThread:'View Voters',noVotesText:'No Votes',upVoteText:'Vote Up',downVoteText:'Vote Down',logintext:'Login to vote on this thread',modalShowMoreText:'More'});
+jQuery.extend(jQuery.fn.evolutionFeature.defaults,{editFeatureText:'Edit Feature',addFeatureText:'Feature ',processingText:'...'});
+jQuery.extend(jQuery.fn.evolutionPager.defaults,{previousLabel:'Go to previous page',nextLabel:'Go to next page',firstLabel:'Go to first page',lastLabel:'Go to last page',individualPageLabel:'Go to page {0}'});
+jQuery.telligent.evolution.systemNotifications.configure({explicitPanelUrl:'#_cptype=panel\u0026_cpcontexttype=Explicit\u0026_cppanelid=994a7020-02f3-4fc2-ba7d-be3f0febf9f9\u0026viewnotification=1',notificationText:'System Notification',reviewText:'Click to review and resolve.',andMoreText:' (plus {0} more)'});
+} catch(e) { };
+// ]]>
+</script>
+<!--SCRIPT-->
+<script type="text/javascript">jQuery(function($) {
+	$.telligent.evolution.messaging.subscribe('userActionFollowToggle', function(data) {
+		var e = $(data.target);
+		var userId = e.data('userid'), accessingUserId = e.data('accessinguserid'), v = e.data('follow');
+		e.html('...');
+		if (v) {
+			$.telligent.evolution.post({
+				url: $.telligent.evolution.site.getBaseUrl() + 'api.ashx/v2/users/{FollowerId}/following.json',
+				data: { FollowerId: accessingUserId, FollowingId: userId },
+				dataType: 'json',
+				success: function(response) { e.html('Unfollow').data('follow', false); },
+				error: function(response) {  e.html('Follow').data('follow', true); }
+			});
+		} else {
+			$.telligent.evolution.del({
+				url: $.telligent.evolution.site.getBaseUrl() + 'api.ashx/v2/users/{FollowerId}/following/{FollowingId}.json',
+				data: { FollowerId: accessingUserId, FollowingId: userId },
+				dataType: 'json',
+				success: function(response) { e.html('Follow').data('follow', true); },
+				error: function(response) {  e.html('Unfollow').data('follow', false); }
+			});
+		}
+	});
+});</script>
+<!--SCRIPT-->
+<script type="text/javascript">jQuery(function($) {
+	$.telligent.evolution.messaging.subscribe('userActionFriendshipToggle', function(data) {
+		var e = $(data.target);
+		var userId = e.data('userid'), accessingUserId = e.data('accessinguserid'), v = parseInt(e.data('friendship'));
+		var t = e.html();
+		e.html('...');
+		if (v == 0) {
+				e.html(t);
+				$.glowModal('/user/requestfriend?UserId=' + userId + '', {width:670,height:390});
+		} else if (v == 3) {
+				$.telligent.evolution.post({
+					url: $.telligent.evolution.site.getBaseUrl() + 'api.ashx/v2/users/{RequestorId}/friends.json',
+					data: { RequestorId: accessingUserId, RequesteeId: userId, RequestMessage: 'Please add me as your friend. '},
+					dataType: 'json',
+					success: function(response) { window.location = window.location; },
+					error: function(response) {  e.html(t); }
+				});
+		} else if (v == 1 || v == 2 || v == 4) {
+			if (v == 4 || (v == 1 && window.confirm('Are you sure you want to cancel this friendship request?')) || (v == 2 && window.confirm('Are you sure you want to unfriend this person?'))) {
+				$.telligent.evolution.del({
+					url: $.telligent.evolution.site.getBaseUrl() + 'api.ashx/v2/users/{RequestorId}/friends/{RequesteeId}.json',
+					data: { RequestorId: accessingUserId, RequesteeId: userId },
+					dataType: 'json',
+					success: function(response) { window.location = window.location; },
+					error: function(response) {  e.html(t); }
+				});
+			} else { e.html(t); }
+		}
+	});
+});</script>
+<!--SCRIPT-->
+<script type="text/javascript">(function($){ $.telligent.evolution.media.defaults.endpoint = '/callback.ashx?__type=Telligent.Evolution.Api.Plugins.Endpoints.FileViewerEndpoint%2C%20Telligent.Evolution.Platform'; }(jQuery));</script>
+<!--SCRIPT-->
+<script type="text/javascript">(function($){ $.telligent.evolution.preview.defaults.endpoint = '/callback.ashx?__type=Telligent.Evolution.Api.Plugins.Endpoints.WebPreviewEndpoint%2C%20Telligent.Evolution.Platform'; }(jQuery));</script>
+<!--SCRIPT-->
+<script type="text/javascript">(function($){ $.fn.evolutionComposer.plugins.mentions.defaults.mentionablesEndpoint = '/callback.ashx?__type=Telligent.Evolution.Api.Plugins.Endpoints.MentionablesEndpoint%2C%20Telligent.Evolution.Platform'; }(jQuery));</script>
+<!--SCRIPT-->
+<script type="text/javascript">(function($){ $.telligent.evolution.language.defaults.dateEndpoint = '/callback.ashx?__type=Telligent.Evolution.Api.Plugins.Endpoints.DateFormattingEndpoint%2C%20Telligent.Evolution.Platform'; }(jQuery));</script>
+<!--SCRIPT-->
+<script type="text/javascript">(function($){ $.fn.evolutionUserFileTextBox.defaults.endpoint = '/callback.ashx?__type=Telligent.Evolution.Api.Plugins.Endpoints.UserFileTextBoxEndpoint%2C%20Telligent.Evolution.Platform'; }(jQuery));</script>
+<!--SCRIPT-->
+<script type="text/html" id="fragment-63df45f4dd4647c7821531bc639946721101179520_categoriesTemplate">
+		</script>
+<!--SCRIPT-->
+<script type="text/html" id="fragment-63df45f4dd4647c7821531bc639946721101179520_panelContainerTemplate">
+	<div id="_tc_ap"  class="ui-presentservice contextual-administration-panel-container" data-presentservices="4a00f2e762ed4213a8e6f0697b5c9e5c|00000000000000000000000000000000|" >
+	</div>
+</script>
+<!--SCRIPT-->
+<script type="text/html" id="fragment-63df45f4dd4647c7821531bc639946721101179520_panelLoadingIndicatorTemplate">
+	<div class="contextual-administration-panel-loading">
+		<div class="spinner">
+			<div class="bounce1"></div>
+			<div class="bounce2"></div>
+			<div class="bounce3"></div>
+		</div>
+	</div>
+</script>
+<!--SCRIPT-->
+<script type="text/html" id="fragment-63df45f4dd4647c7821531bc639946721101179520_panelTemplate">
+	<div class="contextual-administration-panel-wrapper" data-panelid="<%= panelId %>" data-namespace="<%: namespace %>">
+		<div class="contextual-panel <%= type %> <%= cssClass %>">
+			<div class="contextual-panel-heading">
+				<ul class="navigation-list">
+					<% if(backUrl && backLabel) { %>
+						<li class="navigation-list-item <%= (backUrl == '#_cptype=root' ? type : type) %> back">
+							<a href="<%: backUrl %>" class="ui-tip" data-tip="Back">
+								<span class="icon">&lt;</span> <span class="label ui-squeezetext" data-minsize="11"><%= backLabel %></span>
+							</a>
+						</li>
+					<% } else if (backLabel) { %>
+						<li class="navigation-list-item <%= (backUrl == '#_cptype=root' ? type : type) %> back">
+							<a href="#" class="ui-tip" data-tip="Back" onclick="window.history.back(); return false;">
+								<span class="icon">&lt;</span> <span class="label ui-squeezetext" data-minsize="11"><%= backLabel %></span>
+							</a>
+						</li>
+					<% } %>
+					<li class="navigation-list-item search"><a href="#" class="ui-tip" data-tip="Search">Search</a></li>
+					<li class="navigation-list-item close"><a href="#" data-messagename="contextual.shell.close" class="ui-tip" data-tip="Close">&times;</a></li>
+				</ul>
+				<h3 class="name ui-squeezetext ui-tip" data-minsize="11"><%= (name || '') %></h3>
+				<div class="custom-panel-heading-content"></div>
+				<div class="contextual-panel-heading-search">
+					<form>
+					<input type="text" placeholder="Search" />
+					<a href="#" class="exit-search ui-tip" data-tip="Close Search">&times;</a>
+					</form>
+				</div>
+			</div>
+			<div class="contextual-panel-content glow-scrollable <%= contentClass %>">
+				<%= (typeof content === "string" ? content : "") %>
+			</div>
+			<div class="contextual-panel-content-search-results glow-scrollable">
+			</div>
+		</div>
+	</div>
+</script>
+<!--SCRIPT-->
+<script type="text/html" id="fragment-63df45f4dd4647c7821531bc639946721101179520_customPanelTemplate">
+	<div class="contextual-administration-panel-wrapper" data-panelid="<%= panelId %>" data-namespace="<%: namespace %>" data-rootpanelid="<%= (rootPanelId || '') %>">
+		<div class="contextual-panel <%= cssClass %>">
+			<div class="contextual-panel-heading">
+				<ul class="navigation-list">
+					<% if(backUrl && backLabel) { %>
+						<li class="navigation-list-item back">
+							<a href="<%: backUrl %>" class="ui-tip" data-tip="Back">
+								<span class="icon">&lt;</span> <span class="label ui-squeezetext" data-minsize="11"><%= backLabel %></span>
+							</a>
+						</li>
+					<% } %>
+					<li class="navigation-list-item close"><a href="#" data-messagename="contextual.shell.close" class="ui-tip" data-tip="Close">&times;</a></li>
+				</ul>
+				<h3 class="name ui-squeezetext ui-tip" data-minsize="11"><%= (name || '') %></h3>
+				<div class="custom-panel-heading-content"></div>
+			</div>
+			<div class="contextual-panel-content <%= contentClass %>">
+				<%= (typeof content === "string" ? content : "") %>
+			</div>
+		</div>
+	</div>
+</script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/defaultwidgets/fd266454714b4b3c9b7194d8b1bf9741-63df45f4dd4647c7821531bc63994672/ui.js?_=637940629033200913"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+// only show contextual shell in top-most window
+if (window === window.top) {
+	jQuery(function(j){
+		jQuery.telligent.evolution.widgets.contextualPanelShell.register({
+			rootCategoriesTemplateId: 'fragment-63df45f4dd4647c7821531bc639946721101179520_categoriesTemplate',
+			panelContainerTemplateId: 'fragment-63df45f4dd4647c7821531bc639946721101179520_panelContainerTemplate',
+			panelTemplateId: 'fragment-63df45f4dd4647c7821531bc639946721101179520_panelTemplate',
+			panelLoadingIndicatorTemplateId: 'fragment-63df45f4dd4647c7821531bc639946721101179520_panelLoadingIndicatorTemplate',
+			loadUrl: '/utility/scripted-file.ashx?_fid=63df45f4dd4647c7821531bc63994672\u0026_wid=fragment-63df45f4dd4647c7821531bc639946721101179520\u0026_ct=plugin_000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Unknown\u0026_pt=Telligent.Evolution.CoreServices.Administration.Plugins.ContextualPanelServicePlugin%2C%20Telligent.Evolution.Platform\u0026_cft=Other\u0026_cf=load.vm\u0026_pcurl=~%2F',
+			searchUrl: '/utility/scripted-file.ashx?_fid=63df45f4dd4647c7821531bc63994672\u0026_wid=fragment-63df45f4dd4647c7821531bc639946721101179520\u0026_ct=plugin_000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Unknown\u0026_pt=Telligent.Evolution.CoreServices.Administration.Plugins.ContextualPanelServicePlugin%2C%20Telligent.Evolution.Platform\u0026_cft=Other\u0026_cf=search.vm\u0026_pcurl=~%2F',
+			rootPanelUrl: '#_cptype=root',
+			previewPanelUrl: '#_cptype=panel\u0026_cpcontexttype=Theme\u0026_cppanelid=a81369a5-aa60-4034-8a25-07df22cd9c42',
+			customPanelTemplateId: 'fragment-63df45f4dd4647c7821531bc639946721101179520_customPanelTemplate',
+			hasCategories:  false ,
+			supportsExplicitOnly:  false ,
+			manageCommunityText: '\tManage Pregame.com',
+			navigationConfirmationText: 'Are you sure you want to leave? Changes you made may not be saved.',
+			totalBadgeCount:  0 		});
+	});
+}
+</script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/themefiles/f-s-3fc3f82483d14ec485ef92e206116d49-jsfiles/theme.js?_=637940629722675601"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+jQuery(function(j){
+	j.telligent.evolution.theme.social.register({
+		dockedSidebars:  true ,
+		adaptiveHeaders:  true ,
+		adaptiveHeadersMinWidth: 670
+	})
+});
+</script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/defaultwidgets/7bb87a0cc5864a9392ae5b9e5f9747b7-c9932b3229d8453892c87cef53db657e/ui.js?_=637940628863930793"></script>
+<!--SCRIPT-->
+<script type="text/html" id="header-277_site-banner-list-template">
+		<div>
+			<div class="multiple-column-list columns-1">
+				<div class="multiple-column-item column-1">
+					<ul class="content-list content">
+					</ul>
+					<div class="loading"><span class="ui-loading"></span></div>
+					<% if(footerContent) { %>
+						<div class="content-list-footer">
+							<%= footerContent %>
+						</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</script>
+<!--SCRIPT-->
+<script type="text/html" id="header-277_site-banner-notification-preferences-template">
+			<div class="notification-preference">
+				<span class="description">Do not notify me when someone <strong><%: notificationTypeName %></strong>?</span>
+				<a href="#" class="confirm internal-link button submit-button" data-notificationtypeid="<%: notificationTypeId %>">Confirm</a>
+				<a href="#" class="cancel internal-link button submit-button">Cancel</a>
+			</div>
+		</script>
+<!--SCRIPT-->
+<script type="text/html" id="header-277_site-banner-bookmark-filter-template">
+
+			<ul class="navigation-list filter">
+				<% if(contentTypeIds && contentTypeIds.length > 0) { %>
+					<li class="navigation-item conversations">
+						<a class="internal-link" href="#" data-contenttypeids="<%: contentTypeIds %>">Content</a>
+					</li>
+				<% } %>
+				<% if(applicationContentTypeIds && applicationContentTypeIds.length > 0) { %>
+					<li class="navigation-item conversations">
+						<a class="internal-link" href="#" data-contenttypeids="<%: applicationContentTypeIds %>">Application</a>
+					</li>
+				<% } %>
+				<% if(containerTypes && containerTypes.length > 0) { %>
+					<% foreach(containerTypes, function(containerType) {  %>
+						<li class="navigation-item conversations">
+							<% if(containerType.name =='User') { %>
+								<a class="internal-link" href="#" data-contenttypeids="<%: containerType.id %>">Followed members</a>
+							<% }  else { %>
+								<a class="internal-link" href="#" data-contenttypeids="<%: containerType.id %>"><%: containerType.name %></a>
+							<% } %>
+						</li>
+					<% }); %>
+				<% } %>
+			</ul>
+		</script>
+<!--SCRIPT-->
+<script type="text/html" id="header-277_site-banner-user-template">
+									<div class="user "
+								>
+				<div>
+					<div class="avatar">
+													<img src="/cfs-filesystemfile/__key/communityserver-components-imagefileviewer/system-images/anonymous.gif_2D00_40x40x2.png?_=637940628595926448" alt="Anonymous" />
+											</div>
+					<span class="user-name">
+													Anonymous
+											</span>
+
+														</div>
+			</div>
+
+										<ul class="navigation-list user">
+																																																																																																																											</ul>
+					</script>
+<!--SCRIPT-->
+<script type="text/html" id="header-277_site-banner-search-filter-template">
+			<% if(places && places.length > 0) { %>
+				<ul class="navigation-list filter">
+					<% foreach(places, function(place) { %>
+						<li class="navigation-item">
+							<a class="place internal-link" href="#" data-key="<%: place.key %>" data-value="<%: place.value %>" data-searchparam="<%: place.searchParameter %>" data-searchvalue="<%: place.searchValue %>"><%= place.name %></a>
+					<% }); %>
+				</ul>
+			<% } %>
+			<% if(filters && filters.length > 1) { %>
+				<ul class="navigation-list filter">
+				<% foreach(filters, function(filter) {  %>
+					<li class="navigation-item">
+						<a class="type internal-link" href="#" data-key="<%: filter.key %>"><%= filter.name %></a>
+					</li>
+				<% }); %>
+				</ul>
+			<% } %>
+		</script>
+<!--SCRIPT-->
+<script type="text/javascript">
+		
+		
+
+			
+															
+		jQuery(function(){
+			jQuery.telligent.evolution.widgets.siteBanner.register({
+				wrapper: '#header-277',
+				messagePrefix: 'widget.header-277.',
+				userPopupTemplate: 'header-277_site-banner-list-template',
+				banner: jQuery('#header-277_banner'),
+									handheldSearchFieldsLink: jQuery('#header-277_handheldSearchFieldsLink'),
+					handheldSearchFields: jQuery('#header-277_handheldSearchFields'),
+					handheldBannerLinksLink: jQuery('#header-277_handheldBannerLinksLink'),
+					handheldBannerLinks: jQuery('#header-277_handheldBannerLinks'),
+					handheldBannerLinksCount: jQuery('#header-277_handheldBannerLinksCount'),
+					bannerSiteLinks: jQuery('#header-277_bannerSiteLinks'),
+					handheldSiteLinksLink: jQuery('#header-277_handheldSiteLinksLink'),
+					handheldSiteLinks: jQuery('#header-277_handheldSiteLinks'),
+
+																		searchFields: jQuery('#header-277_searchFields'),
+					searchTemplate: 'header-277_site-banner-list-template',
+					searchUrl: '/utility/scripted-file.ashx?_fid=277\u0026_wid=header-277\u0026_ct=header_0010\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=searchquery.jsm\u0026_pcurl=~%2F',
+					searchInput: jQuery('#header-277_Search'),
+					searchFooterContent: '\u003ca data-messagename=\"widget.header-277.advancedsearch\" class=\"right\" id=\"header-277_advancedsearch\" href=\"#\"\u003eAdvanced search\u003c/a\u003e',
+					searchFilterTemplate: 'header-277_site-banner-search-filter-template',
+					searchAdvancedUrl: '/search?{0}',
+					searchAdvancedUserUrl: '/members?{0}',
+					searchText: 'Search',
+					searchFilterContentName: 'Pregame.com',
+					searchFilterGroupsName: 'Groups',
+					searchFilterPeopleName: 'People',
+					searchPlaceApplicationId:  null ,
+					searchPlaceApplicationName:  null ,
+					searchPlaceGroupId:  null ,
+					searchPlaceGroupLocalId:  null ,
+					searchPlaceGroupName:  null ,
+					searchPlaceAnywhereName: 'Anywhere',
+					advancedSearchId: 'header-277_advancedsearch',
+					searchShowPeople:  true,
+													bannerLinks: jQuery('#header-277_bannerLinks'),
+
+                    notificationsText: 'Open notifications list',
+					notificationsTemplate: 'header-277_site-banner-list-template',
+					notificationsUrl: '/utility/scripted-file.ashx?_fid=277\u0026_wid=header-277\u0026_ct=header_0010\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=notifications.vm\u0026_pcurl=~%2F',
+					notificationsLink: jQuery('#header-277_notifications'),
+					notificationsUnread: 0,
+					notificationListFooterContent: '\u003ca href=\"$core_v2_urls.Notifications()\" class=\"view-all left\"\u003eView all\u003c/a\u003e\u003ca class=\"right\" href=\"${notificationSettingsUrl}\"\u003eSettings\u003c/a\u003e',
+					notificationPreferenceTemplate: 'header-277_site-banner-notification-preferences-template',
+					notificationssUnreadCountMessageSingular: 'You have {0} unread notification',
+					notificationssUnreadCountMessagePlural: 'You have {0} unread notifications',
+
+                    conversationsText: 'Open conversations list',
+					conversationsTemplate: 'header-277_site-banner-list-template',
+					conversationsUrl: '/utility/scripted-file.ashx?_fid=277\u0026_wid=header-277\u0026_ct=header_0010\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=conversations.vm\u0026_pcurl=~%2F',
+					conversationsLink: jQuery('#header-277_conversations'),
+					conversationsUnread: 0,
+					conversationNotificationTypeId: '84e4c0a7-3a17-4dfe-b8a0-d7038aa04a84',
+					conversationListFooterContent: '\u003ca href=\"${core_v2_urls.Conversations()}\" class=\"left\"\u003eView all\u003c/a\u003e\u003ca href=\"#\" data-messagename=\"widget.header-277.startconversation\" class=\"right\"\u003eNew message\u003c/a\u003e',
+					conversationsUnreadCountMessageSingular: 'You have {0} unread message',
+					conversationsUnreadCountMessagePlural: 'You have {0} unread messages',
+					conversationNewConversationUrl:'/user/conversations?New=True',
+
+                    bookmarksText: 'Open bookmarks list',
+					bookmarksTemplate: 'header-277_site-banner-list-template',
+					bookmarksUrl: '/utility/scripted-file.ashx?_fid=277\u0026_wid=header-277\u0026_ct=header_0010\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=bookmarks.vm\u0026_pcurl=~%2F',
+					bookmarksLink: jQuery('#header-277_bookmarks'),
+					bookmarksListFooterContent: '\u003ca class=\"left\" href=\"${bookmarksUrl}\"\u003eView all\u003c/a\u003e',
+					bookmarksContentTypes: '$core_v2_encoding.JavascriptEncode($contentTypes)',
+					bookmarksApplicationContentTypes: '$core_v2_encoding.JavascriptEncode($applicationContentTypes)',
+					bookmarksContainerContentTypes: '$core_v2_encoding.JavascriptEncode($containerContentTypes)',
+					bookmarksFilterTemplate: 'header-277_site-banner-bookmark-filter-template',
+					bookmarksIsBookmarked:  false ,
+					bookmarksCurrentContentId: '',
+					bookmarksBookmarks: 'Bookmarks',
+					bookmarkAdded: 'Bookmark added',
+					bookmarkRemoved: 'Bookmark removed',
+
+                    userText: 'Open account menu',
+					userContentTemplate: 'header-277_site-banner-user-template',
+					userLink: jQuery('#header-277_user'),
+				
+				viewType: 'all'
+			});
+		});
+	</script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/defaultwidgets/71c1a04ac8a54215a17f93b79df972b3-69800cf5ac39472e826c4843ce8b79be/ui.js?_=639081600516366605"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+		jQuery(function(){
+			jQuery.telligent.evolution.widgets.activityStoryStream.register({
+				wrapper: '#fragment-10902',
+				loader: '#fragment-10902_loading',
+				pager: '#fragment-10902_pager',
+				container: '#fragment-10902_containerId',
+				filterType: 'Site',
+				tabs: '#fragment-10902_tabs',
+				pageSize: 10,
+				statusMessageContentTypeId: '56f1a3ec-14bb-45c6-949f-ee7776d68c78',
+				moreStoriesUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-morestories.vm\u0026_pcurl=~%2F',
+				getStoryUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-getstory.vm\u0026_pcurl=~%2F',
+				moreCommentsUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-morecomments.vm\u0026_pcurl=~%2F',
+				getCommentUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-getcomment.vm\u0026_pcurl=~%2F',
+				getEditorUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-geteditor.vm\u0026_pcurl=~%2F',
+				updateStatusUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-updatestatus.vm\u0026_pcurl=~%2F',
+				statusAttachmentUploadContextId : '1cb8356f-84c7-4fea-a406-b055a097a67f',
+				statusAttachmentUploadFileUrl : '/api.ashx/v2/cfs/temporary.json?UploadContextId=1cb8356f-84c7-4fea-a406-b055a097a67f',
+				previewStatusAttachmentUrl: '/utility/scripted-file.ashx?_fid=10902\u0026_wid=fragment-10902\u0026_ct=pcommon-home_0000\u0026_ctt=0c647246673542f9875dc8b991fe739b\u0026_ctc=00000000000000000000000000000000\u0026_ctn=3fc3f82483d14ec485ef92e206116d49\u0026_ctd=0\u0026_ep=0\u0026_rt=Web\u0026_cft=Other\u0026_cf=callback-previewattachment.vm\u0026_pcurl=~%2F',
+				deleteForumReplyPanelUrl: '#_cptype=panel\u0026_cpcontexttype=Explicit\u0026_cppanelid=c2360510-559b-4c97-9cc9-760e5b71a003\u0026replyid=0',
+				accessingUserId: 2101,
+				userId: 2101,
+				groupId: 10,
+				containerId: '946d9360-1fd8-4f2a-bab7-ca56a9dc5948',
+				includeSubGroups:  true ,
+				maxReplyLength: 512,
+				todayText: 'Today',
+				cancelText: 'Cancel',
+				replyText: 'Reply',
+				endlessScroll:  false ,
+				hideOriginalPost: 'Hide original post',
+				showOriginalPost: 'Show original post',
+				hideHistory: 'Hide revision history',
+				showHistory: 'Show revision history',
+				deleteActivityMessage: 'Are you sure you want to delete this story?',
+				deleteCommentMessage: 'Are you sure you want to delete this comment?',
+				commentModeratedMessaage: 'Thank you, your reply requires moderation so it may take a while to appear.',
+				commentContentTypeId: '9262536b-49a3-4494-802f-04dff10424ed',
+				commentDeletedText: 'This reply has been deleted.',
+				moreStories: '#fragment-10902_more-stories',
+				showMoreStoriesSingleText: 'Show {0} new story.',
+				showMoreStoriesMultipleText: 'Show {0} new stories.',
+				showMoreCommentsSingleText: 'Show {0} new reply.',
+				showMoreCommentsMultipleText: 'Show {0} new replies.',
+				editSuccessText: 'Status message updated successfully.',
+				filters: {
+																																																																																		0: {
+																		'14c9f88079bb42f0908a75515f259435':true
+																																										,
+																		'0f7404b7d8f24a1b97c9175af1be4570':true
+																																										,
+																		'ecf7e9ef76f0447c9b252a531c7bb651':true
+																																										,
+																		'a23334fb669a421d85e91945a7b80581':true
+																																										,
+																		'14656a259a034311b8e346cef57ac02b':true
+																																										,
+																		'276a9e5128394ae98291e3f24b49cbc4':true
+																																										,
+																		'e9dd0cb7adf74518b0961b00f3f51246':true
+																																										,
+																		'3d10e9df357b42038f7d3bf15f60fd61':true
+																																										,
+																		'948477cb045b40778bf17ce1a091db11':true
+																																										,
+																		'44a697e2d1b348f6951945cfa2bfc4fd':true
+																																										,
+																		'a481f65a7c744bdea8da44f562aaed91':true
+																																										,
+																		'4938dae8d68844109d8f82421f8ee2be':true
+																																										,
+																		'acf00be657174a25a17de2036c694444':true
+																																										,
+																		'0a680cf3f19648c592dbdf8cebe3fe92':true
+																																										,
+																		'edebd6ada45a470f89e63dfc31714bd6':true
+																																										,
+																		'333cc77c019644c5aefa6e35a0011ee8':true
+																																										,
+																		'919abea56ce64b34a6a6baf8b392af90':true
+																																										,
+																		'cf26068cf6644050bf69f1d5c3e7eb1a':true
+																																										,
+																		'432f675c15bb429c98a99e99d539587b':true
+																														}
+																																																																																																																		}
+			});
+		});
+	</script>
+<!--SCRIPT-->
+<script src="/cfs-filesystemfile/__key/defaultwidgets/7bb87a0cc5864a9392ae5b9e5f9747b7-212f71d69e37457887f33f32918f6ae2/ui.js?_=637940628798228423"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+	jQuery(function(){
+		jQuery.telligent.evolution.widgets.contentPeek.register({
+			contentTypeIds: '56f1a3ec-14bb-45c6-949f-ee7776d68c78,3ebf0d38-bb20-4bca-bf65-88981d550e67,d6391dab-5520-42d8-95a6-6e62d1c6394e,ca0e7c80-8686-4d2f-a5a8-63b9e212e922,f7d226ab-d59f-475c-9d22-4a79e3f0ec07,48f9bad6-9756-4845-ab98-382808c7bced,46448885-d0e6-4133-bbfb-f0cd7b0fd6f7,f586769b-0822-468a-b7f3-a94d480ed9b0,a0753cfb-923b-4975-ad2a-42e5282a6d5d,08ca0da0-e017-4a80-9832-476c74d4f174,00000000-0000-0000-0000-000000000000,23b05a61-c3e5-4451-90d9-bfa00453bce4,e9ed4118-60ed-4f2b-a026-5705b8793d05,df237622-6cc3-4fc2-8555-ef4fb2656444,f1feaab6-85f7-463a-a529-fc2abebc9bca,858a2037-b76c-4898-9365-125879b49843,bda1b85b-d6a0-42dc-84e5-9daf1ea18fa3,68c65af2-aa15-4e4c-9c81-155c6a3159f6,9262536b-49a3-4494-802f-04dff10424ed,b0059de4-df5f-4e74-994a-d9df10019867,81aa61eb-ccb9-409b-bc6f-e2f9e7bdda1d',
+			includeLegacyUserLinks:  true 		});
+	});
+	</script>
+<!--SCRIPT-->
+<script type="text/html" id="footer-270_tip_template">
+		<div class="tourtip">
+			<div class="tourtip-message">
+				<%= message %>
+			</div>
+			<ul class="tourtip-actions">
+				<% if(state.index() > 0) { %>
+					<li>
+						<a href="#" class="tourtip-previous">Previous</a>
+					</li>
+				<% } %>
+				<% if(state.index() < (state.count() - 1)) { %>
+					<li>
+						<a href="#" class="tourtip-next">Next</a>
+					</li>
+				<% } %>
+				<% if(state.index() === (state.count() - 1)) { %>
+					<li>
+						<a href="#" class="tourtip-finish">Ok, got it!</a>
+					</li>
+				<% } else { %>
+					<li>
+						<a href="#" class="ui-tip tourtip-skip" title="Continue this tour in 10 minutes.">Later</a>
+					</li>
+				<% } %>
+			</ul>
+		</div>
+	</script>
+<!--SCRIPT-->
+<script type="text/javascript" src="/cfs-filesystemfile/__key/defaultwidgets/7bb87a0cc5864a9392ae5b9e5f9747b7-22e271b19ea14e54a503441c1f4f167e/ui.js?_=637940628786286599"></script>
+<!--SCRIPT-->
+<script type="text/javascript">
+	//<![CDATA[
+
+        jQuery.telligent.evolution.ui.components.moderate.defaults = {
+    		reportedText: 'Thank you for your report',
+    		flagText: 'Report as abusive',
+    		flaggedText: 'Reported as abusive'
+    	};
+	//]]>
+	</script>
+<!--SCRIPT-->
+<script type="text/javascript">var _gaq = _gaq || []; var userInfo = getCookie("PregameUserInfo");    
+if(userInfo != null)  { var splitted = userInfo.split('&'); var userId = splitted[0].substr(7);  _gaq.push(['_setCustomVar', 1, 'Member', userId]); }
+_gaq.push(['_setAccount', 'UA-230920-1']);_gaq.push(['_trackPageview']);(function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+
+function getCookie(c_name)
+{
+var c_value = document.cookie;
+var c_start = c_value.indexOf(" " + c_name + "=");
+if (c_start == -1)
+  {
+  c_start = c_value.indexOf(c_name + "=");
+  }
+if (c_start == -1)
+  {
+  c_value = null;
+  }
+else
+  {
+  c_start = c_value.indexOf("=", c_start) + 1;
+  var c_end = c_value.indexOf(";", c_start);
+  if (c_end == -1)
+  {
+c_end = c_value.length;
+}
+c_value = unescape(c_value.substring(c_start,c_end));
+}
+
+return c_value;
+}
+
+</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"f2632f90adb749dc8d09e0fca746ea55","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
+

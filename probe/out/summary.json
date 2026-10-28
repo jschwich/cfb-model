@@ -1,37 +1,47 @@
 {
- "an_v1": {
+ "sao": {
   "status": 200,
-  "len": 693433,
-  "ctype": "application/json; charset=utf-8"
+  "len": 811519,
+  "ctype": "text/html;charset=UTF-8"
  },
- "an_v1_week": {
+ "sao_consensus": {
   "status": 200,
-  "len": 693433,
-  "ctype": "application/json; charset=utf-8"
+  "len": 696290,
+  "ctype": "text/html;charset=UTF-8"
  },
- "an_v2": {
-  "status": 200,
-  "len": 498124,
-  "ctype": "application/json; charset=utf-8"
- },
- "an_page": {
-  "status": 202,
-  "len": 2395,
+ "sbd": {
+  "status": 404,
+  "len": 365457,
   "ctype": "text/html; charset=UTF-8"
  },
- "vsin": {
+ "covers_cons": {
   "status": 200,
-  "len": 357179,
+  "len": 445207,
+  "ctype": "text/html; charset=utf-8"
+ },
+ "oddsshark": {
+  "status": 200,
+  "len": 450290,
+  "ctype": "text/html; charset=utf-8"
+ },
+ "vi": {
+  "status": 404,
+  "len": 1903,
+  "ctype": "text/html;charset=UTF-8"
+ },
+ "pregame": {
+  "status": 200,
+  "len": 110246,
+  "ctype": "text/html; charset=utf-8"
+ },
+ "vsin_tomorrow": {
+  "status": 200,
+  "len": 357194,
   "ctype": "text/html; charset=UTF-8"
  },
- "vsin_dk": {
+ "vsin_sat": {
   "status": 200,
   "len": 357211,
-  "ctype": "text/html; charset=UTF-8"
- },
- "thespread": {
-  "status": 403,
-  "len": 5845,
   "ctype": "text/html; charset=UTF-8"
  }
 }
