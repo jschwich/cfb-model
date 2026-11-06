@@ -86,18 +86,31 @@ def _my_adj(m):
         return ("<h3>Your adjustments</h3><p class=muted>None of your adjustments has covered a "
                 "finished game yet.</p>")
     better = m["err_with"] < m["err_without"]
+    has_tot = bool(m.get("tot_games"))
+
+    def tcell(r, k):
+        v = r.get(k) if hasattr(r, "get") else None
+        return "–" if v is None or pd.isna(v) else (f"{v:+g}" if k == "tot_shift" else f"{v:.1f}")
+    tot_head = "<th>Total shift</th><th>Total miss without</th><th>Total miss with</th>" if has_tot else ""
     rows = "".join(f"<tr><td>{int(r['wk'])}</td><td class=gm>{E(r['game'])}</td><td>{r['shift']:+g}</td>"
-                   f"<td>{r['err_without']:.1f}</td><td>{r['err_with']:.1f}</td></tr>"
+                   f"<td>{r['err_without']:.1f}</td><td>{r['err_with']:.1f}</td>"
+                   + (f"<td>{tcell(r, 'tot_shift')}</td><td>{tcell(r, 'tot_err_without')}</td>"
+                      f"<td>{tcell(r, 'tot_err_with')}</td>" if has_tot else "") + "</tr>"
                    for _, r in m["rows"].iterrows())
     side = f"{m['side_w']}–{m['side_l']}" if m["side_w"] + m["side_l"] else "–"
+    tot_stats = ""
+    if has_tot:
+        ou = f"{m['tot_w']}–{m['tot_l']}" if m["tot_w"] + m["tot_l"] else "–"
+        tot_stats = (f"<div><span>{m['tot_err_without']:.1f} → {m['tot_err_with']:.1f}</span>total miss without → with</div>"
+                     f"<div><span>{ou}</span>total went the way you pushed it</div>")
     return ("<h3>Your adjustments</h3><div class=stats>"
             f"<div><span>{m['games']}</span>games affected</div>"
-            f"<div><span>{m['err_without']:.1f} → {m['err_with']:.1f}</span>avg miss without → with</div>"
-            f"<div><span>{side}</span>side you pushed toward, ATS</div></div>"
+            f"<div><span>{m['err_without']:.1f} → {m['err_with']:.1f}</span>avg spread miss without → with</div>"
+            f"<div><span>{side}</span>side you pushed toward, ATS</div>{tot_stats}</div>"
             f"<p class=muted>{'Your adjustments made the model more accurate so far.' if better else 'So far the model was more accurate without your adjustments.'} "
-            "Small samples swing a lot.</p>"
+            "Offense adjustments also move totals; this shows whether that helped. Small samples swing a lot.</p>"
             "<div class=tw><table><thead><tr><th>Wk</th><th>Game</th><th>Shift</th><th>Miss without</th>"
-            "<th>Miss with</th></tr></thead><tbody>" + rows + "</tbody></table></div>")
+            "<th>Miss with</th>" + tot_head + "</tr></thead><tbody>" + rows + "</tbody></table></div>")
 
 
 def _badge(res):

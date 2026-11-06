@@ -70,7 +70,16 @@ MY_ADJUSTMENTS = [
 ]
 ```
 
-Points move the team's rating (and every spread it plays in) by that much; totals don't change. Use the team name exactly as the power ratings table spells it, and the week number shown at the top of the dashboard. Commit, then run the workflow (or wait for the next 6-hour run). Games with an adjustment get a blue tag, and the track record shows whether your adjustments have made the model more or less accurate on games already played.
+Points move the team's rating (and every spread it plays in) by that much. By default they count against the team's **offense**, so a QB out also lowers that team's projected points, its team total, the period numbers and the game total. Add `"def"` at the end of a line for a defensive loss (the opponent scores more, so the total goes up), or `"both"` for something that affects the whole team, like a coaching change (total unchanged):
+
+```
+    ("Georgia", -2.0, 10, "star edge rusher out", "def"),
+    ("Kentucky", 2.0, 10, "new OC, whole team playing better", 12, "both"),
+```
+
+How much of an adjustment lands on the total is `ADJ_TOTAL_SHARE` in `config.py` (1.0 = all of it). The **QB study** workflow (Actions tab → QB study → Run workflow) measures this on 2022–2026: it downloads per-game passing stats (about 85 API calls, once), finds every game where a team's established starter didn't play, and checks how far the margin and total landed from the model and from the closing line. Results go to `docs/data/qb_study.json`, including a suggested `ADJ_TOTAL_SHARE` and the typical spread value of losing a starter.
+
+Use the team name exactly as the power ratings table spells it, and the week number shown at the top of the dashboard. Commit, then run the workflow (or wait for the next 6-hour run). Games with an adjustment get a blue tag, and the track record shows whether your adjustments have made the model's spreads and totals more or less accurate on games already played.
 
 ### First-year head coaches
 

@@ -1,0 +1,44 @@
+name: QB study
+
+# One-off: downloads per-game passing stats for past seasons (~85 API calls)
+# and measures how much losing the starting QB moves spreads and totals.
+# Results: docs/data/qb_study.json
+
+on:
+  workflow_dispatch:
+    inputs:
+      years:
+        description: "Seasons, separated by spaces"
+        default: "2022 2023 2024 2025 2026"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pull-history
+  cancel-in-progress: false
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Download passing stats
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        run: python tools/fetch_history.py ${{ github.event.inputs.years }} --only passing
+      - name: Run study
+        run: python tools/qb_study.py --seasons ${{ github.event.inputs.years }}
+      - name: Save
+        run: |
+          git config user.name "cfb-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/history docs/data/qb_study.json
+          git diff --cached --quiet || git commit -m "QB study: ${{ github.event.inputs.years }}"
+          git pull --rebase
+          git push

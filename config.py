@@ -173,10 +173,20 @@ IGNORE_PRIOR_MIN_GAMES = 3
 # ---------- My adjustments ----------
 # When you think the model is wrong about a team (QB injury or return, coaching
 # change, a team that has clearly changed), add a line here. Points move the
-# team's rating, so spreads move by that much; totals don't change.
-#   ("Team name", points, from week, "why", until week)   <- "until week" is optional
+# team's rating, so spreads move by that much.
+#   ("Team name", points, from week, "why", until week, "side")   <- last two optional
+# "side" says which unit the points belong to, which decides what happens to totals:
+#   "off"  = offense (the default; use for QBs, skill players, O-line): the team
+#            scores fewer (or more) points, so its team total and the game total move too
+#   "def"  = defense (a star pass rusher or corner out): the opponent scores more
+#            (or fewer), so the total moves the other way
+#   "both" = half each (coaching change, a team that's just better/worse): total unchanged
 # Week numbers are the model's (the "Week 8" shown at the top of the dashboard).
 # Team names must match the power ratings table exactly.
+ADJ_DEFAULT_SIDE = "off"   # side used when a line doesn't say
+ADJ_TOTAL_SHARE = 1.0      # share of an offense/defense adjustment that moves the total
+                           # (1.0 = all of it; set from tools/qb_study.py once its results are in)
+
 MY_ADJUSTMENTS = [
     # ("Ohio State", 3.0, 9, "QB back from injury"),
     # ("Northwestern", -4.0, 8, "starting QB out", 10),
