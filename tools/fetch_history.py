@@ -46,9 +46,27 @@ def main():
             "coaches": ("/coaches", {"year": y}),          # head coaches this season
             "coaches_prev": ("/coaches", {"year": y - 1}), # ...and last season, to spot changes
             "portal": ("/player/portal", {"year": y}),     # transfers counting for this season
+            "passing": None,  # per-game passing by player, for tools/qb_study.py (~17 calls/season)
         }
         for name, (path, params) in jobs.items():
             if a.only and name not in a.only:
+                continue
+            if name == "passing":
+                if not a.only:
+                    continue  # only on request: --only passing
+                rows = []
+                for st, weeks in (("regular", range(1, 17)), ("postseason", [1])):
+                    for wk in weeks:
+                        try:
+                            got = get("/games/players", {"year": y, "week": wk, "seasonType": st,
+                                                         "category": "passing"})
+                        except Exception as e:
+                            print(f"  passing {st} week {wk}: {e}")
+                            continue
+                        for g in got or []:
+                            g["_week"], g["_season_type"] = wk, st
+                        rows += got or []
+                save(out, name, rows)
                 continue
             save(out, name, get(path, params))
     if not (ROOT / "data" / "history" / "venues.json.gz").exists():
