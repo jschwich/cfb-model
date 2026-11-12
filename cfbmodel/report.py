@@ -147,7 +147,7 @@ def _value_cards(games):
     items = []
     for _, r in games.iterrows():
         if r["spread_tier"]:
-            items.append((r["spread_edge"], r, "spread"))
+            items.append((_spread_rank_edge(r), r, "spread"))
         if r["total_tier"]:
             items.append((r["total_edge"], r, "total"))
     if not items:
@@ -172,8 +172,7 @@ def _value_cards(games):
            "all on the same side) · " + cnt(n_back, "sharp-backed") + " (model + one sharp signal, none "
            "against). " + ("Shown first." if n_prim + n_back else "Both are rare; most weeks have few or none.")
            + "</p>")
-    cards = []
-    for edge, r, kind in items:
+    def card(edge, r, kind):
         tier = r[f"{kind}_tier"]
         pb = ("<span class='tier primary'>★ Primary</span> " if prim(r, kind) else
               "<span class='tier backed'>Sharp-backed</span> " if flag(r, kind, "backed") else "")
@@ -193,14 +192,51 @@ def _value_cards(games):
         warn = ""
         if kind == "spread" and r["flag_conflict"]:
             warn = "<div class=warn>⚠ A situational spot works against this pick</div>"
-        cards.append(
+        if kind == "spread":
+            now = r["spread_edge"]
+            op = _open_edge_for_pick(r)
+            edge_txt = (f"{now:.1f} pt edge · {op:+.1f} vs open" if not pd.isna(op)
+                        else f"{now:.1f} pt edge")
+        else:
+            edge_txt = f"{edge:.1f} pt edge"
+        return (
             f"<div class='card {tier.lower()}{pcls}'><div class=row1><span>{pb}<span class='tier {tier.lower()}'>{tier}</span></span>"
-            f"<span class=edge>{edge:.1f} pt edge</span></div>"
+            f"<span class=edge>{edge_txt}</span></div>"
             f"<div class=pick>{pick}</div>"
             f"<div class=matchup>{E(r['away'])} @ {E(r['home'])}{' (neutral)' if r['neutral'] else ''} · {_when(r['start'])}</div>"
             f"<div class=detail>{detail} · est. win prob {_n(prob, '{:.0%}')}</div>"
             f"{warn}{_sharp_note(r, kind)}{_chips(r['flags'], with_text=True)}{_adj_chip(r)}{_wind(r) if kind == 'total' else ''}</div>")
-    return top + "<div class=cards>" + "".join(cards) + "</div>" + played
+
+    def block(kind, title, note):
+        sub = [card(e, r, k) for e, r, k in items if k == kind]
+        if not sub:
+            return f"<h3>{title}</h3><p class=muted>None flagged this week.</p>"
+        return f"<h3>{title}</h3><p class=muted>{note}</p><div class=cards>{''.join(sub)}</div>"
+
+    return (top
+            + block("spread", "Top spreads",
+                    "Ranked by the edge against the <b>opening</b> line, where the model's spread picks have "
+                    "done best (they've been about break-even against closing lines). The edge at today's "
+                    "number is shown first; bet early in the week.")
+            + block("total", "Top totals",
+                    "Ranked by the edge at today's number. Bigger total edges have hit more often, "
+                    "even against closing lines.")
+            + played)
+
+
+def _open_edge_for_pick(r):
+    """Model's edge vs. the opening line, on the side it picks now (negative = the open was worse)."""
+    op = r.get("open_spread")
+    if op is None or pd.isna(op) or not r.get("spread_pick"):
+        return np.nan
+    if r["spread_pick"] == r["home"]:
+        return op - r["model_spread"]
+    return r["model_spread"] - op
+
+
+def _spread_rank_edge(r):
+    op = _open_edge_for_pick(r)
+    return r["spread_edge"] if pd.isna(op) else op
 
 
 def _wind(r):
