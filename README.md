@@ -29,7 +29,7 @@ Bookmark it. From then on it updates itself every 6 hours.
 
 ## What's on the dashboard
 
-- **Value board:** games where the model disagrees with the betting line by enough to matter, in two lists. **Top totals** are ranked by the edge at today's number. **Top spreads** are ranked by the edge against the *opening* line, because that is where the model's spread picks have done best (about break-even against closing lines); each card shows both edges.
+- **Value board:** games where the model disagrees with the betting line by enough to matter, in two lists. **Top totals** are ranked by the edge at today's number. **Top spreads** are ranked by the edge against the *opening* line, because that is where the model's spread picks have done best (about break-even against closing lines); each card shows both edges. A spread whose line has moved 2+ points away from the model since the open gets a ⚠: that extra edge has covered only about 49% (2022–2026), because it usually means news the model can't see.
 - **All games:** market line versus model line for the whole week, plus projected scores, the opening line and how far it has moved toward or away from the model. Games already played stay on the list with the model's pre-kickoff numbers, the final score, and whether its picks won.
 - **Team totals & periods:** the model's team totals plus 1Q, 3Q, 1H and 2H spreads and totals for every game. These are model numbers only (the free data has no lines for these markets), so compare them with your book.
 - **Power ratings:** every FBS team in points versus an average team, split into offense and defense, with this season's data weighted against the preseason prior.

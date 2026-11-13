@@ -193,6 +193,14 @@ def _value_cards(games):
         if kind == "spread" and r["flag_conflict"]:
             warn = "<div class=warn>⚠ A situational spot works against this pick</div>"
         if kind == "spread":
+            mv, tw = r.get("spread_move"), r.get("move_toward_model")
+            away = abs(mv) if (mv is not None and not pd.isna(mv) and tw is not None
+                               and not pd.isna(tw) and tw <= 0) else np.nan
+            if not pd.isna(away) and round(away, 1) >= getattr(config, "MOVE_AWAY_WARN", 2.0):
+                warn += (f"<div class=warn>⚠ Line has moved {away:g} pts away from the model since the open. "
+                         "Historically that extra edge hasn't paid (≈49% ATS). Usually it's news the model "
+                         "can't see (injury, QB). Check before betting; trust the edge vs open.</div>")
+        if kind == "spread":
             now = r["spread_edge"]
             op = _open_edge_for_pick(r)
             edge_txt = (f"{now:.1f} pt edge · {op:+.1f} vs open" if not pd.isna(op)

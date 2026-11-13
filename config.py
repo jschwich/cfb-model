@@ -109,6 +109,11 @@ SPREAD_LEAN, SPREAD_STRONG = 4.0, 7.0   # points of disagreement with market
 # (about 150 picks), so they're marked low trust instead of flagged as value.
 FLAG_P4_VS_G5_SPREADS = False
 TOTAL_LEAN, TOTAL_STRONG = 5.0, 8.0
+
+# Value board warning when a spread has moved this many points AWAY from the model since the open.
+# Tested 2022-2026: those bigger edges covered about 49% at the close (no better than no move),
+# because the move is usually news the model can't see. Info only; doesn't change any numbers.
+MOVE_AWAY_WARN = 2.0
 # Markets are sharp, so the model's opinion is only partly trusted when
 # turning an edge into a cover probability (0 = trust market, 1 = trust model).
 MODEL_TRUST = 0.5
